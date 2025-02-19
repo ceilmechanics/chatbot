@@ -1,6 +1,6 @@
 import requests
 from flask import Flask, request, jsonify
-from llmproxy import generate
+from llmproxy import generate, TuftsCSAdvisor
 
 app = Flask(__name__)
 
@@ -24,22 +24,13 @@ def main():
 
     print(f"Message from {user} : {message}")
 
-    # Generate a response using LLMProxy
-    response = generate(
-        model='4o-mini',
-        system='answer my question and add keywords',
-        query= message,
-        temperature=0.0,
-        lastk=0,
-        session_id='GenericSession'
-    )
+    try:
+        # Generate response using CS Advisor
+        response = TuftsCSAdvisor.get_response(message)
+        return jsonify({"text": response})
 
-    response_text = response['response']
-    
-    # Send response back
-    print(response_text)
-
-    return jsonify({"text": response_text})
+    except Exception as e:
+        return jsonify({"text": f"Error: {str(e)}"}), 500
     
 @app.errorhandler(404)
 def page_not_found(e):
