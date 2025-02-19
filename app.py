@@ -34,7 +34,7 @@ def main():
         session_id='GenericSession'
     )
 
-    response_text = response
+    response_text = response['response']
     
     # Send response back
     print(response_text)
