@@ -27,7 +27,7 @@ def main():
 
     try:
         # Generate response using CS Advisor
-        response = advisor.get_response(message)  # Modified this line
+        response = advisor.get_response(query=message)  # Modified this line
         return jsonify({"text": response})
 
     except Exception as e:
