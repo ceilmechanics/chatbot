@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from llmproxy import generate, TuftsCSAdvisor
 
 app = Flask(__name__)
+advisor = TuftsCSAdvisor()  # Add this line
 
 @app.route('/')
 def hello_world():
@@ -26,7 +27,7 @@ def main():
 
     try:
         # Generate response using CS Advisor
-        response = TuftsCSAdvisor.get_response(message)
+        response = advisor.get_response(message)  # Modified this line
         return jsonify({"text": response})
 
     except Exception as e:
