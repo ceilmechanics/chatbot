@@ -17,7 +17,7 @@ def main():
     data = request.get_json() 
 
     # Extract relevant information
-    user_id = data.get("user_id", str(uuid.uuid4()))  # Use user_id if provided, or generate one
+    channel_id = data.get("dC9Suu7AujjGywutjiQPJmyQ7xNwGxWFT3")  # Use user_id if provided, or generate one
     user_name = data.get("user_name", "Unknown")
     message = data.get("text", "")
 
@@ -27,28 +27,28 @@ def main():
     if data.get("bot") or not message:
         return jsonify({"status": "ignored"})
 
-    print(f"Message from {user_name} (ID: {user_id}): {message}")
+    print(f"Message in channel {channel_id} sent by {user_name} : {message}")
 
     try:
         # Get or create user-specific advisor instance
-        if user_id not in user_advisors:
-            print(f"Creating new advisor for user {user_id}")
-            user_advisors[user_id] = {
-                "advisor": TuftsCSAdvisor(session_id=f"Tufts-CS-Advisor-{user_id}"),
+        if channel_id not in user_advisors:
+            print(f"Creating new advisor for user {channel_id}")
+            user_advisors[channel_id] = {
+                "advisor": TuftsCSAdvisor(session_id=f"Tufts-CS-Advisor-{channel_id}"),
                 "lastk": 0,
                 "last_active": datetime.now()
             }
         else:
             # Update lastk and timestamp for existing user
-            user_advisors[user_id]["lastk"] += 1
-            user_advisors[user_id]["last_active"] = datetime.now()
+            user_advisors[channel_id]["lastk"] += 1
+            user_advisors[channel_id]["last_active"] = datetime.now()
         
         # Get current lastk value for this user
-        current_lastk = user_advisors[user_id]["lastk"]
-        print(f"User {user_id} - lastk value: {current_lastk}")
+        current_lastk = user_advisors[channel_id]["lastk"]
+        print(f"User {channel_id} - lastk value: {current_lastk}")
         
         # Generate response using user's dedicated advisor with their specific lastk
-        response = user_advisors[user_id]["advisor"].get_response(
+        response = user_advisors[channel_id]["advisor"].get_response(
             query=message, 
             lastk=current_lastk
         )
@@ -64,5 +64,5 @@ def page_not_found(e):
     return "Not Found", 404
 
 if __name__ == "__main__":
-    app.run(threaded=True)  # Enable threading for concurrent requests
-    # app.run(debug=True, port=5000)
+    # app.run(threaded=True)  # Enable threading for concurrent requests
+    app.run(debug=True, port=5000)
