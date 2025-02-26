@@ -174,11 +174,11 @@ class RAGParameterInference:
             return True, 0.7, 5
 
 class TuftsCSAdvisor:
-    def __init__(self, pdf_path='soe-grad-handbook.pdf'):
-        self.session_id = 'Tufts-CS-Advisor-wendanj-0219'
-        self.parameter_inference = RAGParameterInference()  # Fixed to use correct class
+    def __init__(self, pdf_path='soe-grad-handbook.pdf', session_id=None):
+        self.session_id = session_id or 'Tufts-CS-Advisor-default'
+        self.parameter_inference = RAGParameterInference()
         
-        print("\n📚 Loading handbook...")
+        print(f"\n📚 Loading handbook for session {self.session_id}...")
         try:
             upload_response = pdf_upload(
                 path=pdf_path,
@@ -189,19 +189,23 @@ class TuftsCSAdvisor:
         except Exception as e:
             print(f"❌ Error loading handbook: {str(e)}")
 
-    def get_response(self, query: str) -> str:
+    def get_response(self, query: str, lastk: int = 0) -> str:
         """
         Get response using inferred RAG parameters
+        
+        Args:
+            query: User's question
+            lastk: Number of previous exchanges to include for context
         """
         use_rag, threshold, k = self.parameter_inference.infer_rag_params(query)
-        print(use_rag, threshold, k)
+        print(f"Session {self.session_id} - RAG params: use_rag={use_rag}, threshold={threshold}, k={k}, lastk={lastk}")
         
         response = generate(
             model='4o-mini',
             system=self.get_system_prompt(),
             query=query,
             temperature=0.1,
-            lastk=0,
+            lastk=lastk,
             session_id=self.session_id,
             rag_usage=use_rag,
             rag_threshold=threshold,
@@ -216,9 +220,27 @@ class TuftsCSAdvisor:
         """
         Get system prompt for CS graduate advising
         """
-        return '''You are a knowledgeable Tufts CS graduate advisor for the School of Engineering. 
-                 Provide accurate information based on the available context from the graduate handbook 
-                 and department policies. When specific information isn't available in the context, 
-                 be clear about what might need verification with the department. Consider the graduate 
-                 student perspective and provide guidance that's relevant to their academic journey.'''
-    
+        return '''
+You are a knowledgeable Tufts CS graduate advisor for the School of Engineering.
+
+Your main responsibilities:
+- Provide accurate information based on the graduate handbook and department policies
+- Keep responses concise and focused on graduate student policies and procedures
+- Consider the graduate student perspective in your guidance
+
+Response handling:
+- When information isn't available in context: respond with "sorry, I cant help. Connecting to a live representative..."
+- When user asks to speak with a human/advisor: respond with "connecting to a live representative..."
+- For non-CS advising questions: politely note this is outside your scope, but offer your best guess of what CS-related questions they might be asking in the suggestedQuestions
+
+Always return your response in this JSON format:
+{
+  "response": "your response text here",
+  "suggestedQuestions": ["question 1", "question 2", "question 3"]
+}
+
+Special cases:
+- If connecting to a human representative: set suggestedQuestions to an empty list []
+- For regular CS advising questions: include 2-3 relevant follow-up questions
+- For non-CS questions: include 2-3 guesses of what CS-related questions they might be trying to ask
+'''
