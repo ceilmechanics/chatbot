@@ -90,30 +90,57 @@ def main():
                     upsert=True
                 )
             
-            # Create buttons for each suggested question
+            # Create buttons for each suggested question - MODIFIED to display vertically
             question_buttons = []
             for i, question in enumerate(suggested_questions):
                 question_buttons.append({
                     "type": "button",
-                    "text": question,
-                    "msg": f"suggested_question_{user_id}_{i}",
-                    "msg_in_chat_window": True,
-                    "msg_processing_type": "sendMessage"
+                    "text": {"type": "plain_text", "text": question},  # Use full question text
+                    "action_id": f"suggested_question_{i}",
+                    # Set the actual question text as the value to be sent when clicked
+                    "value": question
                 })
             
-            # Construct response with text and suggested question buttons
+            # Construct response with text and suggested question buttons in vertical layout
             response = {
-                "text": response_text
-            }
-            
-            # Add suggested questions as buttons if available
-            if question_buttons:
-                response["attachments"] = [
+                "text": response_text,
+                "blocks": [
                     {
-                        "title": "You may also be interested in:",
-                        "actions": question_buttons
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": response_text
+                        }
                     }
                 ]
+            }
+            
+            # Add suggested questions as vertical buttons if available
+            if question_buttons:
+                response["blocks"].append({
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*You may also be interested in:*"
+                    }
+                })
+                
+                # Add each question as a separate button in its own section block for vertical layout
+                for i, question in enumerate(suggested_questions):
+                    response["blocks"].append({
+                        "type": "actions",
+                        "elements": [
+                            {
+                                "type": "button",
+                                "text": {
+                                    "type": "plain_text",
+                                    "text": question
+                                },
+                                "value": question,  # The actual question text is sent when clicked
+                                "action_id": f"suggested_question_{user_id}_{i}"
+                            }
+                        ]
+                    })
             
             return jsonify(response)
             
