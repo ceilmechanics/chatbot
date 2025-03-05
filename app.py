@@ -91,7 +91,7 @@ def main():
 
     print(f"Message {message_id} in channel {channel_id} sent by {user_name} : {message}")
 
-    if message.lower() == "exit" and user in human_mode_users:
+    if message.lower() == "exit":
         del human_mode_users[user] 
         return jsonify({"text": f"{user}, you are now back in bot mode."})
 
