@@ -24,7 +24,7 @@ HUMAN_OPERATOR = "@wendan.jiang"
 lock = Lock()
 human_mode_users = {}
 
-def send_to_human(user, rc_payload):
+def send_to_human(user, message):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
     """
@@ -33,7 +33,7 @@ def send_to_human(user, rc_payload):
         print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
         payload = {
             "channel": HUMAN_OPERATOR,  # Send as a DM to the human operator
-            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} needs assistance!\n\n**Message:** {rc_payload["text"]}"
+            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} needs assistance!\n\n**Message:** {message}"
         }
         response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
         return response.json()  # Return API response for debugging
@@ -172,7 +172,7 @@ def main():
             if rc_payload:
                 print("LINE 81 there is rc_payload provided, response forwarded")
 
-                forward_res = send_to_human(user, rc_payload)
+                forward_res = send_to_human(user, rc_payload["text"])
                 print("LINE 84", forward_res)
                 
                 return jsonify({
