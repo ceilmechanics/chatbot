@@ -71,9 +71,8 @@ def main():
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
             
-            # Emoji list for suggested questions
             emojis = ["🔍", "💡", "🎓", "📚", "✨", "🧠", "⭐", "🚀"]
-            
+
             # Create buttons for each suggested question
             question_buttons = []
             for i, question in enumerate(suggested_questions):
@@ -83,9 +82,14 @@ def main():
                     "text": f"{emoji} {question}",
                     "msg": question,
                     "msg_in_chat_window": True,
-                    "msg_processing_type": "sendMessage"
+                    "msg_processing_type": "sendMessage",
+                    "is_webview": False,
+                    "image_url": "",
+                    "button_alignment": "vertical",
+                    "button_color": "#1E88E5",
+                    "text_color": "#FFFFFF"
                 })
-            
+
             # Construct response with text and suggested question buttons
             response = {
                 "text": response_text,
@@ -93,6 +97,9 @@ def main():
                     {
                         "color": "#1E88E5",
                         "title": "✨ You might also want to know: 🤔",
+                        "title_link": "",
+                        "title_link_download": False,
+                        "button_alignment": "vertical",
                         "actions": question_buttons
                     }
                 ] if question_buttons else []
