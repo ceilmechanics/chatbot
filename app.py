@@ -71,16 +71,19 @@ def main():
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
             
+            # Emoji list for suggested questions
+            emojis = ["🔍", "💡", "🎓", "📚", "✨", "🧠", "⭐", "🚀"]
+            
+            # Create buttons for each suggested question
             question_buttons = []
             for i, question in enumerate(suggested_questions):
+                emoji = emojis[i % len(emojis)]
                 question_buttons.append({
                     "type": "button",
-                    "text": f"📌 {question}",  # Add emoji prefix
-                    "msg": question,  # Use the actual question text
+                    "text": f"{emoji} {question}",
+                    "msg": question,
                     "msg_in_chat_window": True,
-                    "msg_processing_type": "sendMessage",
-                    "button_alignment": "horizontal",  # Align buttons side by side when possible
-                    "button_color": "#1E88E5" if i % 2 == 0 else "#7986CB"  # Alternate colors
+                    "msg_processing_type": "sendMessage"
                 })
             
             # Construct response with text and suggested question buttons
@@ -88,11 +91,8 @@ def main():
                 "text": response_text,
                 "attachments": [
                     {
-                        "color": "#2196F3",  # Blue accent color
-                        "title": "💡 You might also want to know:",
-                        "title_link": "",  # Required for some clients
-                        "title_color": "#1565C0",  # Darker blue for the title
-                        "collapsed": False,  # Make sure it's expanded by default
+                        "color": "#1E88E5",
+                        "title": "✨ You might also want to know: 🤔",
                         "actions": question_buttons
                     }
                 ] if question_buttons else []
