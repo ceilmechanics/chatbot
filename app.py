@@ -39,22 +39,6 @@ def main():
         if not mongo_client:
             return jsonify({"text": "Error connecting to database"}), 500
 
-        # Handle suggested question button clicks
-        if message.startswith("suggested_question_"):
-            parts = message.split("_")
-            if len(parts) >= 4:  # Format: suggested_question_user_id_index
-                button_user_id = parts[2]  # User ID is the 3rd part (index 2)
-                question_index = int(parts[3])  # Index is the 4th part (index 3)
-                
-                # Get the original question from MongoDB
-                questions_collection = mongo_client["Users"]["suggested_questions"]
-                stored_questions = questions_collection.find_one({"user_id": button_user_id})
-                
-                if stored_questions and "questions" in stored_questions and len(stored_questions["questions"]) > question_index:
-                    message = stored_questions["questions"][question_index]
-                else:
-                    return jsonify({"text": "Sorry, I couldn't find that question."})
-
         # Get or create user profile
         user_collection = mongo_client["Users"]["user"]
         user_profile = user_collection.find_one({"user_id": user_id})
@@ -81,27 +65,42 @@ def main():
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
             
-            # Store suggested questions for later retrieval
-            if suggested_questions:
-                questions_collection = mongo_client["Users"]["suggested_questions"]
-                questions_collection.update_one(
-                    {"user_id": user_id},
-                    {"$set": {"questions": suggested_questions}},
-                    upsert=True
-                )
-            
-            # Create buttons for each suggested question - MODIFIED to display vertically
-            question_buttons = []
-            for i, question in enumerate(suggested_questions):
-                question_buttons.append({
+            # Create a more visually appealing response with cards for suggested questions
+            suggested_questions_blocks = []
+
+            # Group questions into pairs for a two-column layout when possible
+            for i in range(0, len(suggested_questions), 2):
+                # Create buttons for this row
+                row_buttons = []
+                
+                # Add first button in pair
+                row_buttons.append({
                     "type": "button",
-                    "text": {"type": "plain_text", "text": question},  # Use full question text
-                    "action_id": f"suggested_question_{i}",
-                    # Set the actual question text as the value to be sent when clicked
-                    "value": question
+                    "text": suggested_questions[i],
+                    "style": "primary",  # Blue, prominent styling
+                    "msg": suggested_questions[i],  # Use the actual question text
+                    "msg_in_chat_window": True,
+                    "msg_processing_type": "sendMessage"
                 })
-            
-            # Construct response with text and suggested question buttons in vertical layout
+                
+                # Add second button if available
+                if i + 1 < len(suggested_questions):
+                    row_buttons.append({
+                        "type": "button",
+                        "text": suggested_questions[i + 1],
+                        "style": "default",  # Standard styling
+                        "msg": suggested_questions[i + 1],  # Use the actual question text
+                        "msg_in_chat_window": True,
+                        "msg_processing_type": "sendMessage"
+                    })
+                
+                # Add this row as a section
+                suggested_questions_blocks.append({
+                    "type": "actions",
+                    "elements": row_buttons
+                })
+
+            # Construct the enhanced response
             response = {
                 "text": response_text,
                 "blocks": [
@@ -114,33 +113,25 @@ def main():
                     }
                 ]
             }
-            
-            # Add suggested questions as vertical buttons if available
-            if question_buttons:
-                response["blocks"].append({
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "*You may also be interested in:*"
+
+            # Add divider and heading for suggested questions if available
+            if suggested_questions_blocks:
+                response["blocks"].extend([
+                    {
+                        "type": "divider"
+                    },
+                    {
+                        "type": "header",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "💡 You might also want to know:",
+                            "emoji": True
+                        }
                     }
-                })
+                ])
                 
-                # Add each question as a separate button in its own section block for vertical layout
-                for i, question in enumerate(suggested_questions):
-                    response["blocks"].append({
-                        "type": "actions",
-                        "elements": [
-                            {
-                                "type": "button",
-                                "text": {
-                                    "type": "plain_text",
-                                    "text": question
-                                },
-                                "value": question,  # The actual question text is sent when clicked
-                                "action_id": f"suggested_question_{user_id}_{i}"
-                            }
-                        ]
-                    })
+                # Add all question blocks
+                response["blocks"].extend(suggested_questions_blocks)
             
             return jsonify(response)
             
