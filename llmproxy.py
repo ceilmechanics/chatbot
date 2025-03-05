@@ -179,18 +179,25 @@ class RAGParameterInference:
 class TuftsCSAdvisor:
     def __init__(self, pdf_path='soe-grad-handbook.pdf', session_id=None):
         self.session_id = session_id or 'Tufts-CS-Advisor-default'
-        self.parameter_inference = RAGParameterInference()
+        # self.parameter_inference = RAGParameterInference()
+
+        # print("\n>>>>>>>>>>>>>>>>>>>>>>>>> RAG inference results >>>>>>>>>>>>>>>>>>>>> \n")
+        # print(RAGParameterInference)
+        # print("\n\n")
+
+        # use_rag = self.parameter_inference.infer_rag_params(query)
         
-        print(f"\n📚 Loading handbook for session {self.session_id}...")
-        try:
-            upload_response = pdf_upload(
-                path=pdf_path,
-                session_id=self.session_id,
-                strategy='smart'
-            )
-            print("✅ Handbook loaded successfully")
-        except Exception as e:
-            print(f"❌ Error loading handbook: {str(e)}")
+        
+        # print(f"\n📚 Loading handbook for session {self.session_id}...")
+        # try:
+        #     upload_response = pdf_upload(
+        #         path=pdf_path,
+        #         session_id=self.session_id,
+        #         strategy='smart'
+        #     )
+        #     print("✅ Handbook loaded successfully")
+        # except Exception as e:
+        #     print(f"❌ Error loading handbook: {str(e)}")
 
     def get_response(self, query: str, lastk: int = 0) -> str:
         """
@@ -200,9 +207,24 @@ class TuftsCSAdvisor:
             query: User's question
             lastk: Number of previous exchanges to include for context
         """
-        use_rag, threshold, k = self.parameter_inference.infer_rag_params(query)
-        print(f"Session {self.session_id} - RAG params: use_rag={use_rag}, threshold={threshold}, k={k}, lastk={lastk}")
-        
+        rag_usage, threshold, k = self.parameter_inference.infer_rag_params(query)
+        print("\n>>>>>>>>>>>>>>>>>>>>>>>>> RAG inference results >>>>>>>>>>>>>>>>>>>>> \n")
+        print(RAGParameterInference)
+        print(f"\nSession {self.session_id} - RAG params: rag_usage={rag_usage}, threshold={threshold}, k={k}, lastk={lastk}")
+        print("\n\n")
+
+        if lastk == 0 and rag_usage is True:
+            # print(f"\n📚 Loading handbook for session {self.session_id}...")
+            try:
+                upload_response = pdf_upload(
+                    path='soe-grad-handbook.pdf',
+                    session_id=self.session_id,
+                    strategy='smart'
+                )
+                print("✅ Handbook loaded successfully")
+            except Exception as e:
+                print(f"❌ Error loading handbook: {str(e)}")
+
         response = generate(
             model='4o-mini',
             system=self.get_system_prompt(),
@@ -210,7 +232,7 @@ class TuftsCSAdvisor:
             temperature=0.1,
             lastk=lastk,
             session_id=self.session_id,
-            rag_usage=use_rag,
+            rag_usage=rag_usage,
             rag_threshold=threshold,
             rag_k=k
         )
