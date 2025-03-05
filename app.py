@@ -178,12 +178,14 @@ def main():
                 
                 # Extract the payload components
                 original_question = rc_payload["originalQuestion"]
-                llm_answer = rc_payload["llmAnswer"]
+                llm_answer = rc_payload.get("llmAnswer")
         
                 # Format according to requirements
                 formatted_string = ""
                 if llm_answer:
                     formatted_string = f"\nStudent Question: {original_question}\n\nBot Answer: {llm_answer}\n\nCould you please help me verify the answer?"
+                else:
+                    formatted_string = f"\nStudent Question: {original_question}\n\n"
 
                 forward_res = send_to_human(user, formatted_string)
                 print("LINE 84", forward_res)
