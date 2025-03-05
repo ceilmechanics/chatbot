@@ -72,52 +72,26 @@ def main():
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
 
-            emojis = ["🔍", "💡", "🎓", "📚", "✨", "🧠", "⭐", "🚀"]
+            emojis = ["🔍", "💡", "📚"]
 
             # Create buttons for each suggested question
-            # question_buttons = []
-            # for i, question in enumerate(suggested_questions):
-            #     emoji = emojis[i % len(emojis)]
-            #     question_buttons.append({
-            #         "type": "button",
-            #         "text": f"{emoji} {question}",
-            #         "msg": question,
-            #         "msg_in_chat_window": True,
-            #         "msg_processing_type": "sendMessage",
-            #     })
+            question_buttons = []
+            for i, question in enumerate(suggested_questions):
+                emoji = emojis[i % len(emojis)]
+                question_buttons.append({
+                    "type": "button",
+                    "text": f"{emoji} {question}",
+                    "msg": question,
+                    "msg_in_chat_window": True,
+                    "msg_processing_type": "sendMessage",
+                })
 
-            # # Construct response with text and suggested question buttons
-            # response = {
-            #     "text": response_text,
-            #     "attachments": [
-            #         {
-            #             "title": "✨ You might also want to know: 🤔",
-            #             "actions": question_buttons
-            #         }
-            #     ] if question_buttons else []
-            # }
-
-
-            # Create blocks for the response
-            blocks = [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": response_text
-                    }
-                },
-                {
-                    "type": "header",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "✨ You might also want to know: 🤔",
-                        "emoji": True
-                    }
-                }
-            ]
-
+                question_buttons.append({
+                    "type": "divider"
+                })
+            
             # Add each suggested question as a separate action block
+            blocks = []
             for i, question in enumerate(suggested_questions):
                 emoji = emojis[i % len(emojis)]
                 blocks.append({
@@ -139,10 +113,43 @@ def main():
                     ]
                 })
 
-            # Replace your response section with this
+            # Construct response with text and suggested question buttons
             response = {
-                "blocks": blocks
+                "text": response_text,
+                "attachments": [
+                    {
+                        "title": "✨ You might also want to know: 🤔",
+                        "blocks": blocks
+                    }
+                ]
             }
+
+
+            # # Create blocks for the response
+            # blocks = [
+            #     {
+            #         "type": "section",
+            #         "text": {
+            #             "type": "mrkdwn",
+            #             "text": response_text
+            #         }
+            #     },
+            #     {
+            #         "type": "header",
+            #         "text": {
+            #             "type": "plain_text",
+            #             "text": "✨ You might also want to know: 🤔",
+            #             "emoji": True
+            #         }
+            #     }
+            # ]
+
+
+
+            # # Replace your response section with this
+            # response = {
+            #     "blocks": blocks
+            # }
             print (response)
             return jsonify(response)
             
