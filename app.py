@@ -84,7 +84,9 @@ def main():
                     "msg": question,
                     "msg_in_chat_window": True,
                     "msg_processing_type": "sendMessage",
-                    "button_alignment": "vertical",
+                })
+                question_buttons.append({
+                    type: 'divider'
                 })
 
             # Construct response with text and suggested question buttons
