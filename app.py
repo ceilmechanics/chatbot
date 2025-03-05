@@ -33,7 +33,7 @@ def send_to_human(user, rc_payload):
         print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
         payload = {
             "channel": HUMAN_OPERATOR,  # Send as a DM to the human operator
-            "text": rc_payload["text"]
+            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} needs assistance!\n\n**Message:** {rc_payload["text"]}"
         }
         response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
         return response.json()  # Return API response for debugging
