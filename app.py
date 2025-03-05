@@ -99,6 +99,8 @@ def main():
                     }
                 ] if question_buttons else []
             }
+
+            print (response)
             return jsonify(response)
             
         except (json.JSONDecodeError, TypeError):
