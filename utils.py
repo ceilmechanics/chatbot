@@ -3,6 +3,7 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from typing import Optional
+import requests
 
 # Load environment variables from .env file
 load_dotenv()
@@ -56,3 +57,65 @@ def close_mongodb_connection(client: MongoClient):
     if client:
         client.close()
         print("MongoDB connection closed")
+
+
+def forward_human_response(rc_payload, user_profile):
+    url = "https://chat.genaiconnect.net/api/v1/chat.postMessage" #URL of RocketChat server, keep the same
+
+    # Headers with authentication tokens
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": os.environ.get("RC_token"), #Replace with your bot token for local testing or keep it and store secrets in Koyeb
+        "X-User-Id": os.environ.get("RC_userId")#Replace with your bot user id for local testing or keep it and store secrets in Koyeb
+    }
+
+    # Sending the POST request
+    rc_payload["text"] = (
+        "🚨 Escalation Alert 🚨\n"
+        f"User {user_profile.user_name} needs assistance!\n\n"
+        f"**Message:** {rc_payload["text"]}"
+    )
+    
+    response = requests.post(url, json=rc_payload, headers=headers)
+    return response
+
+    # processing the response with LLM and send back to client
+
+def extract_user_id(message):
+    """
+    Extract user ID from a human response message.
+    """
+    # Look for ID pattern in escalation message
+    id_match = re.search(r"User .+ \(ID: ([^\)]+)\)", message)
+    if id_match:
+        return id_match.group(1)
+    
+    # Look for "Responding to" pattern
+    resp_match = re.search(r"Responding to ([\w\.\-]+):", message)
+    if resp_match:
+        return resp_match.group(1)
+        
+    return None
+
+def send_human_response(user_id, message):
+    """
+    Sends a human advisor's response back to the original user.
+    """
+    url = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
+    
+    headers = {
+        "Content-Type": "application/json",
+        "X-Auth-Token": os.environ.get("RC_token"),
+        "X-User-Id": os.environ.get("RC_userId")
+    }
+    
+    # Clean the message if it contains a response prefix
+    cleaned_message = re.sub(r"^Responding to [\w\.\-]+:\s*", "", message).strip()
+    
+    payload = {
+        "channel": f"@{user_id}",
+        "text": f"👤 Human Advisor: {cleaned_message}"
+    }
+    
+    response = requests.post(url, json=payload, headers=headers)
+    return response.json()
