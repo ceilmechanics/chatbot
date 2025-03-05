@@ -72,84 +72,38 @@ def main():
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
 
-            emojis = ["🔍", "💡", "📚"]
+            # emojis = ["🔍", "💡", "📚"]
 
-            # Create buttons for each suggested question
+            # Create numbered buttons for suggested questions
             question_buttons = []
-            for i, question in enumerate(suggested_questions):
-                emoji = emojis[i % len(emojis)]
+            for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
                 question_buttons.append({
                     "type": "button",
-                    "text": f"{emoji} {question}",
-                    "msg": question,
+                    "text": f"{i}",  # Just show the number
+                    "msg": question,  # Send the full question when clicked
                     "msg_in_chat_window": True,
                     "msg_processing_type": "sendMessage",
                 })
+                
+                # Add divider after each button except the last one
+                if i < len(suggested_questions):
+                    question_buttons.append({
+                        "type": "divider"
+                    })
 
-                question_buttons.append({
-                    "type": "divider"
-                })
-            
-            # Add each suggested question as a separate action block
-            blocks = []
-            for i, question in enumerate(suggested_questions):
-                emoji = emojis[i % len(emojis)]
-                blocks.append({
-                    "type": "actions",
-                    "elements": [
-                        {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": f"{emoji} {question}",
-                                "emoji": True
-                            },
-                            "value": question,
-                            "actionId": f"send_message_{message_id}_{i}",
-                            "msg": question,
-                            "msg_in_chat_window": True,
-                            "msg_processing_type": "sendMessage"
-                        }
-                    ]
-                })
+            # Construct response with numbered questions in text and numbered buttons
+            numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])
 
-            # Construct response with text and suggested question buttons
             response = {
-                "text": response_text,
+                "text": response_text + "\n\n✨ You might also want to know:\n" + numbered_questions,
                 "attachments": [
                     {
-                        "title": "✨ You might also want to know: 🤔",
-                        "blocks": blocks
+                        "title": "Click a number to ask that question:",
+                        "actions": question_buttons
                     }
                 ]
             }
 
-
-            # # Create blocks for the response
-            # blocks = [
-            #     {
-            #         "type": "section",
-            #         "text": {
-            #             "type": "mrkdwn",
-            #             "text": response_text
-            #         }
-            #     },
-            #     {
-            #         "type": "header",
-            #         "text": {
-            #             "type": "plain_text",
-            #             "text": "✨ You might also want to know: 🤔",
-            #             "emoji": True
-            #         }
-            #     }
-            # ]
-
-
-
-            # # Replace your response section with this
-            # response = {
-            #     "blocks": blocks
-            # }
             print (response)
             return jsonify(response)
             
