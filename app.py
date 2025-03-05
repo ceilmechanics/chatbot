@@ -22,6 +22,7 @@ def main():
     channel_id = data.get("channel_id")
     user_id = data.get("user_id")
     user_name = data.get("user_name", "Unknown")
+    message_id = data.get("message_id")
     message = data.get("text", "")
 
     print(f"Received request: {data}")
@@ -71,32 +72,51 @@ def main():
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
 
+            # Emoji list for suggested questions
             emojis = ["🔍", "💡", "🎓", "📚", "✨", "🧠", "⭐", "🚀"]
 
-            # Create buttons for each suggested question
-            question_buttons = []
+            # Create block elements for each suggested question
+            blocks = [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": response_text
+                    }
+                },
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "✨ You might also want to know: 🤔"
+                    }
+                }
+            ]
+
+            # Add buttons as individual actions
             for i, question in enumerate(suggested_questions):
                 emoji = emojis[i % len(emojis)]
-                question_buttons.append({
-                    "type": "button",
-                    "text": f"{emoji} {question}",
-                    "msg": question,
-                    "msg_in_chat_window": True,
-                    "msg_processing_type": "sendMessage",
-                    "button_alignment": "vertical",
+                blocks.append({
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": f"{emoji} {question}"
+                            },
+                            "value": question,
+                            "actionId": f"send_message_{message_id}_{i}",
+                            "msg": question,
+                            "msg_in_chat_window": True,
+                            "msg_processing_type": "sendMessage"
+                        }
+                    ]
                 })
 
-            # Construct response with text and suggested question buttons
+            # Construct response with blocks
             response = {
-                "text": response_text,
-                "attachments": [
-                    {
-                        "title": "✨ You might also want to know: 🤔",
-                        "title_link_download": False,
-                        "button_alignment": "vertical",
-                        "actions": question_buttons
-                    }
-                ] if question_buttons else []
+                "blocks": blocks
             }
             return jsonify(response)
             
