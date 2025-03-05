@@ -92,6 +92,7 @@ def main():
     print(f"Message {message_id} in channel {channel_id} sent by {user_name} : {message}")
 
     if message.lower() == "exit" and user in human_mode_users:
+        del human_mode_users[user] 
         return jsonify({"text": f"{user}, you are now back in bot mode."})
         # if user in human_mode_users:
         #     del human_mode_users[user] 
@@ -99,7 +100,7 @@ def main():
         #     return jsonify({"text": f"{user}, you are now back in bot mode."})
         # return jsonify({"text": f"{user}, you were not in human mode."})
 
-    # TODO: if user_id == human_assistant_id
+    # TODO: if user == human_assistant_id
     if message.startswith("Responding to"):
         print("DEBUG: Detected human response from Blair. Forwarding to user.")
 
