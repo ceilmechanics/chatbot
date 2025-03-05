@@ -183,11 +183,11 @@ class TuftsCSAdvisor:
         
         print(f"\n📚 Loading handbook for session {self.session_id}...")
         try:
-            upload_response = pdf_upload(
-                path=pdf_path,
-                session_id=self.session_id,
-                strategy='smart'
-            )
+            # upload_response = pdf_upload(
+            #     path=pdf_path,
+            #     session_id=self.session_id,
+            #     strategy='smart'
+            # )
             print("✅ Handbook loaded successfully")
         except Exception as e:
             print(f"❌ Error loading handbook: {str(e)}")
