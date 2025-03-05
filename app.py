@@ -45,7 +45,7 @@ def send_human_response(user, message, human_operator):
     with lock:
         payload = {
             "channel": f"@{user}",  # Send directly to the original user
-            "text": f"👤 *{human_operator} (Human Agent):* {message}"
+            "text": f"👤 *{human_operator} (Human Agent):* {message} \n If you are satistified with the answer, type 'exit' to return to the bot mode"
         }
         print(f"DEBUG: Sending cleaned human response from {human_operator} to {user}: {message}")
         
@@ -148,7 +148,7 @@ def main():
             print("app.py, sematic similarity found")
             faq_collection = mongo_client["freq_questions"]["questions"]
             faq_answer = faq_collection.find_one({"question": cached_response["cachedQuestion"]})
-            return jsonify({"response": faq_answer["answer"]})
+            return jsonify({"text": faq_answer["answer"]})
         
         # Get response from advisor
         advisor = TuftsCSAdvisor(session_id=f"cs-advising-session-{channel_id}")
