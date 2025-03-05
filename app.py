@@ -70,7 +70,7 @@ def main():
             response_data = json.loads(advisor_response)
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
-            
+
             emojis = ["🔍", "💡", "🎓", "📚", "✨", "🧠", "⭐", "🚀"]
 
             # Create buttons for each suggested question
@@ -83,11 +83,7 @@ def main():
                     "msg": question,
                     "msg_in_chat_window": True,
                     "msg_processing_type": "sendMessage",
-                    "is_webview": False,
-                    "image_url": "",
                     "button_alignment": "vertical",
-                    "button_color": "#1E88E5",
-                    "text_color": "#FFFFFF"
                 })
 
             # Construct response with text and suggested question buttons
@@ -95,9 +91,7 @@ def main():
                 "text": response_text,
                 "attachments": [
                     {
-                        "color": "#1E88E5",
                         "title": "✨ You might also want to know: 🤔",
-                        "title_link": "",
                         "title_link_download": False,
                         "button_alignment": "vertical",
                         "actions": question_buttons
