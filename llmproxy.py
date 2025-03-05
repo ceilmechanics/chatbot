@@ -116,35 +116,40 @@ def pdf_upload(
 class RAGParameterInference:
     def __init__(self):
         self.session_id = 'rag-parameter-inference'
-        self.inference_prompt = '''You are determining RAG parameters for a CS graduate student advising chatbot at Tufts School of Engineering.
+        self.inference_prompt = '''
+You are determining RAG parameters for a CS graduate student advising chatbot at Tufts School of Engineering.
 
-        Consider the following patterns when suggesting RAG parameters:
+Consider the following patterns when suggesting RAG parameters:
 
-        High Precision Needed (higher threshold ~0.8, lower k ~3):
-        - Questions about specific course requirements
-        - Questions about thesis/project deadlines
-        - Specific visa/international student policies
-        - Department-specific deadlines
-        
-        Balanced Context (medium threshold ~0.7, medium k ~5):
-        - Questions about course selection
-        - Academic standing policies
-        - Research opportunities
-        - Transfer credit policies
-        
-        Broader Context (lower threshold ~0.6, higher k ~7):
-        - General program planning
-        - Career development questions
-        - Lab/research group information
-        - Campus resources
+High Precision Needed (higher threshold ~0.8, lower k ~3):
+- Questions about academic standing and dismissal policies
+- Questions about thesis/dissertation defense procedures
+- Specific information about leave policies (personal, medical, parental)
+- Registration deadlines and continuous enrollment requirements
+- Fifth-Year Master's double-counting policies
 
-        Return only a JSON string in this exact format:
-        {
-            "rag_usage": <true/false>,
-            "rag_threshold": <0.0-1.0>,
-            "rag_k": <1-10>,
-            "reasoning": "<brief explanation of why these parameters were chosen>"
-        }'''
+Balanced Context (medium threshold ~0.7, medium k ~5):
+- Questions about transfer credit and extension of degree time
+- Co-op program eligibility and procedures
+- Academic integrity policies
+- English language proficiency requirements
+- Degree-only status and enrollment status
+
+Broader Context (lower threshold ~0.6, higher k ~7):
+- Campus resources (Health Services, Counseling, StAAR Center)
+- Graduate Student Council information
+- Professional development opportunities
+- Shuttle services and transportation
+- Campus facilities and libraries
+
+Return only a JSON string in this exact format:
+{
+    "rag_usage": <true/false>,
+    "rag_threshold": <0.0-1.0>,
+    "rag_k": <1-10>,
+    "reasoning": "<brief explanation of why these parameters were chosen>"
+}  
+'''
 
     def infer_rag_params(self, query: str) -> Tuple[bool, float, int]:
         try:
@@ -179,7 +184,7 @@ class RAGParameterInference:
 class TuftsCSAdvisor:
     def __init__(self, pdf_path='soe-grad-handbook.pdf', session_id=None):
         self.session_id = session_id or 'Tufts-CS-Advisor-default'
-        # self.parameter_inference = RAGParameterInference()
+        self.parameter_inference = RAGParameterInference()
 
         # print("\n>>>>>>>>>>>>>>>>>>>>>>>>> RAG inference results >>>>>>>>>>>>>>>>>>>>> \n")
         # print(RAGParameterInference)
@@ -207,9 +212,9 @@ class TuftsCSAdvisor:
             query: User's question
             lastk: Number of previous exchanges to include for context
         """
+
         rag_usage, threshold, k = self.parameter_inference.infer_rag_params(query)
         print("\n>>>>>>>>>>>>>>>>>>>>>>>>> RAG inference results >>>>>>>>>>>>>>>>>>>>> \n")
-        print(RAGParameterInference)
         print(f"\nSession {self.session_id} - RAG params: rag_usage={rag_usage}, threshold={threshold}, k={k}, lastk={lastk}")
         print("\n\n")
 
@@ -283,17 +288,16 @@ SECOND, CS Advising Questions with a Handbook Reference Available
         }
 
 THIRD, CS Advising Questions Without a Handbook Reference
-	•	If the answer is not found in the Graduate Handbook, do not speculate.
-	•	Forward the inquiry to a human advisor while acknowledging the request. 
-	•	Use the following JSON format:
-        Please note that in rocketChatPayload.text, you must include the user original question along with your drafted response to ask a human advisor to verify before sending.
-        {
-            "response": "Sorry, I don't have that specific information. Connecting you to a live representative...",
-            "rocketChatPayload": {
-                "channel": "@wendan.jiang",
-                "text": "(Copy user's original question). Drafted response: (Your best guess at an answer, it can be answered without relying on the handbook, but ask the human advisor to verify before sending)"
-            }
+- If the answer is not found in the Graduate Handbook but is general knowledge about CS coursework, workload, or similar topics, you MUST provide a helpful response in llmAnswer.
+- You MUST forward both the original question and your answer to a human advisor for verification before sending to the student.
+- Use the following JSON format:
+    {
+        "response": "Sorry, I don't have that specific information. Connecting you to a live representative...",
+        "rocketChatPayload": {
+            "originalQuestion": "(Copy user's original question)",
+            "llmAnswer": "(put your drafted answer here)"
         }
+    }
 
 FORTH, User Explicitly Requests a Human Advisor
 	•	Immediately escalate the request with user's original question in rocketChatPayload['text'].
@@ -301,8 +305,7 @@ FORTH, User Explicitly Requests a Human Advisor
     {
         "response": "Connecting you to a live representative...",
         "rocketChatPayload": {
-            "channel": "@wendan.jiang",
-            "text": "(please put User's original question here)"
+            "originalQuestion": "(please put User's original question here)"
         }
     }
 

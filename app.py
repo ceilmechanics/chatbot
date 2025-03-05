@@ -4,7 +4,7 @@ from llmproxy import generate, TuftsCSAdvisor
 import uuid
 from datetime import datetime
 import os
-from utils import get_mongodb_connection, close_mongodb_connection
+from utils import get_mongodb_connection, close_mongodb_connection, semantic_similarity_check
 import json
 from threading import Lock
 import re
@@ -120,7 +120,7 @@ def main():
         print(f"DEBUG: {user} is in human mode. Forwarding to human.")
         send_to_human(user, message)
         return jsonify({"text": "Your message has been sent to a human."})
-
+    
     # Get MongoDB connection once for the entire request
     mongo_client = None
     try:
@@ -141,6 +141,14 @@ def main():
                 "major": ""
             }
             user_collection.insert_one(user_profile)
+
+        # check cached responses
+        cached_response = json.loads(semantic_similarity_check(message))
+        if cached_response["found"] is True:
+            print("app.py, sematic similarity found")
+            faq_collection = mongo_client["freq_questions"]["questions"]
+            faq_answer = faq_collection.find_one({"question": cached_response["cachedQuestion"]})
+            return jsonify({"response": faq_answer["answer"]})
         
         # Get response from advisor
         advisor = TuftsCSAdvisor(session_id=f"cs-advising-session-{channel_id}")
@@ -167,8 +175,17 @@ def main():
             
             if rc_payload:
                 print("LINE 81 there is rc_payload provided, response forwarded")
+                
+                # Extract the payload components
+                original_question = rc_payload["originalQuestion"]
+                llm_answer = rc_payload["llmAnswer"]
+        
+                # Format according to requirements
+                formatted_string = ""
+                if llm_answer:
+                    formatted_string = f"\nStudent Question: {original_question}\n\nBot Answer: {llm_answer}\n\nCould you please help me verify the answer?"
 
-                forward_res = send_to_human(user, rc_payload["text"])
+                forward_res = send_to_human(user, formatted_string)
                 print("LINE 84", forward_res)
                 
                 return jsonify({

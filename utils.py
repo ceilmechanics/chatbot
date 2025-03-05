@@ -4,6 +4,8 @@ from pymongo import MongoClient
 from dotenv import load_dotenv
 from typing import Optional
 import requests
+from llmproxy import generate
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -58,64 +60,42 @@ def close_mongodb_connection(client: MongoClient):
         client.close()
         print("MongoDB connection closed")
 
+def semantic_similarity_check(query):
 
-# def forward_human_response(rc_payload, user_profile):
-#     url = "https://chat.genaiconnect.net/api/v1/chat.postMessage" #URL of RocketChat server, keep the same
+    system = f"""
+    Determine if the user's question is semantically similar to any pre-stored questions. If a semantic match exists, return the matching pre-stored question.
 
-#     # Headers with authentication tokens
-#     headers = {
-#         "Content-Type": "application/json",
-#         "X-Auth-Token": os.environ.get("RC_token"), #Replace with your bot token for local testing or keep it and store secrets in Koyeb
-#         "X-User-Id": os.environ.get("RC_userId")#Replace with your bot user id for local testing or keep it and store secrets in Koyeb
-#     }
+    Return response in JSON format:
+    {{"found": true/false, "cachedQuestion": "matched pre-stored question or empty string if not found"}}
 
-#     # Sending the POST request
-#     rc_payload["text"] = (
-#         "🚨 Escalation Alert 🚨\n"
-#         f"User {user_profile.user_name} needs assistance!\n\n"
-#         f"**Message:** {rc_payload["text"]}"
-#     )
-    
-#     response = requests.post(url, json=rc_payload, headers=headers)
-#     return response
+    Example:
+    User query: "what are classes I need to take to have a CS major?"
+    Response: {{"found": true, "cachedQuestion": "What courses are required for the Computer Science major?"}}
 
-#     # processing the response with LLM and send back to client
+    Below are all pre-stored questions:
+    1. What courses are required for the Computer Science major?
+    2. What are the residency requirements for master's and PhD programs?
+    3. What happens if a graduate student fails to maintain continuous enrollment?
+    4. What is the time limit for completing a master's degree?
+    5. What is the policy for withdrawing from a graduate course?
+    6. What are the conditions for receiving financial aid as a graduate student?
+    7. What is the policy for parental accommodation for PhD students?
+    8. What is the policy for academic dismissal from the graduate program?
+    9. How many courses can be transferred for graduate credit?
+    10. What are the minimum academic standing requirements for graduate students?
+    11. Can international students take a leave of absence?
+    """
 
-# def extract_user_id(message):
-#     """
-#     Extract user ID from a human response message.
-#     """
-#     # Look for ID pattern in escalation message
-#     id_match = re.search(r"User .+ \(ID: ([^\)]+)\)", message)
-#     if id_match:
-#         return id_match.group(1)
-    
-#     # Look for "Responding to" pattern
-#     resp_match = re.search(r"Responding to ([\w\.\-]+):", message)
-#     if resp_match:
-#         return resp_match.group(1)
-        
-#     return None
+    response = generate(model = '4o-mini',
+        system = system,
+        query = query,
+        temperature=0.7,
+        lastk=0,
+        session_id='semantic_similarity_check',
+    )
 
-# def send_human_response(user_id, message):
-#     """
-#     Sends a human advisor's response back to the original user.
-#     """
-#     url = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
-    
-#     headers = {
-#         "Content-Type": "application/json",
-#         "X-Auth-Token": os.environ.get("RC_token"),
-#         "X-User-Id": os.environ.get("RC_userId")
-#     }
-    
-#     # Clean the message if it contains a response prefix
-#     cleaned_message = re.sub(r"^Responding to [\w\.\-]+:\s*", "", message).strip()
-    
-#     payload = {
-#         "channel": f"@{user_id}",
-#         "text": f"👤 Human Advisor: {cleaned_message}"
-#     }
-    
-#     response = requests.post(url, json=payload, headers=headers)
-#     return response.json()
+    print("\n>>>>>>>>>>>>>>>>>>>>>>>>> semantic_similarity_check >>>>>>>>>>>>>>>>>>>>")
+    print(response["response"])
+    print("\n\n")
+
+    return response["response"]
