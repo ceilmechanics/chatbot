@@ -3,15 +3,15 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from typing import Optional
-import requests
 from llmproxy import generate
-
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Get MongoDB connection string from environment variables
+# Setup log and mongodb
 MONGO_URI = os.environ.get("MONGO_URI")
+logger = logging.getLogger(__name__)
 
 def get_mongodb_connection() -> Optional[MongoClient]:
     """
@@ -98,4 +98,7 @@ def semantic_similarity_check(query):
     print(response["response"])
     print("\n\n")
 
-    return response["response"]
+    return response["response"]    
+
+
+

@@ -1,15 +1,19 @@
 import requests
 from flask import Flask, request, jsonify
-from llmproxy import generate, TuftsCSAdvisor
-import uuid
-from datetime import datetime
+from advisor import TuftsCSAdvisor
 import os
-from utils import get_mongodb_connection, close_mongodb_connection, semantic_similarity_check
+from utils.mongo_config import get_mongodb_connection, close_mongodb_connection
 import json
 from threading import Lock
 import re
+from utils.log_config import setup_logging
+import logging
 
 app = Flask(__name__)
+
+# log
+setup_logging()
+logger = logging.getLogger(__name__)
 
 human_mode_users = {} 
 ROCKETCHAT_URL = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
@@ -24,6 +28,8 @@ HUMAN_OPERATOR = "@wendan.jiang"
 lock = Lock()
 human_mode_users = {}
 
+human_mid = []
+
 def send_to_human(user, message):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
@@ -36,6 +42,7 @@ def send_to_human(user, message):
             "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} needs assistance!\n\n**Message:** {message}"
         }
         response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
+        print("line 45", response.json())
         return response.json()  # Return API response for debugging
 
 def send_human_response(user, message, human_operator):
@@ -71,6 +78,8 @@ def extract_original_user(bot_message):
         
     return None
 
+message_threads = {}
+
 @app.route('/query', methods=['POST'])
 def main():
     data = request.get_json() 
@@ -80,46 +89,50 @@ def main():
     user_id = data.get("user_id")
     user_name = data.get("user_name", "Unknown")
     user = user_name
-    message_id = data.get("message_id")
     message = data.get("text", "")
+    message_id = data.get("message_id")
 
-    print(f"Received request: {data}")
+    logger.info("hitting /query endpoint, request data: ")
+    logger.info(data)
+    logger.info(f"Message in channel {channel_id} sent by {user_name} : {message}")
 
     # Ignore bot messages
     if data.get("bot") or not message:
         return jsonify({"status": "ignored"})
 
-    print(f"Message {message_id} in channel {channel_id} sent by {user_name} : {message}")
+    ### human in the loop
+    #
+    # if message.lower() == "exit":
+    #     del human_mode_users[user] 
+    #     return jsonify({"text": f"{user}, you are now back in bot mode."})
 
-    if message.lower() == "exit":
-        del human_mode_users[user] 
-        return jsonify({"text": f"{user}, you are now back in bot mode."})
+    # # TODO: if user == human_assistant_id
+    # if message.startswith("Responding to"):
+    #     print("DEBUG: Detected human response from Blair. Forwarding to user.")
 
-    # TODO: if user == human_assistant_id
-    if message.startswith("Responding to"):
-        print("DEBUG: Detected human response from Blair. Forwarding to user.")
+    #     # Extract original user from the message
+    #     original_user = extract_original_user(message)
 
-        # Extract original user from the message
-        original_user = extract_original_user(message)
-
-        if not original_user:
-            return jsonify({"error": "No user found to respond to."}), 400
+    #     if not original_user:
+    #         return jsonify({"error": "No user found to respond to."}), 400
         
-        human_mode_users[original_user] = user
+    #     human_mode_users[original_user] = user
 
-        # Send response to the original user
-        cleaned_message = re.sub(r"Responding to [\w\.\-]+:\s*", "", message).strip()
-        print(f"DEBUG: Forwarding cleaned message: '{cleaned_message}' to {original_user}")
+    #     # Send response to the original user
+    #     cleaned_message = re.sub(r"Responding to [\w\.\-]+:\s*", "", message).strip()
+    #     print(f"DEBUG: Forwarding cleaned message: '{cleaned_message}' to {original_user}")
 
-        # TODO: processing with LLM and send back
-        response = send_human_response(original_user, cleaned_message, user)
-        ##response = send_human_response(original_user, message.replace("Responding to", "").strip(), user)
-        return jsonify(response)
+    #     # TODO: processing with LLM and send back
+    #     response = send_human_response(original_user, cleaned_message, user)
+    #     ##response = send_human_response(original_user, message.replace("Responding to", "").strip(), user)
+    #     return jsonify(response)
     
-    if user in human_mode_users:
-        print(f"DEBUG: {user} is in human mode. Forwarding to human.")
-        send_to_human(user, message)
-        return jsonify({"text": "Your message has been sent to a human."})
+    # if user in human_mode_users:
+    #     print(f"DEBUG: {user} is in human mode. Forwarding to human.")
+    #     send_to_human(user, message)
+    #     return jsonify({"text": "Your message has been sent to a human."})
+    #
+    ### END OF HUMAN IN THE LOOP
     
     # Get MongoDB connection once for the entire request
     mongo_client = None
@@ -141,40 +154,32 @@ def main():
                 "major": ""
             }
             user_collection.insert_one(user_profile)
-
-        # check cached responses
-        cached_response = json.loads(semantic_similarity_check(message))
-        if cached_response["found"] is True:
-            print("app.py, sematic similarity found")
-            faq_collection = mongo_client["freq_questions"]["questions"]
-            faq_answer = faq_collection.find_one({"question": cached_response["cachedQuestion"]})
-            return jsonify({"text": faq_answer["answer"]})
+        lastk = user_profile.get("last_k", 0)
+        user_collection.update_one(
+                {"user_id": user_id},
+                {"$set": {"last_k": lastk + 1}}
+            )
         
         # Get response from advisor
-        advisor = TuftsCSAdvisor(session_id=f"cs-advising-session-{channel_id}")
-        lastk = user_profile.get("last_k", 0)
-        advisor_response = advisor.get_response(query=message, lastk=lastk)
+        advisor = TuftsCSAdvisor(user_profile)
+        
+        faq_response = advisor.get_faq_response(query=message, lastk=lastk)
+        print(">>>>>>>>>>> faq >>>>>>>>>>>", faq_response)
 
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADVISOR RESPONSE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n")
-        print(advisor_response)
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADVISOR RESPONSE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n\n")
-
-        # Update lastk in the database
-        user_collection.update_one(
-            {"user_id": user_id},
-            {"$set": {"last_k": lastk + 1}}
-        )
-    
-        # Parse the response
         try:
-            # The TuftsCSAdvisor returns JSON with response and suggestedQuestions
-            response_data = json.loads(advisor_response)
+            response_data = json.loads(faq_response)
+            if not response_data["response"]:
+                advisor_response = advisor.get_response(query=message, lastk=lastk)
+                response_data = json.loads(advisor_response)
+
+            print("LINE 188", response_data)
+
             response_text = response_data["response"]
             suggested_questions = response_data.get("suggestedQuestions", [])
             rc_payload = response_data.get("rocketChatPayload") 
             
             if rc_payload:
-                print("LINE 81 there is rc_payload provided, response forwarded")
+                print("THIS is a request requires human help...")
                 
                 # Extract the payload components
                 original_question = rc_payload["originalQuestion"]
@@ -188,6 +193,10 @@ def main():
                     formatted_string = f"\nStudent Question: {original_question}\n\n"
 
                 forward_res = send_to_human(user, formatted_string)
+                advisor_messsage_id = forward_res["message"]["_id"]
+                message_threads[message_id] = advisor_messsage_id
+                message_threads[advisor_messsage_id] = message_id
+
                 print("LINE 84", forward_res)
                 
                 return jsonify({
