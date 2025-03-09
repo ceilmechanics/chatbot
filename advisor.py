@@ -9,7 +9,7 @@ class TuftsCSAdvisor:
             handbook_upload(self.user_id)
             upload_faq_text(self.user_id)
         
-        time.sleep(2)
+        time.sleep(3)
 
 
     def get_response(self, query: str, lastk: int = 0):
@@ -119,7 +119,7 @@ class TuftsCSAdvisor:
             rag_k=3  # Retrieve more documents
         )
         
-        print("\nFull Response Object:", rag_response)  # Print the entire response object
+        # print("\nFull Response Object:", rag_response)  # Print the entire response object
         print("\nResponse:", rag_response.get('response') if isinstance(rag_response, dict) else rag_response)
         print("\nRAG Context:", rag_response.get('rag_context') if isinstance(rag_response, dict) else "No context available")
 

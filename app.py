@@ -169,7 +169,7 @@ def main():
         try:
             if faq_response:
                 response_data = json.loads(faq_response)
-                if not response_data["response"]:
+                if not response_data.get("response"):
                     advisor_response = advisor.get_response(query=message, lastk=lastk)
                     response_data = json.loads(advisor_response)
             else:
