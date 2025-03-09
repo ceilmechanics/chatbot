@@ -167,8 +167,12 @@ def main():
         print(">>>>>>>>>>> faq >>>>>>>>>>>", faq_response)
 
         try:
-            response_data = json.loads(faq_response)
-            if not response_data["response"]:
+            if faq_response:
+                response_data = json.loads(faq_response)
+                if not response_data["response"]:
+                    advisor_response = advisor.get_response(query=message, lastk=lastk)
+                    response_data = json.loads(advisor_response)
+            else:
                 advisor_response = advisor.get_response(query=message, lastk=lastk)
                 response_data = json.loads(advisor_response)
 
