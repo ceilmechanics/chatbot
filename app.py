@@ -143,9 +143,9 @@ def main():
             
             forward_human = target_thread.get("forward_human")
             if forward_human == True:
-                logger.info("forward a message to human advising")
+                print("forward a message to human advising")
                 forward_thread_id = target_thread.get("forward_thread_id")
-                logger.info("forward_thread_id: " + forward_thread_id)
+                print("forward_thread_id: " + forward_thread_id)
                 send_to_human(user, message, forward_thread_id)
             else:
                 forward_username = target_thread.get("forward_username")
@@ -279,7 +279,8 @@ def main():
             
         except (json.JSONDecodeError, TypeError):
             # If response is not valid JSON, return it as is
-            return jsonify({"text": advisor_response})
+            # return jsonify({"text": advisor_response})
+            traceback.print_exc()
 
     except Exception as e:
         traceback.print_exc()
