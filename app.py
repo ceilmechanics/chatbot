@@ -222,6 +222,7 @@ def main():
                     "forward_username": user_name
 
                 }]
+                thread_collection = mongo_client["Users"]["threads"]
                 thread_collection.insert_many(thread_item)
 
                 # message_threads[message_id] = advisor_messsage_id
