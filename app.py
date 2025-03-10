@@ -265,6 +265,7 @@ def main():
         except (json.JSONDecodeError, TypeError):
             # If response is not valid JSON, return it as is
             # return jsonify({"text": advisor_response})
+            print("error decoding json")
             traceback.print_exc()
 
     except Exception as e:
