@@ -51,8 +51,6 @@ def send_to_human(user, message, tmid=None):
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
 
     logger.info("successfully forward message to human")
-    print("LINE 52: " + response.json())
-
     return response.json()  # Return API response for debugging
 
 
@@ -229,19 +227,6 @@ def main():
                 }]
                 thread_collection = mongo_client["Users"]["threads"]
                 thread_collection.insert_many(thread_item)
-
-                # message_threads[message_id] = advisor_messsage_id
-
-                # human_reply_threads[advisor_messsage_id] = {
-                #     "message_id": message_id,
-                #     "user_name": user_name
-                # }
-
-                # print("LINE 256")
-                # print("message_threads: ", message_threads)
-                # print("human_reply_threads: ", human_reply_threads)
-
-                # print("LINE 84", forward_res)
                 
                 return jsonify({
                     "text": response_text,
