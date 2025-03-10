@@ -51,7 +51,7 @@ def send_to_human(user, message, tmid=None):
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
 
     logger.info("successfully forward message to human")
-    print("LINE 54")
+    logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()  # Return API response for debugging
 
 
@@ -59,7 +59,6 @@ def send_to_human(user, message, tmid=None):
 #     payload = {
 #         "channel": f"@{user}"
 #         "text"
-
 #     }
 
 def send_human_response(user, message, tmid):
@@ -73,8 +72,7 @@ def send_human_response(user, message, tmid):
         "tmid": tmid,
         "tmshow": True
     }
-    logger.info(f"DEBUG: Sending cleaned human response from {HUMAN_OPERATOR} to {user}: {message}")
-    
+
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
