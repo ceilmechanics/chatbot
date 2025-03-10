@@ -236,15 +236,15 @@ def main():
                 # Format according to requirements
                 formatted_string = ""
                 if llm_answer:
-                    formatted_string = f"\n❓ Student Question: {original_question}\n\n 🤖 AI-Generated Answer: {llm_answer}\n\n🔍Can you please review this answer for accuracy and completeness?"
+                    formatted_string = f"\n❓ Student Question: {original_question}\n\n🤖 AI-Generated Answer: {llm_answer}\n\n🔍 Can you please review this answer for accuracy and completeness?"
                 else:
-                    formatted_string = f"\n❓ Student Question: {original_question}\n\n"
+                    formatted_string = f"\n❓ Student Question: {original_question}"
 
                 forward_res = send_to_human(user, formatted_string)
                 
                 # message_id that starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
-                logger.info("advisor_message_id: ", advisor_messsage_id)
+                print("advisor_message_id: ", advisor_messsage_id)
 
                 message_threads[message_id] = advisor_messsage_id
 
@@ -252,6 +252,10 @@ def main():
                     "message_id": message_id,
                     "user_name": user_name
                 }
+
+                print("LINE 256")
+                print("message_threads: ", message_threads)
+                print("human_reply_threads: ", human_reply_threads)
 
                 # print("LINE 84", forward_res)
                 
