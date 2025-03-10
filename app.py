@@ -48,6 +48,10 @@ def send_to_human(user, message, tmid=None):
         }
 
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
+
+    logger.info("successfully forward message to human")
+    print(response.json())
+
     return response.json()  # Return API response for debugging
 
 
@@ -135,9 +139,6 @@ def main():
                 return jsonify({"text": f"Error: unable to find a matched thread"}), 500
 
             print("target thread: ", target_thread)
-
-            # print("message_threads: ", message_threads)
-            # print("human_reply_threads: ", human_reply_threads)
             
             forward_human = target_thread.get("forward_human")
             if forward_human == True:
@@ -148,6 +149,8 @@ def main():
                 forward_username = target_thread.get("forward_username")
                 forward_thread_id = target_thread.get("forward_thread_id")
                 send_human_response(forward_username, message, forward_thread_id)
+            
+            return jsonify({"success": True}), 200
     
         # Get or create user profile
         user_collection = mongo_client["Users"]["user"]
