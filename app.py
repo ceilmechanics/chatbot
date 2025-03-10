@@ -41,8 +41,8 @@ def send_to_human(user, message, tmid=None):
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": message,
-            "smid": tmid,
+            "text": f"🔍 *{user} (student):* {message}",
+            "tmid": tmid,
             "tmshow": True
         }
         logger.info("forwarding to thread: " + tmid)
@@ -60,6 +60,9 @@ def send_to_human(user, message, tmid=None):
 #         "channel": f"@{user}"
 #         "text"
 #     }
+# 2025-03-10 04:05:10,313 - app.py:54 - INFO - DEBUG: RocketChat API Response: 200 - {"ts":1741579510307,"channel":"@wendan.jiang","message":{"alias":"","msg":"how are you?","attachments":[],"parseUrls":true,"groupable":false,"ts":"2025-03-10T04:05:10.196Z","u":{"_id":"dC9Suu7AujjGywutj","username":"BOT-Wendan","name":"BOT-Wendan"},"rid":"dC9Suu7AujjGywutjiQPJmyQ7xNwGxWFT3","_id":"2JxmBtHK9F4CD2nyR","_updatedAt":"2025-03-10T04:05:10.233Z","urls":[],"mentions":[],"channels":[],"md":[{"type":"PARAGRAPH","value":[{"type":"PLAIN_TEXT","value":"how are you?"}]}]},"success":true}
+# 2025-03-10 04:05:00,827 - app.py:77 - INFO - DEBUG: RocketChat API Response: 200 - {"ts":1741579500822,"channel":"@wendan.jiang","message":{"alias":"","msg":"👤 *@wendan.jiang (Human Agent):* hi i am a real human","attachments":[],"parseUrls":true,"groupable":false,"tmid":"H4JoPHbNPWkcGcJCr","ts":"2025-03-10T04:05:00.697Z","u":{"_id":"dC9Suu7AujjGywutj","username":"BOT-Wendan","name":"BOT-Wendan"},"rid":"dC9Suu7AujjGywutjiQPJmyQ7xNwGxWFT3","_id":"q74fxYCFxW4GMgAi9","_updatedAt":"2025-03-10T04:05:00.741Z","urls":[],"mentions":[],"channels":[],"md":[{"type":"PARAGRAPH","value":[{"type":"EMOJI","unicode":"👤"},{"type":"PLAIN_TEXT","value":" *"},{"type":"MENTION_USER","value":{"type":"PLAIN_TEXT","value":"wendan.jiang"}},{"type":"PLAIN_TEXT","value":" (Human Agent):* hi i am a real human"}]}]},"success":true}
+
 
 def send_human_response(user, message, tmid):
     """
