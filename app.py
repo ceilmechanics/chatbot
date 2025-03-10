@@ -45,11 +45,12 @@ def send_to_human(user, message, tmid=None):
             "smid": tmid,
             "tmshow": True
         }
+        logger.info("forwarding to thread: " + tmid)
 
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
 
     logger.info("successfully forward message to human")
-    print(response.json())
+    print("LINE 52: " + response.json())
 
     return response.json()  # Return API response for debugging
 
@@ -143,6 +144,7 @@ def main():
             if forward_human == True:
                 logger.info("forward a message to human advising")
                 forward_thread_id = target_thread.get("forward_thread_id")
+                logger.info("forward_thread_id: " + forward_thread_id)
                 send_to_human(user, message, forward_thread_id)
             else:
                 forward_username = target_thread.get("forward_username")
