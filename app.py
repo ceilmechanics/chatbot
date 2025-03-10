@@ -51,6 +51,7 @@ def send_to_human(user, message, tmid=None):
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
 
     logger.info("successfully forward message to human")
+    print("LINE 54")
     return response.json()  # Return API response for debugging
 
 
