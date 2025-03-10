@@ -48,7 +48,8 @@ def send_to_human(user, message, tmid=None):
         payload = {
             "channel": HUMAN_OPERATOR,
             "text": {message},
-            "smid": tmid
+            "smid": tmid,
+            "tmshow": True
         }
 
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
@@ -73,10 +74,10 @@ def send_human_response(user, message, tmid):
         "tmid": tmid,
         "tmshow": True
     }
-    print(f"DEBUG: Sending cleaned human response from {HUMAN_OPERATOR} to {user}: {message}")
+    logger.info(f"DEBUG: Sending cleaned human response from {HUMAN_OPERATOR} to {user}: {message}")
     
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
-    print(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
+    logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
 
 # def extract_original_user(bot_message):
@@ -126,14 +127,21 @@ def main():
     # checking if it is a thread_message
     if tmid:
         logger.info("thread message id: " + tmid)
+        print("message_threads: ", message_threads)
+        print("human_reply_threads: ", human_reply_threads)
 
         if tmid in message_threads:
             # it is a message sent from user -> human advising
+            logger.info("forward a message to human advising")
             send_to_human(user, message, message_threads[tmid])
         elif tmid in human_reply_threads:
+            logger.info("forwarding a human response back to client")
+            logger.info(tmid_info)
+
             tmid_info = human_reply_threads[tmid]
             send_human_response(tmid_info["user_name"], message, tmid_info["message_id"])
         else:
+            print("no matched threads found!")
             return jsonify({"text": f"Error: unable to find a matched thread"}), 500
 
     ### human in the loop
@@ -236,6 +244,7 @@ def main():
                 
                 # message_id that starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
+                logger.info("advisor_message_id: ", advisor_messsage_id)
 
                 message_threads[message_id] = advisor_messsage_id
 
