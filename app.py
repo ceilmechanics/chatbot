@@ -15,7 +15,6 @@ app = Flask(__name__)
 setup_logging()
 logger = logging.getLogger(__name__)
 
-human_mode_users = {} 
 ROCKETCHAT_URL = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
 
 HEADERS = {
@@ -25,18 +24,14 @@ HEADERS = {
 }
 
 HUMAN_OPERATOR = "@wendan.jiang" 
-lock = Lock()
-human_mode_users = {}
-
-human_mid = []
 
 def send_to_human(user, message, tmid=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
     """
     # with lock: 
-    human_mode_users[user] = HUMAN_OPERATOR
-    print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
+    # human_mode_users[user] = HUMAN_OPERATOR
+    # print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
 
     payload = {}
     if not tmid:
@@ -98,10 +93,10 @@ def send_human_response(user, message, tmid):
 #     return None
 
 
-# key: message_id sent to bot, value: message_id bot should forward to
-message_threads = {}
-# key: human -> bot
-human_reply_threads = {}
+# # key: message_id sent to bot, value: message_id bot should forward to
+# message_threads = {}
+# # key: human -> bot
+# human_reply_threads = {}
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -124,67 +119,36 @@ def main():
     if data.get("bot") or not message:
         return jsonify({"status": "ignored"})
     
-    # checking if it is a thread_message
-    if tmid:
-        logger.info("thread message id: " + tmid)
-        print("message_threads: ", message_threads)
-        print("human_reply_threads: ", human_reply_threads)
-
-        if tmid in message_threads:
-            # it is a message sent from user -> human advising
-            logger.info("forward a message to human advising")
-            send_to_human(user, message, message_threads[tmid])
-        elif tmid in human_reply_threads:
-            logger.info("forwarding a human response back to client")
-            logger.info(tmid_info)
-
-            tmid_info = human_reply_threads[tmid]
-            send_human_response(tmid_info["user_name"], message, tmid_info["message_id"])
-        else:
-            print("no matched threads found!")
-            return jsonify({"text": f"Error: unable to find a matched thread"}), 500
-
-    ### human in the loop
-    #
-    # if message.lower() == "exit":
-    #     del human_mode_users[user] 
-    #     return jsonify({"text": f"{user}, you are now back in bot mode."})
-
-    # # TODO: if user == human_assistant_id
-    # if message.startswith("Responding to"):
-    #     print("DEBUG: Detected human response from Blair. Forwarding to user.")
-
-    #     # Extract original user from the message
-    #     original_user = extract_original_user(message)
-
-    #     if not original_user:
-    #         return jsonify({"error": "No user found to respond to."}), 400
-        
-    #     human_mode_users[original_user] = user
-
-    #     # Send response to the original user
-    #     cleaned_message = re.sub(r"Responding to [\w\.\-]+:\s*", "", message).strip()
-    #     print(f"DEBUG: Forwarding cleaned message: '{cleaned_message}' to {original_user}")
-
-    #     # TODO: processing with LLM and send back
-    #     response = send_human_response(original_user, cleaned_message, user)
-    #     ##response = send_human_response(original_user, message.replace("Responding to", "").strip(), user)
-    #     return jsonify(response)
-    
-    # if user in human_mode_users:
-    #     print(f"DEBUG: {user} is in human mode. Forwarding to human.")
-    #     send_to_human(user, message)
-    #     return jsonify({"text": "Your message has been sent to a human."})
-    #
-    ### END OF HUMAN IN THE LOOP
-    
-    # Get MongoDB connection once for the entire request
     mongo_client = None
     try:
         mongo_client = get_mongodb_connection()
         if not mongo_client:
             return jsonify({"text": "Error connecting to database"}), 500
+        
+        # checking if it is a thread_message
+        if tmid:
+            thread_collection = mongo_client["Users"]["threads"]
+            target_thread = thread_collection.find_one({"thread_id": tmid})
 
+            if not target_thread:
+                logger.error("no thread found")
+                return jsonify({"text": f"Error: unable to find a matched thread"}), 500
+
+            print("target thread: ", target_thread)
+
+            # print("message_threads: ", message_threads)
+            # print("human_reply_threads: ", human_reply_threads)
+            
+            forward_human = target_thread.get("forward_human")
+            if forward_human == True:
+                logger.info("forward a message to human advising")
+                forward_thread_id = target_thread.get("forward_thread_id")
+                send_to_human(user, message, forward_thread_id)
+            else:
+                forward_username = target_thread.get("forward_username")
+                forward_thread_id = target_thread.get("forward_thread_id")
+                send_human_response(forward_username, message, forward_thread_id)
+    
         # Get or create user profile
         user_collection = mongo_client["Users"]["user"]
         user_profile = user_collection.find_one({"user_id": user_id})
@@ -246,16 +210,30 @@ def main():
                 advisor_messsage_id = forward_res["message"]["_id"]
                 print("advisor_message_id: ", advisor_messsage_id)
 
-                message_threads[message_id] = advisor_messsage_id
+                thread_item = [{
+                    "thread_id": message_id,
+                    "forward_thread_id": advisor_messsage_id,
+                    "forward_human": True
+                }, 
+                {
+                    "thread_id": advisor_messsage_id,
+                    "forward_thread_id": message_id,
+                    "forward_human": False,
+                    "forward_username": user_name
 
-                human_reply_threads[advisor_messsage_id] = {
-                    "message_id": message_id,
-                    "user_name": user_name
-                }
+                }]
+                thread_collection.insert_many(thread_item)
 
-                print("LINE 256")
-                print("message_threads: ", message_threads)
-                print("human_reply_threads: ", human_reply_threads)
+                # message_threads[message_id] = advisor_messsage_id
+
+                # human_reply_threads[advisor_messsage_id] = {
+                #     "message_id": message_id,
+                #     "user_name": user_name
+                # }
+
+                # print("LINE 256")
+                # print("message_threads: ", message_threads)
+                # print("human_reply_threads: ", human_reply_threads)
 
                 # print("LINE 84", forward_res)
                 
