@@ -47,6 +47,7 @@ def send_to_human(user, message, tmid=None):
         }
         logger.info("forwarding to thread: " + tmid)
 
+    print("Line 50: ", payload)
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
 
     logger.info("successfully forward message to human")
