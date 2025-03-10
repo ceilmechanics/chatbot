@@ -30,55 +30,77 @@ human_mode_users = {}
 
 human_mid = []
 
-def send_to_human(user, message):
+def send_to_human(user, message, tmid=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
     """
-    with lock: 
-        human_mode_users[user] = HUMAN_OPERATOR
-        print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
-        payload = {
-            "channel": HUMAN_OPERATOR,  # Send as a DM to the human operator
-            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} needs assistance!\n\n**Message:** {message}"
-        }
-        response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
-        print("line 45", response.json())
-        return response.json()  # Return API response for debugging
+    # with lock: 
+    human_mode_users[user] = HUMAN_OPERATOR
+    print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
 
-def send_human_response(user, message, human_operator):
+    payload = {}
+    if not tmid:
+        payload = {
+            "channel": HUMAN_OPERATOR,
+            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} has requested help. Please respond in the thread. \n\n{message}"
+        }
+    else:
+        payload = {
+            "channel": HUMAN_OPERATOR,
+            "text": {message},
+            "smid": tmid
+        }
+
+    response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
+    return response.json()  # Return API response for debugging
+
+
+# def start_human_response_thread(user, message, tmid):
+#     payload = {
+#         "channel": f"@{user}"
+#         "text"
+
+#     }
+
+def send_human_response(user, message, tmid):
     """
     Sends a response from a human operator back to the original user via RocketChat.
     """
-    with lock:
-        payload = {
-            "channel": f"@{user}",  # Send directly to the original user
-            "text": f"👤 *{human_operator} (Human Agent):* {message} \n If you are satistified with the answer, type 'exit' to return to the bot mode"
-        }
-        print(f"DEBUG: Sending cleaned human response from {human_operator} to {user}: {message}")
+    # with lock:
+    payload = {
+        "channel": f"@{user}",  # Send directly to the original user
+        "text": f"👤 *{HUMAN_OPERATOR} (Human Agent):* {message}",
+        "tmid": tmid,
+        "tmshow": True
+    }
+    print(f"DEBUG: Sending cleaned human response from {HUMAN_OPERATOR} to {user}: {message}")
+    
+    response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
+    print(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
+    return response.json()
+
+# def extract_original_user(bot_message):
+#     """
+#     Extracts the original user who requested human help from the bot's escalation message.
+#     Example bot message:
+#     "🚨 Escalation Alert 🚨\nUser wendan.jiang needs assistance!\n\n**Message:** talk to a live representative"
+#     """
+#     match = re.search(r"User ([\w\.\-]+) needs assistance!", bot_message)
+#     if match:
+#         return match.group(1)  # Extracts the username (e.g., "wendan.jiang")
+
+#     # Case 2: Human Response Format ("Responding to XYZ")
+#     match = re.search(r"Responding to ([\w\.\-]+)", bot_message)
+#     if match:
+#         return match.group(1)  # Extracts the username
         
-        response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
-        print(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
+#     return None
 
-        return response.json()
 
-def extract_original_user(bot_message):
-    """
-    Extracts the original user who requested human help from the bot's escalation message.
-    Example bot message:
-    "🚨 Escalation Alert 🚨\nUser wendan.jiang needs assistance!\n\n**Message:** talk to a live representative"
-    """
-    match = re.search(r"User ([\w\.\-]+) needs assistance!", bot_message)
-    if match:
-        return match.group(1)  # Extracts the username (e.g., "wendan.jiang")
-
-    # Case 2: Human Response Format ("Responding to XYZ")
-    match = re.search(r"Responding to ([\w\.\-]+)", bot_message)
-    if match:
-        return match.group(1)  # Extracts the username
-        
-    return None
-
+# key: message_id sent to bot, value: message_id bot should forward to
 message_threads = {}
+# key: human -> bot
+human_reply_threads = {}
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -91,6 +113,7 @@ def main():
     user = user_name
     message = data.get("text", "")
     message_id = data.get("message_id")
+    tmid = data.get("tmid", None)
 
     logger.info("hitting /query endpoint, request data: ")
     logger.info(data)
@@ -99,6 +122,19 @@ def main():
     # Ignore bot messages
     if data.get("bot") or not message:
         return jsonify({"status": "ignored"})
+    
+    # checking if it is a thread_message
+    if tmid:
+        logger.info("thread message id: " + tmid)
+
+        if tmid in message_threads:
+            # it is a message sent from user -> human advising
+            send_to_human(user, message, message_threads[tmid])
+        elif tmid in human_reply_threads:
+            tmid_info = human_reply_threads[tmid]
+            send_human_response(tmid_info["user_name"], message, tmid_info["message_id"])
+        else:
+            return jsonify({"text": f"Error: unable to find a matched thread"}), 500
 
     ### human in the loop
     #
@@ -192,19 +228,28 @@ def main():
                 # Format according to requirements
                 formatted_string = ""
                 if llm_answer:
-                    formatted_string = f"\nStudent Question: {original_question}\n\nBot Answer: {llm_answer}\n\nCould you please help me verify the answer?"
+                    formatted_string = f"\n❓ Student Question: {original_question}\n\n 🤖 AI-Generated Answer: {llm_answer}\n\n🔍Can you please review this answer for accuracy and completeness?"
                 else:
-                    formatted_string = f"\nStudent Question: {original_question}\n\n"
+                    formatted_string = f"\n❓ Student Question: {original_question}\n\n"
 
                 forward_res = send_to_human(user, formatted_string)
+                
+                # message_id that starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
-                message_threads[message_id] = advisor_messsage_id
-                message_threads[advisor_messsage_id] = message_id
 
-                print("LINE 84", forward_res)
+                message_threads[message_id] = advisor_messsage_id
+
+                human_reply_threads[advisor_messsage_id] = {
+                    "message_id": message_id,
+                    "user_name": user_name
+                }
+
+                # print("LINE 84", forward_res)
                 
                 return jsonify({
-                    "text": response_text
+                    "text": response_text,
+                    "tmid": message_id,
+                    "tmshow": True
                 })
 
             else:
