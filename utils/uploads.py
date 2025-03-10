@@ -5,6 +5,7 @@ def upload_faq_text(user_id):
         response = text_upload(
             text = """
 # 20 Frequently Asked Questions for CS Graduate Advisors
+# This is "faq.txt"
 
 ## 1. What are the core competency requirements for CS graduate students?
 **Answer:** CS graduate students must complete at least one class in each of these four areas:

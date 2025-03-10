@@ -41,7 +41,7 @@ def send_to_human(user, message, tmid=None):
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": f"🔍 *{user} (student):* {message}",
+            "text": f"🎒 *{user} (student):* {message}",
             "tmid": tmid,
             "tmshow": True
         }

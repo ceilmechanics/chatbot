@@ -132,13 +132,81 @@ class TuftsCSAdvisor:
         check if it is a question that have already answered in FAQ
         """
 
+#         system_prompt = """
+# Step 1: Analyze incoming question
+#     * Compare the user's question semantically with questions in the "faq.txt" file
+#     * Determine if there is a meaningful semantic match (similar meaning, not just keyword matching)
+
+# Step 2: Response handling
+#     2.1: If a semantic match is found: Return the corresponding answer mentioned from the FAQ
+#     * Generate three relevant follow-up questions that logically extend from the topic
+#     * Format the response as specified in the JSON structure below
+#     {
+#         "response": "The complete answer from the FAQ that matches the question",
+#         "suggestedQuestions": [
+#             "Specific, contextually relevant follow-up question 1",
+#             "Specific, contextually relevant follow-up question 2",
+#             "Specific, contextually relevant follow-up question 3"
+#         ]
+#     }
+
+#     2.2: If no semantic match is found: Return an empty JSON object
+
+# Example
+# User Question: "How do I register for classes next semester?"
+# If there's a matching FAQ entry:
+# {
+#     "response": "Registration for next semester opens on April 15th. You can register through the student portal by logging in with your student ID and password, then navigating to 'Academic Resources' > 'Course Registration'. Make sure to clear any holds on your account before the registration period begins.",
+#     "suggestedQuestions": [
+#         "What are common registration holds and how do I resolve them?",
+#         "Can I get an override if a course is full?",
+#         "When is the deadline to drop a class without a W grade?"
+#     ]
+# }
+
+# """
+
         system_prompt = """
-Step 1: Analyze incoming question
+Step 1: Initial request categorization
+    1.1: Check if the user is requesting to speak with a human
+    * If detected (e.g., "talk to a real human", "connect me with an advisor", "I need to speak to someone"), immediately respond with:
+    {
+        "response": "Connecting you to a human advisor...",
+        "rocketChatPayload": {
+            "originalQuestion": "(put user's original question here)"
+        }
+    }
+
+    1.2: Check if the message is a greeting (e.g., "Hello", "Hi")
+    * If detected, respond with:
+    {
+        "response": "Hello! I'm your Tufts CS advisor. How can I help you today?",
+        "suggestedQuestions": [
+            "Suggested CS advising question 1 from FAQ",
+            "Suggested CS advising question 2 from FAQ",
+            "Suggested CS advising question 3 from FAQ"
+        ]
+    }
+    * Note: The suggested questions must be actual questions already listed in "faq.txt"
+
+    1.3: Check if the question is unrelated to CS advising
+    * If detected, respond with:
+    {
+        "response": "I'm sorry, but this question is outside my scope as a CS advisor.",
+        "suggestedQuestions": [
+            "Suggested CS advising question 1 from FAQ",
+            "Suggested CS advising question 2 from FAQ",
+            "Suggested CS advising question 3 from FAQ"
+        ]
+    }
+    * Note: The suggested questions must be actual questions already listed in "faq.txt"
+
+Step 2: Semantic matching for CS advising questions
     * Compare the user's question semantically with questions in the "faq.txt" file
     * Determine if there is a meaningful semantic match (similar meaning, not just keyword matching)
 
-Step 2: Response handling
-    2.1: If a semantic match is found: Return the corresponding answer mentioned from the FAQ
+Step 3: Response handling for CS advising questions
+    3.1: If a semantic match is found: Return the corresponding answer from the FAQ
     * Generate three relevant follow-up questions that logically extend from the topic
     * Format the response as specified in the JSON structure below
     {
@@ -150,7 +218,7 @@ Step 2: Response handling
         ]
     }
 
-    2.2: If no semantic match is found: Return an empty JSON object
+    3.2: If no semantic match is found: Return an empty JSON object
 
 Example
 User Question: "How do I register for classes next semester?"
@@ -164,6 +232,9 @@ If there's a matching FAQ entry:
     ]
 }
 
+Notes:
+1. For greeting messages and non-CS questions, suggested questions must be selected from existing questions in the FAQ.
+2. For semantic matching questions, suggested questions should be contextually relevant follow-ups to the topic.
 """
 
         rag_response = generate(
@@ -183,48 +254,6 @@ If there's a matching FAQ entry:
         if isinstance(rag_response, dict) and 'response' in rag_response:
             return rag_response['response']
         return rag_response
-
-
-    def get_response_old(self, query: str, lastk: int = 0) -> str:
-        """
-        Get response using inferred RAG parameters
-        
-        Args:
-            query: User's question
-            lastk: Number of previous exchanges to include for context
-        """
-
-        # rag_usage, threshold, k = self.parameter_inference.infer_rag_params(query)
-        # print("\n>>>>>>>>>>>>>>>>>>>>>>>>> RAG inference results >>>>>>>>>>>>>>>>>>>>> \n")
-        # print(f"\nSession {self.session_id} - RAG params: rag_usage={rag_usage}, threshold={threshold}, k={k}, lastk={lastk}")
-        # print("\n\n")
-
-        # if lastk == 0 and rag_usage is True:
-        #     try:
-        #         upload_response = pdf_upload(
-        #             path='soe-grad-handbook.pdf',
-        #             session_id=self.session_id,
-        #             strategy='smart'
-        #         )
-        #         print("✅ Handbook loaded successfully")
-        #     except Exception as e:
-        #         print(f"❌ Error loading handbook: {str(e)}")
-
-        response = generate(
-            model='4o-mini',
-            system=self.get_system_prompt(),
-            query=query,
-            temperature=0.6,
-            lastk=0,
-            session_id='cs-advising-handbooks-v2-' + self.user_id,
-            rag_usage=True,
-            rag_threshold=0.5,
-            rag_k=3
-        )
-        
-        if isinstance(response, dict) and 'response' in response:
-            return response['response']
-        return response
 
     def get_system_prompt(self) -> str:
         return '''
@@ -253,6 +282,7 @@ You will categorize and respond to questions in the following categories:
                 "Suggested CS advising question 3"
             ]
         }
+    - no matter it is a greeting message or a non-CS question, the suggested CS advising question you generated must be questions you are sure about the answer.
 
 2. CS-advising questions with reference available
     - Answer questions accurately using as much information as you can directly from resources provided in RAGs
@@ -312,13 +342,13 @@ You will categorize and respond to questions in the following categories:
     - Immediately escalate the request with user's original question in rocketChatPayload['originalQuestion']
     - Use the following JSON format:
         {
-            "response": "Connecting you to a live representative...",
+            "response": "Connecting you to a human advisor...",
             "rocketChatPayload": {
                 "originalQuestion": "(please put User's original question here)"
             }
         }
 
 Reminder:
-    Try your best to avoid involving a human, unless the user explicitly requests it or the question falls into category 3.1.
-    When forwarding a question to a human (categories 3.1 and 4), always include the "rocketChatPayload" in your JSON response. For category 3.1 specifically, always fill in the "llmAnswer" field with your tentative response.
+    * Try your best to avoid involving a human, unless the user explicitly requests it or the question falls into category 3.1.
+    * When forwarding a question to a human (categories 3.1 and 4), always include the "rocketChatPayload" in your JSON response. For category 3.1 specifically, always fill in the "llmAnswer" field with your tentative response.
 '''
