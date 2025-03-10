@@ -208,6 +208,8 @@ def main():
                     formatted_string = f"\n❓ Student Question: {original_question}"
 
                 forward_res = send_to_human(user, formatted_string)
+
+                print("forward_res: ", forward_res)
                 
                 # message_id that starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
