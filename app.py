@@ -4,10 +4,9 @@ from advisor import TuftsCSAdvisor
 import os
 from utils.mongo_config import get_mongodb_connection, close_mongodb_connection
 import json
-from threading import Lock
-import re
 from utils.log_config import setup_logging
 import logging
+import traceback
 
 app = Flask(__name__)
 
@@ -42,7 +41,7 @@ def send_to_human(user, message, tmid=None):
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": {message},
+            "text": message,
             "smid": tmid,
             "tmshow": True
         }
@@ -280,6 +279,7 @@ def main():
             return jsonify({"text": advisor_response})
 
     except Exception as e:
+        traceback.print_exc()
         print(f"Error processing request: {str(e)}")
         return jsonify({"text": f"Error: {str(e)}"}), 500
     
