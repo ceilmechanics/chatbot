@@ -147,14 +147,14 @@ You must distribute your dissertation to committee members in advance, and submi
 
 def handbook_upload(user_id):
     try:
-        all_references = ["cs_handbook.docx", "soe-grad-handbook.pdf", "grad_courses.pdf", "non_major_courses.pdf", "undergrad_courses.pdf"]
+        all_references = ["cs_handbook.pdf", "filtered_grad_courses.pdf"]
         for reference in all_references:
             response = pdf_upload(
                 path = f'resources/{reference}',
-                session_id = 'cs-advising-handbooks-v2-' + user_id,
+                session_id = 'cs-advising-handbooks-v5-' + user_id,
                 strategy = 'smart'
             )
-            print("✅ " + reference + "is successfully loaded")
+            print("✅ " + reference + " is successfully loaded")
 
     except Exception as e:
         print(f"❌ Error uploading handbooks: {str(e)}")

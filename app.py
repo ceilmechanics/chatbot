@@ -14,6 +14,8 @@ app = Flask(__name__)
 setup_logging()
 logger = logging.getLogger(__name__)
 
+
+# global variables
 ROCKETCHAT_URL = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
 
 HEADERS = {
@@ -27,11 +29,11 @@ HUMAN_OPERATOR = "@wendan.jiang"
 def send_to_human(user, message, tmid=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
-    """
-    # with lock: 
-    # human_mode_users[user] = HUMAN_OPERATOR
-    # print(f'DEBUG: Added {user} to human_mode_users: {human_mode_users}')
 
+    This function handles two scenarios:
+    1. Initial escalation: Creates a new message in the human operator channel with alert emoji
+    2. Thread continuation: Forwards subsequent user messages to an existing thread
+    """
     payload = {}
     if not tmid:
         payload = {
@@ -47,28 +49,16 @@ def send_to_human(user, message, tmid=None):
         }
         logger.info("forwarding to thread: " + tmid)
 
-    print("Line 50: ", payload)
     response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
 
     logger.info("successfully forward message to human")
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
-    return response.json()  # Return API response for debugging
-
-
-# def start_human_response_thread(user, message, tmid):
-#     payload = {
-#         "channel": f"@{user}"
-#         "text"
-#     }
-# 2025-03-10 04:05:10,313 - app.py:54 - INFO - DEBUG: RocketChat API Response: 200 - {"ts":1741579510307,"channel":"@wendan.jiang","message":{"alias":"","msg":"how are you?","attachments":[],"parseUrls":true,"groupable":false,"ts":"2025-03-10T04:05:10.196Z","u":{"_id":"dC9Suu7AujjGywutj","username":"BOT-Wendan","name":"BOT-Wendan"},"rid":"dC9Suu7AujjGywutjiQPJmyQ7xNwGxWFT3","_id":"2JxmBtHK9F4CD2nyR","_updatedAt":"2025-03-10T04:05:10.233Z","urls":[],"mentions":[],"channels":[],"md":[{"type":"PARAGRAPH","value":[{"type":"PLAIN_TEXT","value":"how are you?"}]}]},"success":true}
-# 2025-03-10 04:05:00,827 - app.py:77 - INFO - DEBUG: RocketChat API Response: 200 - {"ts":1741579500822,"channel":"@wendan.jiang","message":{"alias":"","msg":"👤 *@wendan.jiang (Human Agent):* hi i am a real human","attachments":[],"parseUrls":true,"groupable":false,"tmid":"H4JoPHbNPWkcGcJCr","ts":"2025-03-10T04:05:00.697Z","u":{"_id":"dC9Suu7AujjGywutj","username":"BOT-Wendan","name":"BOT-Wendan"},"rid":"dC9Suu7AujjGywutjiQPJmyQ7xNwGxWFT3","_id":"q74fxYCFxW4GMgAi9","_updatedAt":"2025-03-10T04:05:00.741Z","urls":[],"mentions":[],"channels":[],"md":[{"type":"PARAGRAPH","value":[{"type":"EMOJI","unicode":"👤"},{"type":"PLAIN_TEXT","value":" *"},{"type":"MENTION_USER","value":{"type":"PLAIN_TEXT","value":"wendan.jiang"}},{"type":"PLAIN_TEXT","value":" (Human Agent):* hi i am a real human"}]}]},"success":true}
-
+    return response.json()
 
 def send_human_response(user, message, tmid):
     """
     Sends a response from a human operator back to the original user via RocketChat.
     """
-    # with lock:
     payload = {
         "channel": f"@{user}",  # Send directly to the original user
         "text": f"👤 *{HUMAN_OPERATOR} (Human Agent):* {message}",
@@ -80,28 +70,33 @@ def send_human_response(user, message, tmid):
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
 
-# def extract_original_user(bot_message):
-#     """
-#     Extracts the original user who requested human help from the bot's escalation message.
-#     Example bot message:
-#     "🚨 Escalation Alert 🚨\nUser wendan.jiang needs assistance!\n\n**Message:** talk to a live representative"
-#     """
-#     match = re.search(r"User ([\w\.\-]+) needs assistance!", bot_message)
-#     if match:
-#         return match.group(1)  # Extracts the username (e.g., "wendan.jiang")
+def format_response_with_buttons(response_text, suggested_questions):
+    # print("LINE 74, response_data: ", response_data)
+    # response_text = response_data["question"]
+    # suggested_questions = response_data.get("suggestedQuestions", [])
 
-#     # Case 2: Human Response Format ("Responding to XYZ")
-#     match = re.search(r"Responding to ([\w\.\-]+)", bot_message)
-#     if match:
-#         return match.group(1)  # Extracts the username
-        
-#     return None
+    question_buttons = []
+    for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
+        question_buttons.append({
+            "type": "button",
+            "text": f"{i}",  # Just show the number
+            "msg": question,  # Send the full question when clicked
+            "msg_in_chat_window": True,
+            "msg_processing_type": "sendMessage",
+        })
 
-
-# # key: message_id sent to bot, value: message_id bot should forward to
-# message_threads = {}
-# # key: human -> bot
-# human_reply_threads = {}
+    # Construct response with numbered questions in text and numbered buttons
+    numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
+    response = {
+        "text": response_text + "\n\n🤔 You might also want to know:\n" + numbered_questions,
+        "attachments": [
+            {
+                "title": "Click a number to ask that question:",
+                "actions": question_buttons
+            }
+        ]
+    }
+    return response
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -116,9 +111,8 @@ def main():
     message_id = data.get("message_id")
     tmid = data.get("tmid", None)
 
-    logger.info("hitting /query endpoint, request data: ")
-    logger.info(data)
-    logger.info(f"Message in channel {channel_id} sent by {user_name} : {message}")
+    logger.info("hit /query endpoint, request data: %s", json.dumps(data, indent=2))
+    logger.info(f"{user_name} : {message}")
 
     # Ignore bot messages
     if data.get("bot") or not message:
@@ -130,22 +124,21 @@ def main():
         if not mongo_client:
             return jsonify({"text": "Error connecting to database"}), 500
         
-        # checking if it is a thread_message
+        # If it is a thread message, direct forward, no LLM processing needed
         if tmid:
             thread_collection = mongo_client["Users"]["threads"]
             target_thread = thread_collection.find_one({"thread_id": tmid})
 
             if not target_thread:
-                logger.error("no thread found")
+                logger.error("thread with id %s does not exist", tmid)
                 return jsonify({"text": f"Error: unable to find a matched thread"}), 500
 
-            print("target thread: ", target_thread)
+            logger.info("target thread: %s", json.dumps(target_thread, indent=2))
             
             forward_human = target_thread.get("forward_human")
             if forward_human == True:
-                print("forward a message to human advising")
                 forward_thread_id = target_thread.get("forward_thread_id")
-                print("forward_thread_id: " + forward_thread_id)
+                logger.info("forwarding a message from student to human advisor (forward_thread_id " + forward_thread_id + ")")
                 send_to_human(user, message, forward_thread_id)
             else:
                 forward_username = target_thread.get("forward_username")
@@ -172,31 +165,49 @@ def main():
                 {"user_id": user_id},
                 {"$set": {"last_k": lastk + 1}}
             )
-        
+
         # Get response from advisor
         advisor = TuftsCSAdvisor(user_profile)
+
+        # Check if question exactly matches a cached question in the database
+        # If found, return the cached response with suggested questions without calling the LLM
+        faq_collection = mongo_client["freq_questions"]["questions"]
+        faq_doc = faq_collection.find_one({"question": message})
+        if faq_doc:
+            return jsonify(format_response_with_buttons(faq_doc["question"], faq_doc["suggestedQuestions"]))
         
-        faq_response = advisor.get_faq_response(query=message, lastk=lastk)
-        print(">>>>>>>>>>> faq >>>>>>>>>>>", faq_response)
+        # If not cached, try semantic checking
+        else:
+            faq_cursor = faq_collection.find(
+                {"question": {"$exists": True}},  
+                {"_id": 0, "question": 1, "question_id": 1}  # Projection to only return these fields
+            )
 
-        try:
-            if faq_response:
-                response_data = json.loads(faq_response)
-                if not response_data.get("response"):
-                    advisor_response = advisor.get_response(query=message, lastk=lastk)
-                    response_data = json.loads(advisor_response)
-            else:
-                advisor_response = advisor.get_response(query=message, lastk=lastk)
-                response_data = json.loads(advisor_response)
+            faq_list = []
+            for doc in faq_cursor:
+                faq_list.append(f"{doc['question_id']}: {doc['question']}")
+            
+            faq_string = "\n".join(faq_list)
+            response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
+            # logger.info("LLM response: %s ", json.dumps(response_data))
 
-            print("LINE 188", response_data)
+            if response_data.get("cached_question_id"):
+                faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
+                response_data = {
+                    "response": faq_answer["answer"],
+                    "suggestedQuestions": faq_answer["suggestedQuestions"]
+                }
+                logger.info("cached question exists in db")
+                # logger.info("faq retrieved from db %s", json.dumps(faq_answer, indent=2))
+                return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
+            # No matched semantic question, proceed with LLM
+            logger.info("question is cached, processed with LLM")
             response_text = response_data["response"]
-            suggested_questions = response_data.get("suggestedQuestions", [])
             rc_payload = response_data.get("rocketChatPayload") 
             
             if rc_payload:
-                print("THIS is a request requires human help...")
+                logger.info("rc_payload exists")
                 
                 # Extract the payload components
                 original_question = rc_payload["originalQuestion"]
@@ -210,12 +221,8 @@ def main():
                     formatted_string = f"\n❓ Student Question: {original_question}"
 
                 forward_res = send_to_human(user, formatted_string)
-
-                print("forward_res: ", forward_res)
-                
                 # message_id that starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
-                print("advisor_message_id: ", advisor_messsage_id)
 
                 thread_item = [{
                     "thread_id": message_id,
@@ -239,38 +246,7 @@ def main():
                 })
 
             else:
-                # Create numbered buttons for suggested questions
-                question_buttons = []
-                for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
-                    question_buttons.append({
-                        "type": "button",
-                        "text": f"{i}",  # Just show the number
-                        "msg": question,  # Send the full question when clicked
-                        "msg_in_chat_window": True,
-                        "msg_processing_type": "sendMessage",
-                    })
-                    
-                # Construct response with numbered questions in text and numbered buttons
-                numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])
-
-                response = {
-                    "text": response_text + "\n\n🤔 You might also want to know:\n" + numbered_questions,
-                    "attachments": [
-                        {
-                            "title": "Click a number to ask that question:",
-                            "actions": question_buttons
-                        }
-                    ]
-                }
-
-                print (response)
-                return jsonify(response)
-            
-        except (json.JSONDecodeError, TypeError):
-            # If response is not valid JSON, return it as is
-            # return jsonify({"text": advisor_response})
-            print("error decoding json")
-            traceback.print_exc()
+                return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
 
     except Exception as e:
         traceback.print_exc()

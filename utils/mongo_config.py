@@ -3,7 +3,7 @@ import os
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from typing import Optional
-from llmproxy import generate
+# from llmproxy import generate
 import logging
 
 # Load environment variables from .env file
@@ -60,45 +60,45 @@ def close_mongodb_connection(client: MongoClient):
         client.close()
         print("MongoDB connection closed")
 
-def semantic_similarity_check(query):
+# def semantic_similarity_check(query):
 
-    system = f"""
-    Determine if the user's question is semantically similar to any pre-stored questions. If a semantic match exists, return the matching pre-stored question.
+#     system = f"""
+#     Determine if the user's question is semantically similar to any pre-stored questions. If a semantic match exists, return the matching pre-stored question.
 
-    Return response in JSON format:
-    {{"found": true/false, "cachedQuestion": "matched pre-stored question or empty string if not found"}}
+#     Return response in JSON format:
+#     {{"found": true/false, "cachedQuestion": "matched pre-stored question or empty string if not found"}}
 
-    Example:
-    User query: "what are classes I need to take to have a CS major?"
-    Response: {{"found": true, "cachedQuestion": "What courses are required for the Computer Science major?"}}
+#     Example:
+#     User query: "what are classes I need to take to have a CS major?"
+#     Response: {{"found": true, "cachedQuestion": "What courses are required for the Computer Science major?"}}
 
-    Below are all pre-stored questions:
-    1. What courses are required for the Computer Science major?
-    2. What are the residency requirements for master's and PhD programs?
-    3. What happens if a graduate student fails to maintain continuous enrollment?
-    4. What is the time limit for completing a master's degree?
-    5. What is the policy for withdrawing from a graduate course?
-    6. What are the conditions for receiving financial aid as a graduate student?
-    7. What is the policy for parental accommodation for PhD students?
-    8. What is the policy for academic dismissal from the graduate program?
-    9. How many courses can be transferred for graduate credit?
-    10. What are the minimum academic standing requirements for graduate students?
-    11. Can international students take a leave of absence?
-    """
+#     Below are all pre-stored questions:
+#     1. What courses are required for the Computer Science major?
+#     2. What are the residency requirements for master's and PhD programs?
+#     3. What happens if a graduate student fails to maintain continuous enrollment?
+#     4. What is the time limit for completing a master's degree?
+#     5. What is the policy for withdrawing from a graduate course?
+#     6. What are the conditions for receiving financial aid as a graduate student?
+#     7. What is the policy for parental accommodation for PhD students?
+#     8. What is the policy for academic dismissal from the graduate program?
+#     9. How many courses can be transferred for graduate credit?
+#     10. What are the minimum academic standing requirements for graduate students?
+#     11. Can international students take a leave of absence?
+#     """
 
-    response = generate(model = '4o-mini',
-        system = system,
-        query = query,
-        temperature=0.7,
-        lastk=0,
-        session_id='semantic_similarity_check',
-    )
+#     response = generate(model = '4o-mini',
+#         system = system,
+#         query = query,
+#         temperature=0.7,
+#         lastk=0,
+#         session_id='semantic_similarity_check',
+#     )
 
-    print("\n>>>>>>>>>>>>>>>>>>>>>>>>> semantic_similarity_check >>>>>>>>>>>>>>>>>>>>")
-    print(response["response"])
-    print("\n\n")
+#     print("\n>>>>>>>>>>>>>>>>>>>>>>>>> semantic_similarity_check >>>>>>>>>>>>>>>>>>>>")
+#     print(response["response"])
+#     print("\n\n")
 
-    return response["response"]    
+#     return response["response"]    
 
 
 
