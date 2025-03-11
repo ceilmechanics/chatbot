@@ -71,10 +71,6 @@ def send_human_response(user, message, tmid):
     return response.json()
 
 def format_response_with_buttons(response_text, suggested_questions):
-    # print("LINE 74, response_data: ", response_data)
-    # response_text = response_data["question"]
-    # suggested_questions = response_data.get("suggestedQuestions", [])
-
     question_buttons = []
     for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
         question_buttons.append({
@@ -189,7 +185,6 @@ def main():
             
             faq_string = "\n".join(faq_list)
             response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
-            # logger.info("LLM response: %s ", json.dumps(response_data))
 
             if response_data.get("cached_question_id"):
                 faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
@@ -198,7 +193,6 @@ def main():
                     "suggestedQuestions": faq_answer["suggestedQuestions"]
                 }
                 logger.info("cached question exists in db")
-                # logger.info("faq retrieved from db %s", json.dumps(faq_answer, indent=2))
                 return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
             # No matched semantic question, proceed with LLM
@@ -216,7 +210,7 @@ def main():
                 # Format according to requirements
                 formatted_string = ""
                 if llm_answer:
-                    formatted_string = f"\n❓ Student Question: {original_question}\n\n🤖 AI-Generated Answer: {llm_answer}\n\n🔍 Can you please review this answer for accuracy and completeness?"
+                    formatted_string = f"\n❓ Student Question: {original_question}\n\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
                 else:
                     formatted_string = f"\n❓ Student Question: {original_question}"
 
