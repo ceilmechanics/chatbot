@@ -170,7 +170,7 @@ def main():
         faq_collection = mongo_client["freq_questions"]["questions"]
         faq_doc = faq_collection.find_one({"question": message})
         if faq_doc:
-            return jsonify(format_response_with_buttons(faq_doc["question"], faq_doc["suggestedQuestions"]))
+            return jsonify(format_response_with_buttons(faq_doc["answer"], faq_doc["suggestedQuestions"]))
         
         # If not cached, try semantic checking
         else:
@@ -196,7 +196,7 @@ def main():
                 return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
             # No matched semantic question, proceed with LLM
-            logger.info("question is cached, processed with LLM")
+            logger.info("question is not cached, processed with LLM")
             response_text = response_data["response"]
             rc_payload = response_data.get("rocketChatPayload") 
             
