@@ -2,7 +2,7 @@ import requests
 from flask import Flask, request, jsonify
 from advisor import TuftsCSAdvisor
 import os
-from utils.mongo_config import get_mongodb_connection, close_mongodb_connection
+from utils.mongo_config import get_collection, get_mongodb_connection
 import json
 from utils.log_config import setup_logging
 import logging
@@ -43,7 +43,7 @@ def send_to_human(user, message, tmid=None):
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": f"🎒 *{user} (student):* {message}",
+            "text": f"🐘 *{user} (student):* {message}",
             "tmid": tmid,
             "tmshow": True
         }
@@ -96,10 +96,16 @@ def format_response_with_buttons(response_text, suggested_questions):
 
 @app.route('/query', methods=['POST'])
 def main():
+    """
+    Main endpoint for handling user queries to the Tufts CS Advisor.
+    
+    This endpoint processes incoming messages, manages conversations through RocketChat,
+    and provides responses using either cached FAQ answers or live LLM responses.
+    It also handles escalation to human operators when necessary.
+    """
     data = request.get_json() 
 
     # Extract relevant information
-    channel_id = data.get("channel_id")
     user_id = data.get("user_id")
     user_name = data.get("user_name", "Unknown")
     user = user_name
@@ -107,6 +113,7 @@ def main():
     message_id = data.get("message_id")
     tmid = data.get("tmid", None)
 
+    # Log the incoming request
     logger.info("hit /query endpoint, request data: %s", json.dumps(data, indent=2))
     logger.info(f"{user_name} : {message}")
 
@@ -114,25 +121,27 @@ def main():
     if data.get("bot") or not message:
         return jsonify({"status": "ignored"})
     
-    mongo_client = None
     try:
+        # Get MongoDB client from the connection pool
         mongo_client = get_mongodb_connection()
         if not mongo_client:
             return jsonify({"text": "Error connecting to database"}), 500
         
-        # If it is a thread message, direct forward, no LLM processing needed
+        # ==== THREAD MESSAGE HANDLING ====
+        # If message is part of an existing thread, handle direct forwarding without LLM processing
         if tmid:
-            thread_collection = mongo_client["Users"]["threads"]
+            logger.info("Processing thread message - direct forwarding without LLM processing")
+            thread_collection = get_collection("Users", "threads")
             target_thread = thread_collection.find_one({"thread_id": tmid})
 
             if not target_thread:
                 logger.error("thread with id %s does not exist", tmid)
                 return jsonify({"text": f"Error: unable to find a matched thread"}), 500
 
-            # logger.info("target thread: %s", json.dumps(target_thread, indent=2))
             print("target_thread")
             print(target_thread)
             
+            # Determine message direction (student to human advisor or vice versa)
             forward_human = target_thread.get("forward_human")
             if forward_human == True:
                 forward_thread_id = target_thread.get("forward_thread_id")
@@ -145,8 +154,9 @@ def main():
             
             return jsonify({"success": True}), 200
     
-        # Get or create user profile
-        user_collection = mongo_client["Users"]["user"]
+        # ==== USER PROFILE MANAGEMENT ====
+        # Get or create user profile for tracking interactions
+        user_collection = get_collection("Users", "user")
         user_profile = user_collection.find_one({"user_id": user_id})
 
         if not user_profile:
@@ -158,23 +168,27 @@ def main():
                 "major": ""
             }
             user_collection.insert_one(user_profile)
+
+         # Update the interaction counter for this user
         lastk = user_profile.get("last_k", 0)
         user_collection.update_one(
                 {"user_id": user_id},
                 {"$set": {"last_k": lastk + 1}}
             )
 
-        # Get response from advisor
+        # Initialize the advisor with user profile data
         advisor = TuftsCSAdvisor(user_profile)
 
+        # ==== FAQ MATCHING - EXACT MATCH ====
         # Check if question exactly matches a cached question in the database
-        # If found, return the cached response with suggested questions without calling the LLM
-        faq_collection = mongo_client["freq_questions"]["questions"]
+        faq_collection = get_collection("freq_questions", "questions")
         faq_doc = faq_collection.find_one({"question": message})
         if faq_doc:
+            logger.info("Found exact FAQ match - returning cached response")
             return jsonify(format_response_with_buttons(faq_doc["answer"], faq_doc["suggestedQuestions"]))
         
-        # If not cached, try semantic checking
+        # ==== FAQ MATCHING - SEMANTIC MATCH ====
+        # If no exact match, try semantic matching with all FAQs
         else:
             faq_cursor = faq_collection.find(
                 {"question": {"$exists": True}},  
@@ -184,24 +198,27 @@ def main():
             faq_list = []
             for doc in faq_cursor:
                 faq_list.append(f"{doc['question_id']}: {doc['question']}")
-            
             faq_string = "\n".join(faq_list)
             response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
 
+            # Check if LLM found a semantically similar FAQ
             if response_data.get("cached_question_id"):
                 faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
                 response_data = {
                     "response": faq_answer["answer"],
                     "suggestedQuestions": faq_answer["suggestedQuestions"]
                 }
-                logger.info("cached question exists in db")
+                logger.info("Found semantic FAQ match - returning cached response")
                 return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
-            # No matched semantic question, proceed with LLM
-            logger.info("question is not cached, processed with LLM")
+            # ==== LLM PROCESSING ====
+            # No cached or semantic match found, process with LLM
+            logger.info("No FAQ match found - processing with LLM")
             response_text = response_data["response"]
             rc_payload = response_data.get("rocketChatPayload") 
             
+            # ==== HUMAN ESCALATION ====
+            # Check if LLM determined human escalation is needed
             if rc_payload:
                 logger.info("rc_payload exists")
                 
@@ -209,17 +226,19 @@ def main():
                 original_question = rc_payload["originalQuestion"]
                 llm_answer = rc_payload.get("llmAnswer")
         
-                # Format according to requirements
+                # Format message for human advisor with context
                 formatted_string = ""
                 if llm_answer:
                     formatted_string = f"\n❓ Student Question: {original_question}\n\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
                 else:
                     formatted_string = f"\n❓ Student Question: {original_question}"
 
+                # Forward to human advisor and get the response
                 forward_res = send_to_human(user, formatted_string)
-                # message_id that starts a new thread on human advisor side
+                # message_id starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
 
+                # Create bidirectional thread mapping for ongoing conversation
                 thread_item = [{
                     "thread_id": message_id,
                     "forward_thread_id": advisor_messsage_id,
@@ -232,7 +251,7 @@ def main():
                     "forward_username": user_name
 
                 }]
-                thread_collection = mongo_client["Users"]["threads"]
+                thread_collection = get_collection("Users", "threads")
                 thread_collection.insert_many(thread_item)
                 
                 return jsonify({
@@ -241,7 +260,10 @@ def main():
                     "tmshow": True
                 })
 
+            # ==== STANDARD LLM RESPONSE ====
+            # Return LLM-generated response with suggested follow-up questions
             else:
+                logger.info("Returning standard LLM response with suggested questions")
                 return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
 
     except Exception as e:
@@ -249,10 +271,8 @@ def main():
         print(f"Error processing request: {str(e)}")
         return jsonify({"text": f"Error: {str(e)}"}), 500
     
-    finally:
-        # Always close MongoDB connection
-        if mongo_client:
-            close_mongodb_connection(mongo_client)
+    # Remove this finally block - we don't want to close the connection after each request
+    # The connection pool will be managed by the MongoDB driver
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -263,4 +283,9 @@ def hello_world():
    return jsonify({"text": 'Hello from Koyeb - you reached the main page!'})
 
 if __name__ == "__main__":
+    # Register shutdown handler to close MongoDB connection when app stops
+    import atexit
+    from utils.mongo_config import close_mongodb_connection
+    atexit.register(close_mongodb_connection)
+    
     app.run(debug=True, host="0.0.0.0", port=5999)
