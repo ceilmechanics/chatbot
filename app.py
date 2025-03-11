@@ -129,7 +129,9 @@ def main():
                 logger.error("thread with id %s does not exist", tmid)
                 return jsonify({"text": f"Error: unable to find a matched thread"}), 500
 
-            logger.info("target thread: %s", json.dumps(target_thread, indent=2))
+            # logger.info("target thread: %s", json.dumps(target_thread, indent=2))
+            print("target_thread")
+            print(target_thread)
             
             forward_human = target_thread.get("forward_human")
             if forward_human == True:
