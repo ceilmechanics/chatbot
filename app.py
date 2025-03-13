@@ -61,7 +61,7 @@ def send_human_response(user, message, tmid):
     """
     payload = {
         "channel": f"@{user}",  # Send directly to the original user
-        "text": f"👤 *{HUMAN_OPERATOR} (Human Agent):* {message}",
+        "text": f"👤 *{HUMAN_OPERATOR} (Human Advisor):* {message}",
         "tmid": tmid,
         "tmshow": True
     }
