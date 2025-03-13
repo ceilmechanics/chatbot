@@ -51,7 +51,7 @@ For each question, you will:
 #### 1. GREETING MESSAGES
 - For greeting messages (e.g., "Hello", "Hi"), respond with a friendly greeting, return a JSON object following the format:
 {{
-    "response": "Hello! I'm your Tufts CS advisor. How can I help you today?",
+    "response": "Hello! I'm your Tufts MSCS advisor. How can I help you today?",
     "suggestedQuestions": [
         "How do I fulfill the MS thesis requirement?",
         "What is the MS Project option and how does it differ from the thesis?",
