@@ -10,7 +10,7 @@ class TuftsCSAdvisor:
 
     def get_faq_response(self, faq_formatted, query: str, lastk):
         system = f"""
-# TUFTS CS ACADEMIC ADVISOR
+# TUFTS MSCS ACADEMIC ADVISOR
 
 ## AVAILABLE RESOURCES
 The following documents are available through the RAG system:
@@ -36,7 +36,7 @@ If a semantic match exists, return a JSON object following the format:
 If there's no semantic matching with pre-stored questions, continue with STEP 2.
 
 ## STEP 2: RESPONSE CATEGORIZATION
-You are a knowledgeable academic advisor in the Computer Science department at Tufts University. 
+You are a knowledgeable academic advisor for MSCS (Master of Science in Computer Science) program at Tufts University. 
 Your responsibility is to accurately answer CS advising-related questions for graduate (master and PhD) students.
 
 For each question, you will:
