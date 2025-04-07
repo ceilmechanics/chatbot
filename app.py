@@ -16,12 +16,12 @@ logger = logging.getLogger(__name__)
 
 
 # global variables
-ROCKETCHAT_URL = "https://chat.genaiconnect.net/api/v1/chat.postMessage"
+RC_BASE_URL = "https://chat.genaiconnect.net/api/v1"
 
 HEADERS = {
     "Content-Type": "application/json",
-    "X-Auth-Token": os.environ.get("RC_token"), #Replace with your bot token for local testing or keep it and store secrets in Koyeb
-    "X-User-Id": os.environ.get("RC_userId") #Replace with your bot user id for local testing or keep it and store secrets in Koyeb
+    "X-Auth-Token": os.environ.get("RC_token"),
+    "X-User-Id": os.environ.get("RC_userId")
 }
 
 HUMAN_OPERATOR = "@wendan.jiang" 
@@ -49,7 +49,9 @@ def send_to_human(user, message, tmid=None):
         }
         logger.info("forwarding to thread: " + tmid)
 
-    response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
+    response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
+
+    # print(HEADERS)
 
     logger.info("successfully forward message to human")
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
@@ -62,13 +64,28 @@ def send_human_response(user, message, tmid):
     payload = {
         "channel": f"@{user}",  # Send directly to the original user
         "text": f"👤 *{HUMAN_OPERATOR} (Human Advisor):* {message}",
-        "tmid": tmid,
-        "tmshow": True
+        "tmid": tmid
     }
 
-    response = requests.post(ROCKETCHAT_URL, json=payload, headers=HEADERS)
+    response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
+
+def send_loading_response(user):
+    payload = {
+        "channel": f"@{user}",  # Send directly to the original user
+        "text": f" :everything_fine_parrot: Processing your academic inquiry for Tufts MSCS program. One moment please..."
+    }
+
+    response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
+    logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
+
+    if response.status_code == 200:
+        json_res = response.json()
+        return json_res["message"]["rid"], json_res["message"]["_id"]
+    else:
+        raise Exception("fail to send loading message")
+
 
 def format_response_with_buttons(response_text, suggested_questions):
     question_buttons = []
@@ -169,7 +186,7 @@ def main():
             }
             user_collection.insert_one(user_profile)
 
-         # Update the interaction counter for this user
+        # Update the interaction counter for this user
         lastk = user_profile.get("last_k", 0)
         user_collection.update_one(
                 {"user_id": user_id},
@@ -190,6 +207,9 @@ def main():
         # ==== FAQ MATCHING - SEMANTIC MATCH ====
         # If no exact match, try semantic matching with all FAQs
         else:
+            # Prompting loading message
+            room_id, loading_msg_id = send_loading_response(user_name)
+
             faq_cursor = faq_collection.find(
                 {"question": {"$exists": True}},  
                 {"_id": 0, "question": 1, "question_id": 1}  # Projection to only return these fields
@@ -214,6 +234,7 @@ def main():
             # ==== LLM PROCESSING ====
             # No cached or semantic match found, process with LLM
             logger.info("No FAQ match found - processing with LLM")
+
             response_text = response_data["response"]
             rc_payload = response_data.get("rocketChatPayload") 
             
@@ -254,6 +275,15 @@ def main():
                 thread_collection = get_collection("Users", "threads")
                 thread_collection.insert_many(thread_item)
                 
+                # delete loading msg
+                response = requests.post(f"{RC_BASE_URL}/chat.update", json={
+                    "roomId": room_id,
+                    "msgId": loading_msg_id,
+                    "text": " :coll_doge_gif: Your question has been forwarded to a human academic advisor. To begin your conversation, please click the \"View Thread\" button."
+                }, headers=HEADERS)
+
+                print(response.json())
+
                 return jsonify({
                     "text": response_text,
                     "tmid": message_id,
@@ -264,15 +294,23 @@ def main():
             # Return LLM-generated response with suggested follow-up questions
             else:
                 logger.info("Returning standard LLM response with suggested questions")
+
+                # delete loading msg
+                print(f"LINE 302, room_id {room_id}")
+                print(f"LINE 302, loading_msg_id {loading_msg_id}")
+
+                requests.post(f"{RC_BASE_URL}/chat.update", json={
+                    "roomId": room_id,
+                    "msgId": loading_msg_id,
+                    "text": " :yay_gif: I've analyzed your inquiry regarding the Tufts MSCS program. Please review the information below."
+                }, headers=HEADERS)
+
                 return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
 
     except Exception as e:
         traceback.print_exc()
         print(f"Error processing request: {str(e)}")
         return jsonify({"text": f"Error: {str(e)}"}), 500
-    
-    # Remove this finally block - we don't want to close the connection after each request
-    # The connection pool will be managed by the MongoDB driver
 
 @app.errorhandler(404)
 def page_not_found(e):
