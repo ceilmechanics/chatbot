@@ -1,16 +1,24 @@
-# Web Server
-This folder contains an example of a web application (app.py) using Flask and LLMProxy, a simple script(test_query) to test the deployment, and additional files (requirements.txt, Procfile) required for a Koyeb deployment.
+# TODOs:
 
-## Getting Started
-### Creating Koyeb Deployment
-    1. Sign-up to the service using this link: https://app.koyeb.com/auth/signup 
-    2. Create service and follow steps to link either your Github repo or you could try this public repo example https://github.com/koyeb/example-flask 
-    3. Use "Secrets" to add your LLMProxy API key and end-point information. More info at this link https://www.koyeb.com/docs/reference/secrets
-    4. Update your deployment with the environment variables where variables names must be "endPoint" and "apiKey". Then redeploy with a build triggered option.
-    5. Click on the service link and it should open a web page with the mesage "Hello from Koyeb - you reached the main page!".
+## Human-in-the-loop
+* [x] Provide more instructions for the thread, when LLM is not confident with the answer. Make it clear what the right hand side windows are for.
+* [ ] Email plugin
+* [ ] Reducing advisor workload: Adding ✅ or ❌ buttons to approve or modify AI-drafted responses
 
-### Testing Your Deployment
-    1. Edit the "test.py" file and replace the links in below lines with your service link - keep the "/query" part in the second line
-        response_main = requests.get("https://replace_with_your_web_server_link")
-        response_llmproxy = requests.post("https://replace_with_your_web_server_link/query", json=data)
-    2. Run the test file locally on your machine and you should receive two responses from the web application and LLMProxy respectively.
+## Usability
+* [x] Loading bar
+* [ ] Advisor Q&A portal
+* [ ] FAQ format, make sure the FAQ format stored in DB are well-markdown formatted.
+   * [ ] Single quote/double quote consistency
+   * [ ] Bullet points should be well-represented in markdown formats
+
+## Prompt
+* [x] Lastk
+   * [x] How long lastk should exist? Every week?
+* [ ] When user is repeatedly asking questions in the same topic, consider escalate to the human advisor
+* [ ] Incorporate Web Search API (Google Search) to answer more questions
+   * [ ] Professor info
+   * [ ] Courses info
+* [ ] Add reference links in attachment (similar to GPT-4o)
+   * [ ] Handbook link
+   * [ ] Tufts website (professor info, courses info)
