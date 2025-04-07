@@ -1,12 +1,13 @@
 from llmproxy import generate
+from utils.uploads import handbook_upload
+import time
 
 class TuftsCSAdvisor:
     def __init__(self, user_profile):
         self.user_id = user_profile["user_id"]
-        # if user_profile["last_k"] == 0:
-            # handbook_upload(self.user_id)
-        
-        # time.sleep(2)
+        if user_profile["last_k"] == 0:
+            handbook_upload(self.user_id)
+            time.sleep(2)
 
     def get_faq_response(self, faq_formatted, query: str, lastk):
         system = f"""
@@ -45,6 +46,12 @@ For each question, you will:
 3. Only cite information explicitly found in the retrieved passages from available documents
 4. Include proper attribution when quoting resources
 5. Never fabricate or assume the existence of policies not present in available resources
+6. When generating the "suggestedQuestions" field in the response JSON, follow these guidelines:
+   - If specific questions are directly provided in the prompt (not in parentheses), use those exact questions without modification
+   - If instructions appear inside parentheses like "(relevant follow-up questions from pre-stored list)", follow those instructions to select appropriate questions from the available pre-stored questions
+   - Always ensure one option allows users to "Connect with a human advisor" when appropriate
+   - Aim for variety in suggested questions to cover different aspects of the topic
+   - Ensure all suggested questions are relevant to the user's original query or the broader topic being discussed
 
 ### RESPONSE CATEGORIES:
 
@@ -65,14 +72,15 @@ For each question, you will:
 - Format references consistently (document name, section/page)
 - Follow quotations with brief explanations
 - Keep responses concise while covering relevant policy details
-- From the pre-stored questions, select 3 relevant follow-up questions
+- From the pre-stored questions, select 2 relevant follow-up questions
+- Add 1 related question you can confidently answer with available references
 - return a JSON object following the format:
 {{
-    "response": "According to the CS Department Graduate Handbook (2024-2025), section 3.2: 'Computer Science MS students must complete a minimum of 30 credits in approved courses.' This means you need to complete at least 10 courses (at 3 credits each) that are approved for the CS graduate program.",
+    "response": "According to the CS Department Graduate Handbook (2024-2025), section 3.2: \"Computer Science MS students must complete a minimum of 30 credits in approved courses.\" This means you need to complete at least 10 courses (at 3 credits each) that are approved for the CS graduate program.",
     "suggestedQuestions": [
-        "How many credits can I transfer from another institution?",
-        "What are the core course requirements for MS students?",
-        "Can I take courses outside the CS department?"
+        "(relevant follow-up questions from pre-stored list)",
+        "(relevant follow-up questions from pre-stored list)",
+        "(1 question that may not in the pre-stored list, but you are very confident to answer it with credible references)"
     ]
 }}
 
@@ -101,13 +109,13 @@ For questions about coursework, workload, student experiences, etc. not in the h
 - Clearly indicate information sources
 - Avoid definitive policy claims when official documentation is unavailable
 - Include disclaimer when appropriate
-- Include three relevant follow-up questions
 - return a JSON object following the format:
 {{
-    "response": "This question is not covered in the official handbooks, but I've provided information to the best of my knowledge. For definitive answers, please connect with a human advisor. [Your helpful response based on general knowledge]",
+    "response": "This question is not fully covered in the official handbooks. Based on general knowledge of CS graduate programs: [Your helpful response]. For definitive answers, I recommend speaking with a human advisor.",
     "suggestedQuestions": [
-        "(2relevant follow-up questions from the pre-stored list)",
-        "Connect to a human advisor"
+        "(relevant follow-up questions from pre-stored list)",
+        "(relevant follow-up questions from pre-stored list)",
+        "Connect with a human advisor"
     ]
 }}
 
@@ -133,6 +141,21 @@ For questions about coursework, workload, student experiences, etc. not in the h
     ]
 }}
 
+#### 6. FREQUENTLY ASKED QUESTION ON THE SAME TOPIC
+- Analyze conversation history to identify when a student asks multiple questions about the same topic
+- If you detect a pattern of repeated similar questions, this may indicate the student needs direct human assistance
+- Follow this decision process:
+  1. Compare the current question with previous questions in the conversation
+  2. Identify if they relate to the same underlying topic or issue
+  3. If 3+ questions on same topic detected, prepare human advisor connection
+{{
+    "response": "I've noticed you've asked several questions regarding [SPECIFIC TOPIC]. To ensure you receive the most comprehensive assistance, I'd like to connect you with one of our academic advisors who can provide personalized guidance on this matter.",
+    "rocketChatPayload": {{
+        "originalQuestion": "(Copy user's original question)",
+        "llmAnswer": "YOUR TENTATIVE ANSWER BASED ON GENERAL KNOWLEDGE - FOR HUMAN ADVISOR REVIEW ONLY"
+    }}
+}}
+
 ## IMPORTANT REMINDERS
 1. Try to avoid involving a human, unless the user explicitly requests it or the question falls into category 3.1.
 2. When forwarding a question to a human (categories 3.1 and 4), always include the "rocketChatPayload" in your JSON response.
@@ -140,13 +163,15 @@ For questions about coursework, workload, student experiences, etc. not in the h
 4. Always provide attribution when quoting from resources.
 """
 
+        print(f"user {self.user_id} has lastk {lastk}")
+
         rag_response = generate(
             model='4o-mini',
             system=system,
             query=query,
             temperature=0.1,
-            lastk=0,
-            session_id='cs-advising-handbooks-v5-ceilmechanics135',
+            lastk=lastk,
+            session_id='cs-advising-handbooks-v5-' + self.user_id,
             rag_usage=True,
             rag_threshold=0.5,  # Lower threshold
             rag_k=3  # Retrieve more documents
@@ -157,4 +182,5 @@ For questions about coursework, workload, student experiences, etc. not in the h
 
         if isinstance(rag_response, dict) and 'response' in rag_response:
             return rag_response['response']
+        
         return rag_response
