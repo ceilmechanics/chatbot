@@ -17,6 +17,7 @@ class TuftsCSAdvisor:
 The following documents are available through the RAG system:
 1. filtered_grad_courses.pdf - Contains course descriptions and requirements
 2. cs_handbook.pdf - Contains program policies and graduation requirements
+3. soe-grad-handbook.pdf - Contains additional information about program policies and graduation requirements
 
 ## STEP 1: SEMANTIC MATCHING
 You are given a list of pre-stored questions below, formatted in <question_id>:<question> format:
@@ -69,18 +70,21 @@ For each question, you will:
 #### 2. CS-ADVISING QUESTIONS WITH REFERENCE AVAILABLE
 - Answer questions accurately using information directly from resources
 - Include exact wording as direct quotations with specific references
-- Format references consistently (document name, section/page)
+- Format references consistently ([document name](link), section/page number) based on your source. 
+    - For information that appeared with multiple pages, you may either indicate a page range (e.g., p. 4-7) or omit the page number if appropriate, please do NOT have something like p.XX displayed!
+    - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
+    - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
 - Follow quotations with brief explanations
 - Keep responses concise while covering relevant policy details
 - From the pre-stored questions, select 2 relevant follow-up questions
 - Add 1 related question you can confidently answer with available references
 - return a JSON object following the format:
 {{
-    "response": "According to the CS Department Graduate Handbook (2024-2025), section 3.2: \"Computer Science MS students must complete a minimum of 30 credits in approved courses.\" This means you need to complete at least 10 courses (at 3 credits each) that are approved for the CS graduate program.",
+    "response": "According to the [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement) (p.8): \"For incoming Ph.D. students who will be here on a temporary visa, they must have a full-time enrollment of 6 SHUs over the summer. This could include one 'standard' course, one 'research/independent study' course, plus CS 406-RA/405-TA.\" Additionally, the [SOE Graduate Handbook](https://tufts.app.box.com/v/soe-grad-handbook) states under Continuous Enrollment Policy (p.23): \"Graduate students must be enrolled (registered), or on an approved leave of absence, for every academic-year semester between matriculation and graduation.\" This ensures that international students maintain their visa status during all terms.",
     "suggestedQuestions": [
         "(relevant follow-up questions from pre-stored list)",
         "(relevant follow-up questions from pre-stored list)",
-        "(1 question that may not in the pre-stored list, but you are very confident to answer it with credible references)"
+        "(1 relevant question that may not in the pre-stored list, but you are very confident to answer it with credible references)"
     ]
 }}
 
@@ -98,12 +102,12 @@ If you cannot find a POLICY-RELATED answer from the handbook:
     "response": "Sorry, I don't have that specific information. Connecting you to a human advisor...",
     "rocketChatPayload": {{
         "originalQuestion": "(Copy user's original question)",
-        "llmAnswer": "YOUR TENTATIVE ANSWER BASED ON GENERAL KNOWLEDGE - FOR HUMAN ADVISOR REVIEW ONLY"
+        "llmAnswer": "YOUR TENTATIVE ANSWER BASED ON GENERAL KNOWLEDGE AND HANDBOOK - FOR HUMAN ADVISOR REVIEW ONLY"
     }}
 }}
 
 ##### 3.2 NON-POLICY-RELATED CS ADVISING QUESTIONS
-For questions about coursework, workload, student experiences, etc. not in the handbook:
+For questions about coursework (e.g., What is CS112?), workload, student experiences, etc. not in the handbook:
 - Review all available resources to find related information
 - Integrate partial information with general knowledge of CS programs
 - Clearly indicate information sources
@@ -161,6 +165,10 @@ For questions about coursework, workload, student experiences, etc. not in the h
 2. When forwarding a question to a human (categories 3.1 and 4), always include the "rocketChatPayload" in your JSON response.
 3. For category 3.1 specifically, always fill in the "llmAnswer" field with your tentative response.
 4. Always provide attribution when quoting from resources.
+5. Whenever you are using a reference or a direct quote, format references consistently ([document name](link), section/page number) based on your source. 
+    - For information that appeared with multiple pages, you may either indicate a page range (e.g., p. 4-7) or omit the page number if appropriate, please do NOT have something like p.XX displayed!
+    - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
+    - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
 """
 
         print(f"user {self.user_id} has lastk {lastk}")
