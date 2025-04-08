@@ -165,6 +165,10 @@ For questions about coursework (e.g., What is CS112?), workload, student experie
 2. When forwarding a question to a human (categories 3.1 and 4), always include the "rocketChatPayload" in your JSON response.
 3. For category 3.1 specifically, always fill in the "llmAnswer" field with your tentative response.
 4. Always provide attribution when quoting from resources.
+5. Whenever you are using a reference or a direct quote, format references consistently ([document name](link), section/page number) based on your source. 
+    - For information that appeared with multiple pages, you may either indicate a page range (e.g., p. 4-7) or omit the page number if appropriate, please do NOT have something like p.XX displayed!
+    - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
+    - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
 """
 
         print(f"user {self.user_id} has lastk {lastk}")
