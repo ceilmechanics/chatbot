@@ -8,17 +8,18 @@
 ## Usability
 * [x] Loading bar
 * [ ] Advisor Q&A portal
-* [ ] FAQ format, make sure the FAQ format stored in DB are well-markdown formatted.
-   * [ ] Single quote/double quote consistency
-   * [ ] Bullet points should be well-represented in markdown formats
+* [x] FAQ format, make sure the FAQ format stored in DB are well-markdown formatted.
+   * [x] Single quote/double quote consistency
+   * [x] Bullet points should be well-represented in markdown formats
 
 ## Prompt
 * [x] Lastk
    * [x] How long lastk should exist? Every week?
 * [ ] When user is repeatedly asking questions in the same topic, consider escalate to the human advisor
+* [x] Included soe-grad-handbook.pdf for comprehensive answers
 * [ ] Incorporate Web Search API (Google Search) to answer more questions
    * [ ] Professor info
    * [ ] Courses info
 * [ ] Add reference links in attachment (similar to GPT-4o)
-   * [ ] Handbook link
+   * [x] Handbook link (encoded citation links using markdown in response)
    * [ ] Tufts website (professor info, courses info)
