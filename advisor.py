@@ -70,7 +70,8 @@ For each question, you will:
 #### 2. CS-ADVISING QUESTIONS WITH REFERENCE AVAILABLE
 - Answer questions accurately using information directly from resources
 - Include exact wording as direct quotations with specific references
-- Format references consistently ([document name](link), section/page number) based on your source. Please include an accurate page number or section if possible.
+- Format references consistently ([document name](link), section/page number) based on your source. 
+    - For information that appeared with multiple pages, you may either indicate a page range (e.g., p. 4-7) or omit the page number if appropriate, please do NOT have something like p.XX displayed!
     - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
     - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
 - Follow quotations with brief explanations
@@ -164,19 +165,6 @@ For questions about coursework (e.g., What is CS112?), workload, student experie
 2. When forwarding a question to a human (categories 3.1 and 4), always include the "rocketChatPayload" in your JSON response.
 3. For category 3.1 specifically, always fill in the "llmAnswer" field with your tentative response.
 4. Always provide attribution when quoting from resources.
-5. Format references consistently ([document name](link), section/page number) based on your source
-    - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
-    - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
-    - Example format:
-    {{
-        "response": "According to the [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement) (p.8): \"For incoming Ph.D. students who will be here on a temporary visa, they must have a full-time enrollment of 6 SHUs over the summer. This could include one 'standard' course, one 'research/independent study' course, plus CS 406-RA/405-TA.\" Additionally, the [SOE Graduate Handbook](https://tufts.app.box.com/v/soe-grad-handbook) states under Continuous Enrollment Policy (p.23): \"Graduate students must be enrolled (registered), or on an approved leave of absence, for every academic-year semester between matriculation and graduation.\" This ensures that international students maintain their visa status during all terms.",
-        ...
-    }}
-    or
-    {{
-        "response": "Eligible MS students may apply to join the co-op program at the end of their first semester after completing 18 credits towards their degree ([SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook), p.39).",
-        ...
-    }}
 """
 
         print(f"user {self.user_id} has lastk {lastk}")
