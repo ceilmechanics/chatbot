@@ -74,7 +74,7 @@ def send_human_response(user, message, tmid):
 def send_loading_response(user):
     payload = {
         "channel": f"@{user}",  # Send directly to the original user
-        "text": f" :everything_fine_parrot: Processing your academic inquiry for Tufts MSCS program. One moment please..."
+        "text": f" :everything_fine_parrot: Processing your inquiry. One moment please..."
     }
 
     response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
