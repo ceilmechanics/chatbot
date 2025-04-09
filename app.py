@@ -51,8 +51,6 @@ def send_to_human(user, message, tmid=None):
 
     response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
 
-    # print(HEADERS)
-
     logger.info("successfully forward message to human")
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
@@ -296,13 +294,9 @@ def main():
                 logger.info("Returning standard LLM response with suggested questions")
 
                 # delete loading msg
-                print(f"LINE 302, room_id {room_id}")
-                print(f"LINE 302, loading_msg_id {loading_msg_id}")
-
-                requests.post(f"{RC_BASE_URL}/chat.update", json={
+                response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
                     "roomId": room_id,
-                    "msgId": loading_msg_id,
-                    "text": " :yay_gif: I've analyzed your inquiry regarding the Tufts MSCS program. Please review the information below."
+                    "msgId": loading_msg_id
                 }, headers=HEADERS)
 
                 return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
