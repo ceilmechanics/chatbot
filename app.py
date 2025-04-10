@@ -293,10 +293,10 @@ def main():
             else:
                 logger.info("Returning standard LLM response with suggested questions")
 
-                # delete loading msg
-                response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
+                response = requests.post(f"{RC_BASE_URL}/chat.update", json={
                     "roomId": room_id,
-                    "msgId": loading_msg_id
+                    "msgId": loading_msg_id,
+                    "text": " :kirby_vibing: Ta-da! Your answer is ready!"
                 }, headers=HEADERS)
 
                 return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
