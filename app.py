@@ -1,13 +1,18 @@
-import requests
-from flask import Flask, request, jsonify, redirect
-from advisor import TuftsCSAdvisor
+# Standard library imports
 import os
-from utils.mongo_config import get_collection, get_mongodb_connection
 import json
-from utils.log_config import setup_logging
 import logging
 import traceback
+
+# Third-party imports
+import requests
 from bson.objectid import ObjectId
+from flask import Flask, request, jsonify, redirect, render_template
+
+# Local application imports
+from advisor import TuftsCSAdvisor
+from utils.mongo_config import get_collection, get_mongodb_connection
+from utils.log_config import setup_logging
 
 app = Flask(__name__)
 
@@ -315,9 +320,8 @@ def page_not_found(e):
 def hello_world():
    return jsonify({"text": 'Hello from Koyeb - you reached the main page!'})
 
-
-@app.route('/database', methods=['GET', 'POST'])
-def view_database():
+@app.route('/faqs', methods=['GET', 'POST'])
+def display_faqs():
     """
     Endpoint to display and edit the freq_questions database.
     """
@@ -368,7 +372,7 @@ def view_database():
             )
             
             # Redirect to avoid form resubmission
-            return redirect('/database')
+            return redirect('/faqs')
         
         # Handle form submission for adding new documents
         elif request.method == 'POST' and request.form.get('action') == 'add':
@@ -407,14 +411,14 @@ def view_database():
             })
             
             # Redirect to avoid form resubmission
-            return redirect('/database')
+            return redirect('/faqs')
         
         # Handle document deletion
         elif request.method == 'POST' and request.form.get('action') == 'delete':
             doc_id = request.form.get('doc_id')
             collection = mongo_client[db_name][collection_name]
             collection.delete_one({"_id": ObjectId(doc_id)})
-            return redirect('/database')
+            return redirect('/faqs')
         
         # Get all documents from freq_questions.questions collection
         collection = mongo_client[db_name][collection_name]
@@ -432,167 +436,17 @@ def view_database():
         for doc in documents:
             doc['_id'] = str(doc['_id'])
         
-        # Generate HTML response
-        html_response = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Frequent Questions Database Manager</title>
-            <style>
-                body {{ font-family: Arial, sans-serif; margin: 20px; }}
-                .container {{ max-width: 1200px; margin: 0 auto; }}
-                .card {{ border: 1px solid #ccc; border-radius: 5px; padding: 20px; margin-bottom: 20px; }}
-                .question-card {{ background-color: #f9f9f9; margin-bottom: 15px; padding: 15px; border-radius: 5px; }}
-                .question-id {{ float: right; background: #e0e0e0; padding: 5px 10px; border-radius: 3px; }}
-                .form-group {{ margin-bottom: 10px; }}
-                label {{ display: block; margin-bottom: 5px; font-weight: bold; }}
-                textarea, input[type="text"], input[type="number"] {{ width: 100%; padding: 8px; margin-bottom: 10px; }}
-                textarea {{ height: 100px; }}
-                button {{ padding: 8px 15px; background: #4CAF50; color: white; border: none; cursor: pointer; margin-right: 5px; }}
-                .delete-btn {{ background: #f44336; }}
-                .add-field-btn {{ background: #2196F3; }}
-                .suggested-questions {{ margin-top: 10px; }}
-                .suggested-question {{ margin-bottom: 5px; }}
-                h2 {{ color: #333; }}
-                .nav {{ margin-bottom: 20px; }}
-                .nav a {{ padding: 8px 15px; background: #607d8b; color: white; text-decoration: none; margin-right: 5px; border-radius: 3px; }}
-                .note {{ background-color: #fffacd; padding: 10px; border-radius: 5px; margin-bottom: 15px; }}
-            </style>
-            <script>
-                function addSuggestedQuestion(docId) {{
-                    const container = document.getElementById('suggested-questions-' + docId);
-                    const count = container.children.length;
-                    const newInput = document.createElement('div');
-                    newInput.className = 'suggested-question';
-                    newInput.innerHTML = `<input type="text" name="suggested_question_${{count}}" placeholder="Suggested Question">`;
-                    container.appendChild(newInput);
-                }}
-                
-                function addNewSuggestedQuestion() {{
-                    const container = document.getElementById('new-suggested-questions');
-                    const count = container.children.length;
-                    const newInput = document.createElement('div');
-                    newInput.className = 'suggested-question';
-                    newInput.innerHTML = `<input type="text" name="new_suggested_question_${{count}}" placeholder="Suggested Question">`;
-                    container.appendChild(newInput);
-                }}
-                
-                function confirmDelete(docId) {{
-                    if(confirm('Are you sure you want to delete this question?')) {{
-                        document.getElementById('delete-form-' + docId).submit();
-                    }}
-                }}
-            </script>
-        </head>
-        <body>
-            <div class="container">
-                <h1>Frequent Questions Database Manager</h1>
-                
-                <div class="nav">
-                    <a href="/">Home</a>
-                    <a href="/database">Refresh</a>
-                </div>
-                
-                <div class="card">
-                    <h2>Add New Question</h2>
-                    <div class="note">
-                        <strong>Note:</strong> New questions will automatically be assigned the next available ID (currently {highest_id + 1}).
-                    </div>
-                    <form method="POST">
-                        <input type="hidden" name="action" value="add">
-                        
-                        <div class="form-group">
-                            <label for="question">Question:</label>
-                            <input type="text" name="question" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="answer">Answer:</label>
-                            <textarea name="answer" required></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Suggested Questions:</label>
-                            <div id="new-suggested-questions" class="suggested-questions">
-                                <div class="suggested-question">
-                                    <input type="text" name="new_suggested_question_0" placeholder="Suggested Question">
-                                </div>
-                            </div>
-                            <button type="button" class="add-field-btn" onclick="addNewSuggestedQuestion()">Add Another Suggested Question</button>
-                        </div>
-                        
-                        <button type="submit">Add Question</button>
-                    </form>
-                </div>
-                
-                <h2>Existing Questions ({len(documents)})</h2>
-                
-                {
-                ''.join([
-                    f'''
-                    <div class="question-card">
-                        <div class="question-id">ID: {doc.get('question_id', 'N/A')}</div>
-                        <form method="POST">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="doc_id" value="{doc['_id']}">
-                            <input type="hidden" name="question_id" value="{doc.get('question_id', '')}">
-                            
-                            <div class="form-group">
-                                <label for="question">Question:</label>
-                                <input type="text" name="question" value="{doc.get('question', '')}" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="answer">Answer:</label>
-                                <textarea name="answer" required>{doc.get('answer', '')}</textarea>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Suggested Questions:</label>
-                                <div id="suggested-questions-{doc['_id']}" class="suggested-questions">
-                                    {
-                                    ''.join([
-                                        f'<div class="suggested-question"><input type="text" name="suggested_question_{i}" value="{sq}" placeholder="Suggested Question"></div>'
-                                        for i, sq in enumerate(doc.get('suggestedQuestions', []))
-                                    ])
-                                    }
-                                </div>
-                                <button type="button" class="add-field-btn" onclick="addSuggestedQuestion('{doc['_id']}')">Add Suggested Question</button>
-                            </div>
-                            
-                            <button type="submit">Update</button>
-                            <button type="button" class="delete-btn" onclick="confirmDelete('{doc['_id']}')">Delete</button>
-                        </form>
-                        
-                        <form id="delete-form-{doc['_id']}" method="POST" style="display: none;">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="doc_id" value="{doc['_id']}">
-                        </form>
-                    </div>
-                    '''
-                    for doc in documents
-                ])
-                }
-            </div>
-        </body>
-        </html>
-        """
-        
-        return html_response
+        # Pass data to the template and render it
+        return render_template(
+            'faqs.html',  # Use the combined template
+            documents=documents,
+            next_id=highest_id + 1,
+            enumerate=enumerate
+        )
     
     except Exception as e:
         logger.error(f"Error in database view: {str(e)}")
-        return f"""
-        <!DOCTYPE html>
-        <html>
-        <head><title>Database Error</title></head>
-        <body>
-            <h1>Error</h1>
-            <p>Error in database view: {str(e)}</p>
-            <p><a href="/">Back to Home</a></p>
-        </body>
-        </html>
-        """
+        return render_template('error.html', error_message=str(e))
 
 
 if __name__ == "__main__":
