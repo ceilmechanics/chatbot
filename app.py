@@ -89,6 +89,15 @@ def send_loading_response(user):
         return json_res["message"]["rid"], json_res["message"]["_id"]
     else:
         raise Exception("fail to send loading message")
+    
+def update_loading_message(room_id, loading_msg_id):
+    requests.post(f"{RC_BASE_URL}/chat.update",
+                  json={
+                      "roomId": room_id,
+                      "msgId": loading_msg_id,
+                      "text": " :kirby_vibing: Ta-da! Your answer is ready!"
+                  },
+                  headers=HEADERS)
 
 
 def format_response_with_buttons(response_text, suggested_questions):
@@ -223,7 +232,7 @@ def main():
             for doc in faq_cursor:
                 faq_list.append(f"{doc['question_id']}: {doc['question']}")
             faq_string = "\n".join(faq_list)
-            response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
+            response_data = json.loads(advisor.get_cached_response(faq_string, message))
 
             # Check if LLM found a semantically similar FAQ
             if response_data.get("cached_question_id"):
@@ -233,12 +242,14 @@ def main():
                     "suggestedQuestions": faq_answer["suggestedQuestions"]
                 }
                 logger.info("Found semantic FAQ match - returning cached response")
+                update_loading_message(room_id, loading_msg_id)
                 return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
             # ==== LLM PROCESSING ====
             # No cached or semantic match found, process with LLM
             logger.info("No FAQ match found - processing with LLM")
 
+            response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
             response_text = response_data["response"]
             rc_payload = response_data.get("rocketChatPayload") 
             
@@ -298,13 +309,7 @@ def main():
             # Return LLM-generated response with suggested follow-up questions
             else:
                 logger.info("Returning standard LLM response with suggested questions")
-
-                response = requests.post(f"{RC_BASE_URL}/chat.update", json={
-                    "roomId": room_id,
-                    "msgId": loading_msg_id,
-                    "text": " :kirby_vibing: Ta-da! Your answer is ready!"
-                }, headers=HEADERS)
-
+                update_loading_message(room_id, loading_msg_id)
                 return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
 
     except Exception as e:

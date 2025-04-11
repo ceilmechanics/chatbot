@@ -9,35 +9,66 @@ class TuftsCSAdvisor:
             handbook_upload(self.user_id)
             time.sleep(2)
 
+    def get_cached_response(self, faq_formatted, query: str):
+        system = f"""
+You are a semantic matching specialist. Your ONLY task is to determine if a user's question matches any pre-stored question.
+
+PRE-STORED QUESTIONS:
+{faq_formatted}
+
+MATCHING CRITERIA:
+A semantic match exists when questions have the same core meaning or intent, even with different wording:
+- Questions using synonyms or equivalent terms (e.g., "courses" vs "classes", "coop" vs "co-op")
+- Questions asking for the same information in different ways
+- Questions with the same underlying purpose despite different phrasing
+- Questions addressing the same topic with the same goal
+
+EXAMPLE MATCHES:
+User: "How many classes do I need to graduate with my master's?" 
+→ Matches question #1: "How many courses are required for a Master's degree in Computer Science at Tufts?"
+→ Correct response: {{"cached_question_id": "1"}}
+
+User: "What do I need to do for my MS thesis?" 
+→ Matches question #4: "How do I fulfill the MS thesis requirement?"
+→ Correct response: {{"cached_question_id": "4"}}
+
+User: "Can I do internships as an international student?"
+→ Matches question #11: "Can international students complete internships as part of the program?"
+→ Correct response: {{"cached_question_id": "11"}}
+
+User: "What music clubs are available on campus?"
+→ No match to any pre-stored question
+→ Correct response: {{}}
+
+RESPONSE FORMAT:
+- If you find a match: Return ONLY {{"cached_question_id": "X"}} where X is the question number
+- If no match exists: Return ONLY {{}}
+- DO NOT include any other text, explanations, or content
+- Return ONLY valid JSON
+
+IMPORTANT:
+- Return only ONE best match if multiple possibilities exist
+- Do not attempt to answer the question
+- Do not include comments or explanations
+"""
+
+        response = generate(
+            model='4o-mini',
+            system=system,
+            query=query,
+            temperature=0.1,
+            lastk=0,
+            session_id='cs-advising-semantic-checking'
+        )
+
+        print(response['response'])
+        return response['response']
+
+
     def get_faq_response(self, faq_formatted, query: str, lastk):
         system = f"""
 # TUFTS MSCS ACADEMIC ADVISOR
 
-## AVAILABLE RESOURCES
-The following documents are available through the RAG system:
-1. filtered_grad_courses.pdf - Contains course descriptions and requirements
-2. cs_handbook.pdf - Contains program policies and graduation requirements
-3. soe-grad-handbook.pdf - Contains additional information about program policies and graduation requirements
-
-## STEP 1: SEMANTIC MATCHING
-You are given a list of pre-stored questions below, formatted in <question_id>:<question> format:
-{faq_formatted}
-
-Determine if the user's question is semantically similar to any pre-stored questions. 
-Determine semantic similarity by focusing on the underlying meaning and intent, not just keywords:
-- Synonyms and equivalent terms (e.g., "courses" vs "classes")
-- Rephrased questions with the same meaning
-- Different wording structures asking for the same information
-- Questions with the same core intent, even if details vary
-
-If a semantic match exists, return a JSON object following the format:
-{{
-    "cached_question_id": "question_id"
-}}
-
-If there's no semantic matching with pre-stored questions, continue with STEP 2.
-
-## STEP 2: RESPONSE CATEGORIZATION
 You are a knowledgeable academic advisor for MSCS (Master of Science in Computer Science) program at Tufts University. 
 Your responsibility is to accurately answer CS advising-related questions for graduate (master and PhD) students.
 
