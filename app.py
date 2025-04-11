@@ -1,12 +1,18 @@
-import requests
-from flask import Flask, request, jsonify
-from advisor import TuftsCSAdvisor
+# Standard library imports
 import os
-from utils.mongo_config import get_collection, get_mongodb_connection
 import json
-from utils.log_config import setup_logging
 import logging
 import traceback
+
+# Third-party imports
+import requests
+from bson.objectid import ObjectId
+from flask import Flask, request, jsonify, redirect, render_template
+
+# Local application imports
+from advisor import TuftsCSAdvisor
+from utils.mongo_config import get_collection, get_mongodb_connection
+from utils.log_config import setup_logging
 
 app = Flask(__name__)
 
@@ -293,10 +299,10 @@ def main():
             else:
                 logger.info("Returning standard LLM response with suggested questions")
 
-                # delete loading msg
-                response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
+                response = requests.post(f"{RC_BASE_URL}/chat.update", json={
                     "roomId": room_id,
-                    "msgId": loading_msg_id
+                    "msgId": loading_msg_id,
+                    "text": " :kirby_vibing: Ta-da! Your answer is ready!"
                 }, headers=HEADERS)
 
                 return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
@@ -313,6 +319,135 @@ def page_not_found(e):
 @app.route('/')
 def hello_world():
    return jsonify({"text": 'Hello from Koyeb - you reached the main page!'})
+
+@app.route('/faqs', methods=['GET', 'POST'])
+def display_faqs():
+    """
+    Endpoint to display and edit the freq_questions database.
+    """
+    try:
+        # Get MongoDB client from the connection pool
+        mongo_client = get_mongodb_connection()
+        if not mongo_client:
+            return jsonify({"error": "Error connecting to database"}), 500
+        
+        # Focus specifically on freq_questions database
+        db_name = "freq_questions"
+        collection_name = "questions"
+        
+        # Handle form submission for updating documents
+        if request.method == 'POST' and request.form.get('action') == 'update':
+            doc_id = request.form.get('doc_id')
+            question = request.form.get('question')
+            answer = request.form.get('answer')
+            question_id = request.form.get('question_id')
+            
+            # Get suggested questions (they come as a list)
+            suggested_questions = []
+            i = 0
+            while True:
+                sq = request.form.get(f'suggested_question_{i}')
+                if sq is None:
+                    break
+                suggested_questions.append(sq)
+                i += 1
+            
+            # Convert question_id to integer if it exists
+            if question_id:
+                try:
+                    question_id = int(question_id)
+                except ValueError:
+                    return "Question ID must be an integer", 400
+            
+            # Update the document
+            collection = mongo_client[db_name][collection_name]
+            collection.update_one(
+                {"_id": ObjectId(doc_id)},
+                {"$set": {
+                    "question": question,
+                    "answer": answer,
+                    "question_id": question_id,
+                    "suggestedQuestions": suggested_questions
+                }}
+            )
+            
+            # Redirect to avoid form resubmission
+            return redirect('/faqs')
+        
+        # Handle form submission for adding new documents
+        elif request.method == 'POST' and request.form.get('action') == 'add':
+            question = request.form.get('question')
+            answer = request.form.get('answer')
+            
+            # Get suggested questions
+            suggested_questions = []
+            i = 0
+            while True:
+                sq = request.form.get(f'new_suggested_question_{i}')
+                if sq is None or sq == '':
+                    break
+                suggested_questions.append(sq)
+                i += 1
+            
+            # Get all documents to determine highest question_id
+            collection = mongo_client[db_name][collection_name]
+            all_docs = list(collection.find({}, {"question_id": 1}))
+            
+            # Find the highest question_id
+            highest_id = 0
+            for doc in all_docs:
+                if 'question_id' in doc and isinstance(doc['question_id'], int) and doc['question_id'] > highest_id:
+                    highest_id = doc['question_id']
+            
+            # Use the next available ID
+            next_id = highest_id + 1
+            
+            # Insert the new document
+            collection.insert_one({
+                "question": question,
+                "answer": answer,
+                "question_id": next_id,
+                "suggestedQuestions": suggested_questions
+            })
+            
+            # Redirect to avoid form resubmission
+            return redirect('/faqs')
+        
+        # Handle document deletion
+        elif request.method == 'POST' and request.form.get('action') == 'delete':
+            doc_id = request.form.get('doc_id')
+            collection = mongo_client[db_name][collection_name]
+            collection.delete_one({"_id": ObjectId(doc_id)})
+            return redirect('/faqs')
+        
+        # Get all documents from freq_questions.questions collection
+        collection = mongo_client[db_name][collection_name]
+        
+        # Sort by question_id for better organization
+        documents = list(collection.find({}).sort("question_id", 1))
+        
+        # Get the highest question_id for new questions
+        highest_id = 0
+        for doc in documents:
+            if 'question_id' in doc and isinstance(doc['question_id'], int) and doc['question_id'] > highest_id:
+                highest_id = doc['question_id']
+        
+        # Convert ObjectId to string for display
+        for doc in documents:
+            doc['_id'] = str(doc['_id'])
+        
+        # Pass data to the template and render it
+        return render_template(
+            'faqs.html',  # Use the combined template
+            documents=documents,
+            next_id=highest_id + 1,
+            enumerate=enumerate
+        )
+    
+    except Exception as e:
+        logger.error(f"Error in database view: {str(e)}")
+        return render_template('error.html', error_message=str(e))
+
 
 if __name__ == "__main__":
     # Register shutdown handler to close MongoDB connection when app stops
