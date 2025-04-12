@@ -17,32 +17,53 @@ PRE-STORED QUESTIONS:
 {faq_formatted}
 
 MATCHING CRITERIA:
-A semantic match exists when questions have the same core meaning or intent, even with different wording:
-- Questions using synonyms or equivalent terms (e.g., "courses" vs "classes", "coop" vs "co-op")
+A semantic match exists when questions have EXACTLY the same core meaning or intent, requiring the SAME information in response:
+- Questions using synonyms or equivalent terms (e.g., "courses" vs "classes", "coop" vs "co-op", "MSCS" vs "Computer Science Graduate program")
 - Questions asking for the same information in different ways
 - Questions with the same underlying purpose despite different phrasing
-- Questions addressing the same topic with the same goal
 
-EXAMPLE MATCHES:
+For each potential match, assign a confidence score from 0.0 to 1.0 that reflects:
+- How precisely the questions align in scope and specificity (0.0-0.3)
+- How similar the required answer would be for both questions (0.0-0.4)
+- How closely the subject focus matches (e.g., international students vs. all students) (0.0-0.3)
+- Only return matches with a confidence score of 0.6 or higher
+
+POINTS TO CONSIDER WHEN SCORING:
+- Subject focus: Questions about different subjects (e.g., international vs. domestic students) should score lower
+- Question scope: Questions about requirements vs. consequences of not meeting requirements should score lower
+- Information sought: Questions about what counts vs. what doesn't count should score lower
+- Specificity: General questions vs. specific scenario questions should score lower
+
+EXAMPLE STRONG MATCHES (confidence ≥ 0.6):
 User: "How many classes do I need to graduate with my master's?" 
 → Matches question #1: "How many courses are required for a Master's degree in Computer Science at Tufts?"
-→ Correct response: {{"cached_question_id": "1"}}
+→ Confidence: 0.85
+→ Correct response: {{"cached_question_id": "1", "confidence": 0.85}}
 
 User: "What do I need to do for my MS thesis?" 
 → Matches question #4: "How do I fulfill the MS thesis requirement?"
-→ Correct response: {{"cached_question_id": "4"}}
+→ Confidence: 0.95
+→ Correct response: {{"cached_question_id": "4", "confidence": 0.95}}
 
-User: "Can I do internships as an international student?"
-→ Matches question #11: "Can international students complete internships as part of the program?"
-→ Correct response: {{"cached_question_id": "11"}}
+EXAMPLE WEAK MATCHES (confidence < 0.6):
+User: "Are there specific courses that don't count toward the MS requirements?"
+→ Related to question #X: "Can I take non-CS courses as part of my degree program?"
+→ Confidence: 0.45 (Different focus: exclusion vs. inclusion of courses)
+→ Correct response: {{}}
 
-User: "What music clubs are available on campus?"
-→ No match to any pre-stored question
+User: "What happens if I drop below full-time status as an international student?"
+→ Related to question #Y: "What enrollment status do I need to maintain as a graduate student?"
+→ Confidence: 0.55 (Different scope: consequences for specific student type vs. general requirements)
+→ Correct response: {{}}
+
+User: "Do courses that don't count toward my degree still impact my academic standing?"
+→ Related to question #Z: "What are the requirements for maintaining good academic standing in the graduate program?"
+→ Confidence: 0.50 (Different focus: impact of specific course types vs. general standing requirements)
 → Correct response: {{}}
 
 RESPONSE FORMAT:
-- If you find a match: Return ONLY {{"cached_question_id": "X"}} where X is the question number
-- If no match exists: Return ONLY {{}}
+- If you find a match with confidence ≥ 0.6: Return ONLY {{"cached_question_id": "X", "confidence": 0.NN}}
+- If no match exists or best match has confidence < 0.6: Return ONLY {{}}
 - DO NOT include any other text, explanations, or content
 - Return ONLY valid JSON
 
@@ -50,6 +71,8 @@ IMPORTANT:
 - Return only ONE best match if multiple possibilities exist
 - Do not attempt to answer the question
 - Do not include comments or explanations
+- Be extremely strict about matching - when in doubt, do NOT match
+- Consider the threshold of 0.6 to be a high bar requiring questions to be truly equivalent
 """
 
         response = generate(

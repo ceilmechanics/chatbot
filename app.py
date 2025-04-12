@@ -237,11 +237,12 @@ def main():
             # Check if LLM found a semantically similar FAQ
             if response_data.get("cached_question_id"):
                 faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
+                logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
+
                 response_data = {
                     "response": faq_answer["answer"],
                     "suggestedQuestions": faq_answer["suggestedQuestions"]
                 }
-                logger.info("Found semantic FAQ match - returning cached response")
                 update_loading_message(room_id, loading_msg_id)
                 return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
