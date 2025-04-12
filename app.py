@@ -44,7 +44,7 @@ def send_to_human(user, message, tmid=None):
     if not tmid:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nUser {user} has requested help. Please respond in the thread. \n\n{message}"
+            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nStudent {user} has requested help. Please respond in the thread. \n\n{message}"
         }
     else:
         payload = {
@@ -89,31 +89,63 @@ def send_loading_response(user):
         return json_res["message"]["rid"], json_res["message"]["_id"]
     else:
         raise Exception("fail to send loading message")
+    
+def update_loading_message(room_id, loading_msg_id):
+    requests.post(f"{RC_BASE_URL}/chat.update",
+                  json={
+                      "roomId": room_id,
+                      "msgId": loading_msg_id,
+                      "text": " :kirby_vibing: Ta-da! Your answer is ready!"
+                  },
+                  headers=HEADERS)
 
 
 def format_response_with_buttons(response_text, suggested_questions):
+    # response_text = response_data.get("response")
+    # suggested_questions = response_data.get("suggestedQuestions")
+    # response_data["response"], response_data["suggestedQuestions"]
+
     question_buttons = []
-    for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
+    if suggested_questions:
+        for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
+            question_buttons.append({
+                "type": "button",
+                "text": f"{i}",  # Just show the number
+                "msg": question,  # Send the full question when clicked
+                "msg_in_chat_window": True,
+                "msg_processing_type": "sendMessage",
+            })
+
+        # Construct response with numbered questions in text and numbered buttons
+        numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
+        response = {
+            "text": response_text + "\n\n🤔 You might also want to know:\n" + numbered_questions,
+            "attachments": [
+                {
+                    "title": "Click a number to ask that question:",
+                    "actions": question_buttons
+                }
+            ]
+        }
+        return response
+    else:
         question_buttons.append({
             "type": "button",
-            "text": f"{i}",  # Just show the number
-            "msg": question,  # Send the full question when clicked
+            "text": f"Yes",  # Just show the number
+            "msg": "Talk to a human advisor",  # Send the full question when clicked
             "msg_in_chat_window": True,
             "msg_processing_type": "sendMessage",
         })
 
-    # Construct response with numbered questions in text and numbered buttons
-    numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
-    response = {
-        "text": response_text + "\n\n🤔 You might also want to know:\n" + numbered_questions,
-        "attachments": [
-            {
-                "title": "Click a number to ask that question:",
-                "actions": question_buttons
-            }
-        ]
-    }
-    return response
+        return {
+            "text": response_text,
+                "attachments": [
+                    {
+                        "title": "Click \"Yes\" to connect with a human advisor",
+                        "actions": question_buttons
+                    }
+                ]
+        }
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -223,22 +255,25 @@ def main():
             for doc in faq_cursor:
                 faq_list.append(f"{doc['question_id']}: {doc['question']}")
             faq_string = "\n".join(faq_list)
-            response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
+            response_data = json.loads(advisor.get_cached_response(faq_string, message))
 
             # Check if LLM found a semantically similar FAQ
             if response_data.get("cached_question_id"):
                 faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
+                logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
+
                 response_data = {
                     "response": faq_answer["answer"],
                     "suggestedQuestions": faq_answer["suggestedQuestions"]
                 }
-                logger.info("Found semantic FAQ match - returning cached response")
+                update_loading_message(room_id, loading_msg_id)
                 return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
             # ==== LLM PROCESSING ====
             # No cached or semantic match found, process with LLM
             logger.info("No FAQ match found - processing with LLM")
 
+            response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
             response_text = response_data["response"]
             rc_payload = response_data.get("rocketChatPayload") 
             
@@ -252,11 +287,9 @@ def main():
                 llm_answer = rc_payload.get("llmAnswer")
         
                 # Format message for human advisor with context
-                formatted_string = ""
+                formatted_string = f"\n💬 Student Question: {original_question}"
                 if llm_answer:
-                    formatted_string = f"\n❓ Student Question: {original_question}\n\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
-                else:
-                    formatted_string = f"\n❓ Student Question: {original_question}"
+                    formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
                 # Forward to human advisor and get the response
                 forward_res = send_to_human(user, formatted_string)
@@ -298,14 +331,8 @@ def main():
             # Return LLM-generated response with suggested follow-up questions
             else:
                 logger.info("Returning standard LLM response with suggested questions")
-
-                response = requests.post(f"{RC_BASE_URL}/chat.update", json={
-                    "roomId": room_id,
-                    "msgId": loading_msg_id,
-                    "text": " :kirby_vibing: Ta-da! Your answer is ready!"
-                }, headers=HEADERS)
-
-                return format_response_with_buttons(response_data["response"], response_data["suggestedQuestions"])
+                update_loading_message(room_id, loading_msg_id)
+                return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"))
 
     except Exception as e:
         traceback.print_exc()
