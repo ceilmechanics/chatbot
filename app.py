@@ -13,13 +13,13 @@ from flask import Flask, request, jsonify, redirect, render_template
 from advisor import TuftsCSAdvisor
 from utils.mongo_config import get_collection, get_mongodb_connection
 from utils.log_config import setup_logging
+from utils.emails import send_notification_email
 
 app = Flask(__name__)
 
 # log
 setup_logging()
 logger = logging.getLogger(__name__)
-
 
 # global variables
 RC_BASE_URL = "https://chat.genaiconnect.net/api/v1"
@@ -32,7 +32,14 @@ HEADERS = {
 
 HUMAN_OPERATOR = "@wendan.jiang" 
 
-def send_to_human(user, message, tmid=None):
+# Email configuration
+SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
+EMAIL_USER = os.environ.get("EMAIL_USER")
+EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+ADVISOR_EMAIL = os.environ.get("ADVISOR_EMAIL")
+
+def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
 
@@ -40,18 +47,42 @@ def send_to_human(user, message, tmid=None):
     1. Initial escalation: Creates a new message in the human operator channel with alert emoji
     2. Thread continuation: Forwards subsequent user messages to an existing thread
     """
-    payload = {}
     if not tmid:
+        formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
+        formatted_string += f"\n💬 Student Question: {original_question}"
+        if llm_answer:
+            formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}"
+        formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
+
+        # TODO: need TA's efforts to enable button config
+        copy_button = {
+                    "type": "button",
+                    "text": "👍 Approve & Send",  
+                    "msg": llm_answer,  
+                    "msg_in_chat_window": True,
+                    "msg_processing_type": "insertText",  # Change this to insertText instead of sendMessage
+                }
+        
+        # Format payload with the modified button
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nStudent {user} has requested help. Please respond in the thread. \n\n{message}"
+            "text": formatted_string,
+            "attachments": [
+                {
+                    "title": "AI response looks good?",
+                    "actions": [copy_button]
+                }
+            ]
         }
+        # for now, only forward initial escalation message to human advisor
+        # TODO: collect feedback from Johnny to see what is his preference
+        send_notification_email(user, original_question, llm_answer, True)
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": f"🐘 *{user} (student):* {message}",
+            "text": f"🐘 *{user} (student):* {original_question}",
             "tmid": tmid,
-            "tmshow": True
+            "tmshow": False
         }
         logger.info("forwarding to thread: " + tmid)
 
@@ -199,7 +230,7 @@ def main():
             if forward_human == True:
                 forward_thread_id = target_thread.get("forward_thread_id")
                 logger.info("forwarding a message from student to human advisor (forward_thread_id " + forward_thread_id + ")")
-                send_to_human(user, message, forward_thread_id)
+                send_to_human(user, message, None, forward_thread_id)
             else:
                 forward_username = target_thread.get("forward_username")
                 forward_thread_id = target_thread.get("forward_thread_id")
@@ -286,13 +317,13 @@ def main():
                 original_question = rc_payload["originalQuestion"]
                 llm_answer = rc_payload.get("llmAnswer")
         
-                # Format message for human advisor with context
-                formatted_string = f"\n💬 Student Question: {original_question}"
-                if llm_answer:
-                    formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
+                # # Format message for human advisor with context
+                # formatted_string = f"\n💬 Student Question: {original_question}"
+                # if llm_answer:
+                #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
                 # Forward to human advisor and get the response
-                forward_res = send_to_human(user, formatted_string)
+                forward_res = send_to_human(user, original_question, llm_answer)
                 # message_id starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
 
