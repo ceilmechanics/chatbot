@@ -21,7 +21,6 @@ app = Flask(__name__)
 setup_logging()
 logger = logging.getLogger(__name__)
 
-
 # global variables
 RC_BASE_URL = "https://chat.genaiconnect.net/api/v1"
 
@@ -39,74 +38,6 @@ SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
 EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 ADVISOR_EMAIL = os.environ.get("ADVISOR_EMAIL")
-
-# def send_notification_email(student_username, message_text, is_initial_escalation):
-#     """
-#     Sends an email notification to the human advisor when they receive a new message.
-    
-#     Args:
-#         student_username (str): The username of the student sending the message
-#         message_text (str): The content of the message
-#         is_initial_escalation (bool): Whether this is the first escalation or a follow-up
-    
-#     Returns:
-#         bool: True if email was sent successfully, False otherwise
-#     """
-#     if not all([EMAIL_USER, EMAIL_PASSWORD, ADVISOR_EMAIL]):
-#         logger.warning("Email credentials not configured. Skipping email notification.")
-#         return
-    
-#     try:
-#         # Create message
-#         msg = MIMEMultipart()
-#         msg['From'] = EMAIL_USER
-#         msg['To'] = ADVISOR_EMAIL
-        
-#         if is_initial_escalation:
-#             msg['Subject'] = f"🚨 ALERT: New CS Advising Escalation from {student_username}"
-#             body = f"""
-#             <html>
-#             <body>
-#                 <h2>New Escalation Alert</h2>
-#                 <p>Student <b>{student_username}</b> has requested help that requires your attention.</p>
-#                 <h3>Message Content:</h3>
-#                 <p>{message_text}</p>
-#                 <br/>
-#                 <p>Please log in to RocketChat to respond to this message.</p>
-#                 <hr>
-#                 <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
-#             </body>
-#             </html>
-#             """
-#         else:
-#             msg['Subject'] = f"💬 New Thread Message from {student_username}"
-#             body = f"""
-#             <html>
-#             <body>
-#                 <h2>New Message in Existing Thread</h2>
-#                 <p>Student <b>{student_username}</b> has sent a new message in an active thread.</p>
-#                 <h3>Message Content:</h3>
-#                 <p>{message_text}</p>
-#                 <p>Please log in to RocketChat to continue the conversation.</p>
-#                 <hr>
-#                 <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
-#             </body>
-#             </html>
-#             """
-        
-#         msg.attach(MIMEText(body, 'html'))
-        
-#         # Connect to server and send
-#         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-#         server.starttls()
-#         server.login(EMAIL_USER, EMAIL_PASSWORD)
-#         server.send_message(msg)
-#         server.quit()
-        
-#         logger.info(f"Email notification sent to advisor for message from {student_username}")
-        
-#     except Exception as e:
-#         logger.error(f"Failed to send email notification: {str(e)}")
 
 def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None):
     """
