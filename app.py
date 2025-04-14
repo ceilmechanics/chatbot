@@ -13,11 +13,7 @@ from flask import Flask, request, jsonify, redirect, render_template
 from advisor import TuftsCSAdvisor
 from utils.mongo_config import get_collection, get_mongodb_connection
 from utils.log_config import setup_logging
-
-# email notification
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+from utils.emails import send_notification_email
 
 app = Flask(__name__)
 
@@ -44,76 +40,75 @@ EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 ADVISOR_EMAIL = os.environ.get("ADVISOR_EMAIL")
 
-def send_notification_email(student_username, message_text, is_initial_escalation=True):
-    """
-    Sends an email notification to the human advisor when they receive a new message.
+# def send_notification_email(student_username, message_text, is_initial_escalation):
+#     """
+#     Sends an email notification to the human advisor when they receive a new message.
     
-    Args:
-        student_username (str): The username of the student sending the message
-        message_text (str): The content of the message
-        is_initial_escalation (bool): Whether this is the first escalation or a follow-up
+#     Args:
+#         student_username (str): The username of the student sending the message
+#         message_text (str): The content of the message
+#         is_initial_escalation (bool): Whether this is the first escalation or a follow-up
     
-    Returns:
-        bool: True if email was sent successfully, False otherwise
-    """
-    if not all([EMAIL_USER, EMAIL_PASSWORD, ADVISOR_EMAIL]):
-        logger.warning("Email credentials not configured. Skipping email notification.")
-        return False
+#     Returns:
+#         bool: True if email was sent successfully, False otherwise
+#     """
+#     if not all([EMAIL_USER, EMAIL_PASSWORD, ADVISOR_EMAIL]):
+#         logger.warning("Email credentials not configured. Skipping email notification.")
+#         return
     
-    try:
-        # Create message
-        msg = MIMEMultipart()
-        msg['From'] = EMAIL_USER
-        msg['To'] = ADVISOR_EMAIL
+#     try:
+#         # Create message
+#         msg = MIMEMultipart()
+#         msg['From'] = EMAIL_USER
+#         msg['To'] = ADVISOR_EMAIL
         
-        if is_initial_escalation:
-            msg['Subject'] = f"🚨 ALERT: New CS Advising Escalation from {student_username}"
-            body = f"""
-            <html>
-            <body>
-                <h2>New Escalation Alert</h2>
-                <p>Student <b>{student_username}</b> has requested help that requires your attention.</p>
-                <h3>Message Content:</h3>
-                <p>{message_text}</p>
-                <p>Please log in to RocketChat to respond to this message.</p>
-                <hr>
-                <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
-            </body>
-            </html>
-            """
-        else:
-            msg['Subject'] = f"💬 New Thread Message from {student_username}"
-            body = f"""
-            <html>
-            <body>
-                <h2>New Message in Existing Thread</h2>
-                <p>Student <b>{student_username}</b> has sent a new message in an active thread.</p>
-                <h3>Message Content:</h3>
-                <p>{message_text}</p>
-                <p>Please log in to RocketChat to continue the conversation.</p>
-                <hr>
-                <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
-            </body>
-            </html>
-            """
+#         if is_initial_escalation:
+#             msg['Subject'] = f"🚨 ALERT: New CS Advising Escalation from {student_username}"
+#             body = f"""
+#             <html>
+#             <body>
+#                 <h2>New Escalation Alert</h2>
+#                 <p>Student <b>{student_username}</b> has requested help that requires your attention.</p>
+#                 <h3>Message Content:</h3>
+#                 <p>{message_text}</p>
+#                 <br/>
+#                 <p>Please log in to RocketChat to respond to this message.</p>
+#                 <hr>
+#                 <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
+#             </body>
+#             </html>
+#             """
+#         else:
+#             msg['Subject'] = f"💬 New Thread Message from {student_username}"
+#             body = f"""
+#             <html>
+#             <body>
+#                 <h2>New Message in Existing Thread</h2>
+#                 <p>Student <b>{student_username}</b> has sent a new message in an active thread.</p>
+#                 <h3>Message Content:</h3>
+#                 <p>{message_text}</p>
+#                 <p>Please log in to RocketChat to continue the conversation.</p>
+#                 <hr>
+#                 <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
+#             </body>
+#             </html>
+#             """
         
-        msg.attach(MIMEText(body, 'html'))
+#         msg.attach(MIMEText(body, 'html'))
         
-        # Connect to server and send
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
-        server.login(EMAIL_USER, EMAIL_PASSWORD)
-        server.send_message(msg)
-        server.quit()
+#         # Connect to server and send
+#         server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+#         server.starttls()
+#         server.login(EMAIL_USER, EMAIL_PASSWORD)
+#         server.send_message(msg)
+#         server.quit()
         
-        logger.info(f"Email notification sent to advisor for message from {student_username}")
-        return True
+#         logger.info(f"Email notification sent to advisor for message from {student_username}")
         
-    except Exception as e:
-        logger.error(f"Failed to send email notification: {str(e)}")
-        return False
+#     except Exception as e:
+#         logger.error(f"Failed to send email notification: {str(e)}")
 
-def send_to_human(user, message, tmid=None):
+def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
 
@@ -121,62 +116,47 @@ def send_to_human(user, message, tmid=None):
     1. Initial escalation: Creates a new message in the human operator channel with alert emoji
     2. Thread continuation: Forwards subsequent user messages to an existing thread
     """
-    payload = {}
-    is_initial_escalation = (tmid is None)
     if not tmid:
-        # Check if message contains AI-Generated Answer
-        if "AI-Generated Answer:" in message:
-            # Extract the AI answer part
-            try:
-                message_parts = message.split("🤖 AI-Generated Answer:")
-                ai_answer = message_parts[1].split("Can you please review")[0].strip()
-                
-                # Create button that inserts text without sending
-                copy_button = {
+        formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
+        formatted_string += f"\n💬 Student Question: {original_question}"
+        if llm_answer:
+            formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}"
+        formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
+
+        # TODO: need TA's efforts to enable button config
+        copy_button = {
                     "type": "button",
-                    "text": "Copy",  
-                    "msg": ai_answer,  
+                    "text": "👍 Approve & Send",  
+                    "msg": llm_answer,  
                     "msg_in_chat_window": True,
                     "msg_processing_type": "insertText",  # Change this to insertText instead of sendMessage
                 }
-                
-                # Format payload with the modified button
-                payload = {
-                    "channel": HUMAN_OPERATOR,
-                    "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nStudent {user} has requested help. Please respond in the thread.\n\n{message}",
-                    "attachments": [
-                        {
-                            "title": "Click to copy the AI answer to your input field:",
-                            "actions": [copy_button]
-                        }
-                    ]
+        
+        # Format payload with the modified button
+        payload = {
+            "channel": HUMAN_OPERATOR,
+            "text": formatted_string,
+            "attachments": [
+                {
+                    "title": "AI response looks good?",
+                    "actions": [copy_button]
                 }
-            except:
-                # Fall back to regular format if parsing fails
-                payload = {
-                    "channel": HUMAN_OPERATOR,
-                    "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nStudent {user} has requested help. Please respond in the thread. \n\n{message}"
-                }
-        else:
-            # Regular escalation without AI answer
-            payload = {
-                "channel": HUMAN_OPERATOR,
-                "text": f"\U0001F6A8 *Escalation Alert* \U0001F6A8\nStudent {user} has requested help. Please respond in the thread. \n\n{message}"
-            }
+            ]
+        }
+        # for now, only forward initial escalation message to human advisor
+        # TODO: collect feedback from Johnny to see what is his preference
+        send_notification_email(user, original_question, llm_answer, True)
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
-            "text": f"🐘 *{user} (student):* {message}",
+            "text": f"🐘 *{user} (student):* {original_question}",
             "tmid": tmid,
-            "tmshow": True
+            "tmshow": False
         }
         logger.info("forwarding to thread: " + tmid)
 
     response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
 
-    # Send email notification to human advisor
-    send_notification_email(user, message, is_initial_escalation)
-    
     logger.info("successfully forward message to human")
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
@@ -319,7 +299,7 @@ def main():
             if forward_human == True:
                 forward_thread_id = target_thread.get("forward_thread_id")
                 logger.info("forwarding a message from student to human advisor (forward_thread_id " + forward_thread_id + ")")
-                send_to_human(user, message, forward_thread_id)
+                send_to_human(user, message, None, forward_thread_id)
             else:
                 forward_username = target_thread.get("forward_username")
                 forward_thread_id = target_thread.get("forward_thread_id")
@@ -406,13 +386,13 @@ def main():
                 original_question = rc_payload["originalQuestion"]
                 llm_answer = rc_payload.get("llmAnswer")
         
-                # Format message for human advisor with context
-                formatted_string = f"\n💬 Student Question: {original_question}"
-                if llm_answer:
-                    formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
+                # # Format message for human advisor with context
+                # formatted_string = f"\n💬 Student Question: {original_question}"
+                # if llm_answer:
+                #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
                 # Forward to human advisor and get the response
-                forward_res = send_to_human(user, formatted_string)
+                forward_res = send_to_human(user, original_question, llm_answer)
                 # message_id starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
 
