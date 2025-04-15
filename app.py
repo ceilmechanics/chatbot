@@ -90,7 +90,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         }
         # for now, only forward initial escalation message to human advisor
         # TODO: collect feedback from Johnny to see what is his preference
-        send_notification_email(user, original_question, llm_answer, True)
+        # send_notification_email(user, original_question, llm_answer, True)
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
@@ -235,7 +235,7 @@ def main():
                 }, 
                 headers={
                     "Content-Type": "application/json",
-                    "X-Auth-Token": user_token,
+                    "X-Auth-Token": os.environ.get("RC_advisor_token"),
                     "X-User-Id": user_id
                 })
             print("delete response", response)
@@ -323,19 +323,19 @@ def main():
             for doc in faq_cursor:
                 faq_list.append(f"{doc['question_id']}: {doc['question']}")
             faq_string = "\n".join(faq_list)
-            response_data = json.loads(advisor.get_cached_response(faq_string, message))
+            # response_data = json.loads(advisor.get_cached_response(faq_string, message))
 
             # Check if LLM found a semantically similar FAQ
-            if response_data.get("cached_question_id"):
-                faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
-                logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
+            # if response_data.get("cached_question_id"):
+            #     faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
+            #     logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
 
-                response_data = {
-                    "response": faq_answer["answer"],
-                    "suggestedQuestions": faq_answer["suggestedQuestions"]
-                }
-                update_loading_message(room_id, loading_msg_id)
-                return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
+            #     response_data = {
+            #         "response": faq_answer["answer"],
+            #         "suggestedQuestions": faq_answer["suggestedQuestions"]
+            #     }
+            #     update_loading_message(room_id, loading_msg_id)
+            #     return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
             # ==== LLM PROCESSING ====
             # No cached or semantic match found, process with LLM
