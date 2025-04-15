@@ -90,7 +90,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         }
         # for now, only forward initial escalation message to human advisor
         # TODO: collect feedback from Johnny to see what is his preference
-        send_notification_email(user, original_question, llm_answer, True)
+        # send_notification_email(user, original_question, llm_answer, True)
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
@@ -235,7 +235,7 @@ def main():
                 }, 
                 headers={
                     "Content-Type": "application/json",
-                    "X-Auth-Token": user_token,
+                    "X-Auth-Token": os.environ.get("RC_advisor_token"),
                     "X-User-Id": user_id
                 })
             print("delete response", response)
