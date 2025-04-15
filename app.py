@@ -143,7 +143,6 @@ def update_loading_message(room_id, loading_msg_id):
                   },
                   headers=HEADERS)
 
-
 def format_response_with_buttons(response_text, suggested_questions):
     # response_text = response_data.get("response")
     # suggested_questions = response_data.get("suggestedQuestions")
@@ -156,7 +155,7 @@ def format_response_with_buttons(response_text, suggested_questions):
                 "type": "button",
                 "text": f"{i}",  # Just show the number
                 "msg": question,  # Send the full question when clicked
-                "msg_in_chat_window": True,
+                # "msg_in_chat_window": False,
                 "msg_processing_type": "sendMessage",
             })
 
@@ -209,6 +208,7 @@ def main():
     message = data.get("text", "")
     message_id = data.get("message_id")
     tmid = data.get("tmid", None)
+    channel_id = data.get("channel_id")
 
     # Log the incoming request
     logger.info("hit /query endpoint, request data: %s", json.dumps(data, indent=2))
@@ -227,8 +227,15 @@ def main():
 
         if llm_answer and tmid and user:
             send_human_response(user, llm_answer, tmid)
+            # delete the message
+            response = requests.post(f"{RC_BASE_URL}/chat.delete",
+                  json={
+                      "roomId": channel_id,
+                      "msgId": loading_msg_id
+                  },
+                  headers=HEADERS)
+            logger.info("deleting button msg response: %s", json.dumps(response, indent=2))
             return jsonify({"success": True}), 200
-        
     
     try:
         # Get MongoDB client from the connection pool
