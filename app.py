@@ -55,14 +55,17 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
 
         # TODO: need TA's efforts to enable button config
+        # "{\"msg\":\"method\",\"id\":\"18\",\"method\":\"sendMessage\",\"params\":[{\"_id\":\"462knqHeraMvauT8Z\",\"rid\":\"BKr3v5Ft34gQQqcfeiQPJmyQ7xNwGxWFT3\",\"msg\":\"I'm here to assist you with your questions regarding the Tufts MSCS program. If you have specific inquiries or need detailed information, I can help guide you or connect you with a human advisor.\"},null]}"
         copy_button = {
                     "type": "button",
                     "text": "👍 Approve & Send",  
-                    "msg": llm_answer,
-                    "msg_in_chat_window": True,
-                    "msg_processing_type": "sendMessage",  # Change this to insertText instead of sendMessage
-                    "tmid": trigger_msg_id
-        }
+                    "msg": json.dumps({
+                        "msg": llm_answer,
+                        "tmid": trigger_msg_id
+                    }),
+                    "msg_in_chat_window": False,
+                    "msg_processing_type": "sendMessage"
+                }
         
         # Format payload with the modified button
         payload = {
@@ -82,8 +85,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         payload = {
             "channel": HUMAN_OPERATOR,
             "text": f"🐘 *{user} (student):* {original_question}",
-            "tmid": tmid,
-            "tmshow": False
+            "tmid": tmid
         }
         logger.info("forwarding to thread: " + tmid)
 
@@ -355,8 +357,7 @@ def main():
 
                 return jsonify({
                     "text": response_text,
-                    "tmid": message_id,
-                    "tmshow": True
+                    "tmid": message_id
                 })
 
             # ==== STANDARD LLM RESPONSE ====
