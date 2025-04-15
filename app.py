@@ -59,11 +59,9 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         copy_button = {
                     "type": "button",
                     "text": "👍 Approve & Send",  
-                    "msg": json.dumps({
-                        "msg": llm_answer,
-                        "tmid": trigger_msg_id
-                    }),
-                    "msg_in_chat_window": False,
+                    "msg": llm_answer,
+                    "tmid": trigger_msg_id,
+                    "msg_in_chat_window": True,
                     "msg_processing_type": "sendMessage"
                 }
         
