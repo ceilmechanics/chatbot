@@ -205,6 +205,7 @@ def main():
     user_id = data.get("user_id")
     user_name = data.get("user_name", "Unknown")
     user = user_name
+    user_token = data.get("token")
     message = data.get("text", "")
     message_id = data.get("message_id")
     tmid = data.get("tmid", None)
@@ -228,13 +229,16 @@ def main():
         if llm_answer and tmid and user:
             send_human_response(user, llm_answer, tmid)
             # delete the message
-            response = requests.post(f"{RC_BASE_URL}/chat.delete",
-                  json={
-                      "roomId": channel_id,
-                      "msgId": message_id
-                  },
-                  headers=HEADERS)
-            print(response)
+            response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
+                    "roomId": channel_id,
+                    "msgId": message_id
+                }, 
+                headers={
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": user_token,
+                    "X-User-Id": user_id
+                })
+            print("delete response", response)
             # logger.info("deleting button msg response: %s", json.dumps(response, indent=2))
             return jsonify({"success": True}), 200
     
@@ -382,6 +386,8 @@ def main():
                     "msgId": loading_msg_id,
                     "text": " :coll_doge_gif: Your question has been forwarded to a human academic advisor. To begin your conversation, please click the \"View Thread\" button."
                 }, headers=HEADERS)
+
+                
 
                 print(response.json())
 
