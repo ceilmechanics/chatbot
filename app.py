@@ -155,7 +155,7 @@ def format_response_with_buttons(response_text, suggested_questions):
                 "type": "button",
                 "text": f"{i}",  # Just show the number
                 "msg": question,  # Send the full question when clicked
-                "msg_in_chat_window": False,
+                "msg_in_chat_window": True,
                 "msg_processing_type": "sendMessage",
             })
 
@@ -234,7 +234,8 @@ def main():
                       "msgId": message_id
                   },
                   headers=HEADERS)
-            logger.info("deleting button msg response: %s", json.dumps(response, indent=2))
+            print(response)
+            # logger.info("deleting button msg response: %s", json.dumps(response, indent=2))
             return jsonify({"success": True}), 200
     
     try:
