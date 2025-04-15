@@ -173,7 +173,7 @@ def format_response_with_buttons(response_text, suggested_questions):
             "text": response_text,
                 "attachments": [
                     {
-                        "title": "Click \"Yes\" to connect with a human advisor",
+                        "title": "🚀 Connecting to a human advisor?",
                         "actions": question_buttons
                     }
                 ]
