@@ -58,10 +58,11 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         copy_button = {
                     "type": "button",
                     "text": "👍 Approve & Send",  
-                    "msg": llm_answer,  
+                    "msg": llm_answer,
                     "msg_in_chat_window": True,
-                    "msg_processing_type": "insertText",  # Change this to insertText instead of sendMessage
-                }
+                    "msg_processing_type": "sendMessage",  # Change this to insertText instead of sendMessage
+                    "tmid": trigger_msg_id
+        }
         
         # Format payload with the modified button
         payload = {
@@ -323,7 +324,7 @@ def main():
                 #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
                 # Forward to human advisor and get the response
-                forward_res = send_to_human(user, original_question, llm_answer)
+                forward_res = send_to_human(user, original_question, llm_answer, trigger_msg_id=message_id)
                 # message_id starts a new thread on human advisor side
                 advisor_messsage_id = forward_res["message"]["_id"]
 
