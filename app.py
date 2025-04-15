@@ -39,6 +39,15 @@ EMAIL_USER = os.environ.get("EMAIL_USER")
 EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
 ADVISOR_EMAIL = os.environ.get("ADVISOR_EMAIL")
 
+def is_json_object(json_string):
+    try:
+        parsed = json.loads(json_string)
+        if isinstance(parsed, dict):
+            return parsed
+        return None
+    except json.JSONDecodeError:
+        return None
+
 def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
@@ -59,8 +68,11 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         copy_button = {
                     "type": "button",
                     "text": "👍 Approve & Send",  
-                    "msg": llm_answer,
-                    "tmid": trigger_msg_id,
+                    "msg": json.dumps({
+                        "llm_answer": llm_answer,
+                        "tmid": trigger_msg_id,
+                        "user": user
+                    }),
                     "msg_in_chat_window": True,
                     "msg_processing_type": "sendMessage"
                 }
@@ -205,6 +217,18 @@ def main():
     # Ignore bot messages
     if data.get("bot") or not message:
         return jsonify({"status": "ignored"})
+    
+    # Handle button message
+    parsed_msg = is_json_object(message)
+    if parsed_msg:
+        llm_answer = parsed_msg.get("llm_answer")
+        tmid = parsed_msg.get("tmid")
+        user = parsed_msg.get("user")
+
+        if llm_answer and tmid and user:
+            send_human_response(user, llm_answer, tmid)
+            return jsonify({"success": True}), 200
+        
     
     try:
         # Get MongoDB client from the connection pool
