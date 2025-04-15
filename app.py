@@ -323,19 +323,19 @@ def main():
             for doc in faq_cursor:
                 faq_list.append(f"{doc['question_id']}: {doc['question']}")
             faq_string = "\n".join(faq_list)
-            response_data = json.loads(advisor.get_cached_response(faq_string, message))
+            # response_data = json.loads(advisor.get_cached_response(faq_string, message))
 
             # Check if LLM found a semantically similar FAQ
-            if response_data.get("cached_question_id"):
-                faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
-                logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
+            # if response_data.get("cached_question_id"):
+            #     faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
+            #     logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
 
-                response_data = {
-                    "response": faq_answer["answer"],
-                    "suggestedQuestions": faq_answer["suggestedQuestions"]
-                }
-                update_loading_message(room_id, loading_msg_id)
-                return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
+            #     response_data = {
+            #         "response": faq_answer["answer"],
+            #         "suggestedQuestions": faq_answer["suggestedQuestions"]
+            #     }
+            #     update_loading_message(room_id, loading_msg_id)
+            #     return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
             # ==== LLM PROCESSING ====
             # No cached or semantic match found, process with LLM
