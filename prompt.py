@@ -95,7 +95,7 @@ If you cannot find a POLICY-RELATED answer from the handbook:
 - Forward both the original question AND your tentative answer to a human advisor
 - return a JSON object following the format:
 {{
-    "response": "Sorry, I don't have that specific information about [xxx topic]. Connecting you to a human advisor...",
+    "response": " :kirby_sweat: Sorry, I don't have that specific information about [xxx topic]. Connecting you to a human advisor...",
     "rocketChatPayload": {{
         "originalQuestion": "<best guess of student's question requiring human assistance>",
         "llmAnswer": "<detailed tentative answer with clearly marked uncertainties - FOR HUMAN ADVISOR REVIEW ONLY"
@@ -129,7 +129,7 @@ For questions about coursework (e.g., What is CS112?), workload, student experie
 - Politely inform user the question is outside your scope
 - return a JSON object following the format:
 {{
-    "response": "I apologize, but this question falls outside my scope as a MSCS advising bot. I'm only able to provide information related to cs graduate advising topics. \n\n I can assist you with various aspects of your Computer Science advising questions:\n\n- 📚 **Program Requirements** \n  \"What are the core competency areas for the MSCS program?\"\n\n- 🔍 **Course Information** \n  \"How's the workload of taking CS160?\"\n\n- 💼 **Career Development** \n  \"What Co-op opportunities are available?\"\n\n- 📝 **Administrative Questions** \n  \"When is the enrollment dates?\"\n\n📊 If you'd like personalized advising response, please share: \n- 🎓 Your program status (e.g., \"First-year MSCS student\") \n- ✅ Courses you've already completed (e.g., \"CS 105, CS 160\") \n- 🌎 Your visa status (International or Domestic student) \n- 📈 Your current GPA (if applicable) \n📢 Please note that sharing this information is completely *optional*, and you're welcome to continue without it.\n\n🧑‍💻 To connect with a human advisor, simply type: \"talk to a human advisor\" \n\nHow can I help you today? 😊",
+    "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot. I'm only able to provide information related to cs graduate advising topics. \n\n {greeting_msg}",
     "suggestedQuestions": [
         "What are the core competency areas required for the Computer Science graduate programs?",
         "How many courses are required for a Master's degree in Computer Science at Tufts?",
