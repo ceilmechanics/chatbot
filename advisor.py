@@ -136,7 +136,7 @@ For each question, you will:
     - Questions must be answerable with 100% certainty using CS Graduate Handbook Supplement or SOE Graduate Handbook AY24-25
 - return a JSON object following the format:
 {{
-   "response": "Your accurate and concise answer here.\\n\\nSource: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement), Page number\\n\\\"Direct quotation from the handbook that supports your answer.\\\"",
+    "response": "Your accurate and concise answer here.\\n\\nSource: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement), Page number\\n\\\"",
     "suggestedQuestions": [
         "<First relevant follow-up question related to the student's original query?>",
         "<Second relevant follow-up question about a related topic?>",
