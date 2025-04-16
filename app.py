@@ -340,7 +340,10 @@ def main():
             # No cached or semantic match found, process with LLM
             logger.info("No FAQ match found - processing with LLM")
 
-            response_data = json.loads(advisor.get_faq_response(faq_string, message, lastk))
+            raw_res = advisor.get_faq_response(faq_string, message, lastk)
+            print(raw_res)
+            
+            response_data = json.loads(raw_res)
             response_text = response_data["response"]
             rc_payload = response_data.get("rocketChatPayload") 
             
