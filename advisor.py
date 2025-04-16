@@ -218,17 +218,13 @@ When you need additional student information to provide a more accurate response
     - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
 6. category 3.2 does NOT need suggestedQuestions in its response JSON
 
-## pre-stored questions
-Below are a list of pre-stored questions
-{faq_formatted}
-
 """
 
         print(f"user {self.user_id} has lastk {lastk}")
 
         rag_response = generate(
             model='4o-mini',
-            system=system,
+            system=get_system_prompt(),
             query=query,
             temperature=0.1,
             lastk=lastk,
