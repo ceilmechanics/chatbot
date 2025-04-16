@@ -1,5 +1,6 @@
 from llmproxy import generate
 from utils.uploads import handbook_upload
+from prompt import get_system_prompt
 import time
 
 class TuftsCSAdvisor:
@@ -247,7 +248,7 @@ Below are a list of pre-stored questions
 
         rag_response = generate(
             model='4o-mini',
-            system=system,
+            system=get_system_prompt(),
             query=query,
             temperature=0.1,
             lastk=lastk,
