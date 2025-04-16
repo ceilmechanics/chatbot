@@ -1,5 +1,6 @@
 from llmproxy import generate
 from utils.uploads import handbook_upload
+from prompt import get_system_prompt
 import time
 
 class TuftsCSAdvisor:
@@ -9,83 +10,83 @@ class TuftsCSAdvisor:
             handbook_upload(self.user_id)
             time.sleep(2)
 
-    def get_cached_response(self, faq_formatted, query: str):
-        system = f"""
-You are a semantic matching specialist. Your ONLY task is to determine if a user's question matches any pre-stored question.
+#     def get_cached_response(self, faq_formatted, query: str):
+#         system = f"""
+# You are a semantic matching specialist. Your ONLY task is to determine if a user's question matches any pre-stored question.
 
-PRE-STORED QUESTIONS:
-{faq_formatted}
+# PRE-STORED QUESTIONS:
+# {faq_formatted}
 
-MATCHING CRITERIA:
-A semantic match exists when questions have EXACTLY the same core meaning or intent, requiring the SAME information in response:
-- Questions using synonyms or equivalent terms (e.g., "courses" vs "classes", "coop" vs "co-op", "MSCS" vs "Computer Science Graduate program")
-- Questions asking for the same information in different ways
-- Questions with the same underlying purpose despite different phrasing
+# MATCHING CRITERIA:
+# A semantic match exists when questions have EXACTLY the same core meaning or intent, requiring the SAME information in response:
+# - Questions using synonyms or equivalent terms (e.g., "courses" vs "classes", "coop" vs "co-op", "MSCS" vs "Computer Science Graduate program")
+# - Questions asking for the same information in different ways
+# - Questions with the same underlying purpose despite different phrasing
 
-For each potential match, assign a confidence score from 0.0 to 1.0 that reflects:
-- How precisely the questions align in scope and specificity (0.0-0.3)
-- How similar the required answer would be for both questions (0.0-0.4)
-- How closely the subject focus matches (e.g., international students vs. all students) (0.0-0.3)
-- Only return matches with a confidence score of 0.6 or higher
+# For each potential match, assign a confidence score from 0.0 to 1.0 that reflects:
+# - How precisely the questions align in scope and specificity (0.0-0.3)
+# - How similar the required answer would be for both questions (0.0-0.4)
+# - How closely the subject focus matches (e.g., international students vs. all students) (0.0-0.3)
+# - Only return matches with a confidence score of 0.6 or higher
 
-POINTS TO CONSIDER WHEN SCORING:
-- Subject focus: Questions about different subjects (e.g., international vs. domestic students) should score lower
-- Question scope: Questions about requirements vs. consequences of not meeting requirements should score lower
-- Information sought: Questions about what counts vs. what doesn't count should score lower
-- Specificity: General questions vs. specific scenario questions should score lower
+# POINTS TO CONSIDER WHEN SCORING:
+# - Subject focus: Questions about different subjects (e.g., international vs. domestic students) should score lower
+# - Question scope: Questions about requirements vs. consequences of not meeting requirements should score lower
+# - Information sought: Questions about what counts vs. what doesn't count should score lower
+# - Specificity: General questions vs. specific scenario questions should score lower
 
-EXAMPLE STRONG MATCHES (confidence ≥ 0.6):
-User: "How many classes do I need to graduate with my master's?" 
-→ Matches question #1: "How many courses are required for a Master's degree in Computer Science at Tufts?"
-→ Confidence: 0.85
-→ Correct response: {{"cached_question_id": "1", "confidence": 0.85}}
+# EXAMPLE STRONG MATCHES (confidence ≥ 0.6):
+# User: "How many classes do I need to graduate with my master's?" 
+# → Matches question #1: "How many courses are required for a Master's degree in Computer Science at Tufts?"
+# → Confidence: 0.85
+# → Correct response: {{"cached_question_id": "1", "confidence": 0.85}}
 
-User: "What do I need to do for my MS thesis?" 
-→ Matches question #4: "How do I fulfill the MS thesis requirement?"
-→ Confidence: 0.95
-→ Correct response: {{"cached_question_id": "4", "confidence": 0.95}}
+# User: "What do I need to do for my MS thesis?" 
+# → Matches question #4: "How do I fulfill the MS thesis requirement?"
+# → Confidence: 0.95
+# → Correct response: {{"cached_question_id": "4", "confidence": 0.95}}
 
-EXAMPLE WEAK MATCHES (confidence < 0.6):
-User: "Are there specific courses that don't count toward the MS requirements?"
-→ Related to question #X: "Can I take non-CS courses as part of my degree program?"
-→ Confidence: 0.45 (Different focus: exclusion vs. inclusion of courses)
-→ Correct response: {{}}
+# EXAMPLE WEAK MATCHES (confidence < 0.6):
+# User: "Are there specific courses that don't count toward the MS requirements?"
+# → Related to question #X: "Can I take non-CS courses as part of my degree program?"
+# → Confidence: 0.45 (Different focus: exclusion vs. inclusion of courses)
+# → Correct response: {{}}
 
-User: "What happens if I drop below full-time status as an international student?"
-→ Related to question #Y: "What enrollment status do I need to maintain as a graduate student?"
-→ Confidence: 0.55 (Different scope: consequences for specific student type vs. general requirements)
-→ Correct response: {{}}
+# User: "What happens if I drop below full-time status as an international student?"
+# → Related to question #Y: "What enrollment status do I need to maintain as a graduate student?"
+# → Confidence: 0.55 (Different scope: consequences for specific student type vs. general requirements)
+# → Correct response: {{}}
 
-User: "Do courses that don't count toward my degree still impact my academic standing?"
-→ Related to question #Z: "What are the requirements for maintaining good academic standing in the graduate program?"
-→ Confidence: 0.50 (Different focus: impact of specific course types vs. general standing requirements)
-→ Correct response: {{}}
+# User: "Do courses that don't count toward my degree still impact my academic standing?"
+# → Related to question #Z: "What are the requirements for maintaining good academic standing in the graduate program?"
+# → Confidence: 0.50 (Different focus: impact of specific course types vs. general standing requirements)
+# → Correct response: {{}}
 
-RESPONSE FORMAT:
-- If you find a match with confidence ≥ 0.6: Return ONLY {{"cached_question_id": "X", "confidence": 0.NN}}
-- If no match exists or best match has confidence < 0.6: Return ONLY {{}}
-- DO NOT include any other text, explanations, or content
-- Return ONLY valid JSON
+# RESPONSE FORMAT:
+# - If you find a match with confidence ≥ 0.6: Return ONLY {{"cached_question_id": "X", "confidence": 0.NN}}
+# - If no match exists or best match has confidence < 0.6: Return ONLY {{}}
+# - DO NOT include any other text, explanations, or content
+# - Return ONLY valid JSON
 
-IMPORTANT:
-- Return only ONE best match if multiple possibilities exist
-- Do not attempt to answer the question
-- Do not include comments or explanations
-- Be extremely strict about matching - when in doubt, do NOT match
-- Consider the threshold of 0.6 to be a high bar requiring questions to be truly equivalent
-"""
+# IMPORTANT:
+# - Return only ONE best match if multiple possibilities exist
+# - Do not attempt to answer the question
+# - Do not include comments or explanations
+# - Be extremely strict about matching - when in doubt, do NOT match
+# - Consider the threshold of 0.6 to be a high bar requiring questions to be truly equivalent
+# """
 
-        response = generate(
-            model='4o-mini',
-            system=system,
-            query=query,
-            temperature=0.1,
-            lastk=0,
-            session_id='cs-advising-semantic-checking'
-        )
+#         response = generate(
+#             model='4o-mini',
+#             system=system,
+#             query=query,
+#             temperature=0.1,
+#             lastk=0,
+#             session_id='cs-advising-semantic-checking'
+#         )
 
-        print(response['response'])
-        return response['response']
+#         print(response['response'])
+#         return response['response']
 
 
     def get_faq_response(self, faq_formatted, query: str, lastk):
@@ -101,48 +102,19 @@ For each question, you will:
 3. Only cite information explicitly found in the retrieved passages from available documents
 4. Include proper attribution when quoting resources
 5. Never fabricate or assume the existence of policies not present in available resources
-6. When generating the "suggestedQuestions" field in the response JSON, follow these guidelines:
-   A. DIRECTLY PROVIDED QUESTIONS
-      • Use exact questions without modification when they appear directly in the JSON response
-      • Example:
-        "suggestedQuestions": [
-            "What are the core competency areas required for the Computer Science graduate programs?",
-            "How many courses are required for a Master's degree in Computer Science at Tufts?",
-            "What are the Co-op opportunities for Computer Science graduate students?"
-        ]
-
-   B. INSTRUCTIONS IN PARENTHESES
-      • Generate questions based on specific instructions in parentheses
-      • Example:
-        "suggestedQuestions": [
-            "(first relevant follow-up question)",
-            "(second relevant follow-up question)",
-            "(third relevant follow-up question)"
-        ]
-        - Generate 3 relevant follow-up questions
-        - Priority: Select from pre-stored questions first
-        - If insufficient relevant pre-stored questions exist, generate additional questions based on handbook content
-        - Questions must be answerable with 100% certainty using CS Graduate Handbook Supplement or SOE Graduate Handbook AY24-25
-
-   C. RELEVANCE CRITERIA
-      A question is considered "relevant" if it:
-      • Relates to the same topic area as the user's query
-      • Follows logically from the current conversation
-      • Addresses a closely related aspect that would benefit the student's understanding
-
-   D. GENERAL REQUIREMENTS
-      • Always include "Connect with a human advisor" option when specified
-      • Ensure variety to cover different aspects of the topic
-      • All questions must relate to the user's query or broader discussion topic
-      • Questions must be answerable with 100% certainty using CS Graduate Handbook Supplement or SOE Graduate Handbook AY24-25
-
+6. Consider the following student information when personalizing responses:
+   - Student program (MSCS, MSDS, etc.)
+   - Courses already taken
+   - GPA
+   - Visa status (international/domestic)
+   - Previous questions the student has asked and previous answers you provided
 
 ### RESPONSE CATEGORIES:
 
 #### 1. GREETING MESSAGES
 - For greeting messages (e.g., "Hello", "Hi"), respond with a friendly greeting, return a JSON object following the format:
 {{
-    "response": "Hello! I'm your Tufts MSCS advisor. How can I help you today?",
+   "response": "Hello! I'm your Tufts MSCS advising bot. How can I help you today? \\nIf you would like to connect with a human advisor, you can say: \\"talk to a human advisor\\".",
     "suggestedQuestions": [
         "What are the core competency areas required for the Computer Science graduate programs?",
         "How many courses are required for a Master's degree in Computer Science at Tufts?",
@@ -159,17 +131,16 @@ For each question, you will:
     - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
 - Follow quotations with brief explanations
 - Keep responses concise while covering relevant policy details
-- Generate 3 relevant follow-up questions
-    - Priority: Select from pre-stored questions first
-    - If insufficient relevant pre-stored questions exist, generate additional questions based on handbook content
+- Generate 3 follow-up questions which are relevant to the student's question and make sure these follow-up questions:
+    - Questions have not been asked by the student in the previous conversation
     - Questions must be answerable with 100% certainty using CS Graduate Handbook Supplement or SOE Graduate Handbook AY24-25
 - return a JSON object following the format:
 {{
-    "response": "According to the [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement) (p.8): \"For incoming Ph.D. students who will be here on a temporary visa, they must have a full-time enrollment of 6 SHUs over the summer. This could include one 'standard' course, one 'research/independent study' course, plus CS 406-RA/405-TA.\" Additionally, the [SOE Graduate Handbook](https://tufts.app.box.com/v/soe-grad-handbook) states under Continuous Enrollment Policy (p.23): \"Graduate students must be enrolled (registered), or on an approved leave of absence, for every academic-year semester between matriculation and graduation.\" This ensures that international students maintain their visa status during all terms.",
+    "response": "Your accurate and concise answer here.\\n\\nSource: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement), Page number\\n\\\"",
     "suggestedQuestions": [
-        "(first relevant follow-up question)",
-        "(second relevant follow-up question)",
-        "(third relevant follow-up question)"
+        "<First relevant follow-up question related to the student's original query?>",
+        "<Second relevant follow-up question about a related topic?>",
+        "<Third relevant follow-up question to further explore the topic?>"
     ]
 }}
 
@@ -184,10 +155,10 @@ If you cannot find a POLICY-RELATED answer from the handbook:
 - Forward both the original question AND your tentative answer to a human advisor
 - return a JSON object following the format:
 {{
-    "response": "Sorry, I don't have that specific information. Connecting you to a human advisor...",
+    "response": "Sorry, I don't have that specific information about [xxx topic]. Connecting you to a human advisor...",
     "rocketChatPayload": {{
-        "originalQuestion": "(Copy user's original question)",
-        "llmAnswer": "YOUR TENTATIVE ANSWER BASED ON GENERAL KNOWLEDGE AND HANDBOOK - FOR HUMAN ADVISOR REVIEW ONLY"
+        "originalQuestion": "<best guess of student's question requiring human assistance>",
+        "llmAnswer": "<detailed tentative answer with clearly marked uncertainties - FOR HUMAN ADVISOR REVIEW ONLY"
     }}
 }}
 
@@ -207,9 +178,9 @@ For questions about coursework (e.g., What is CS112?), workload, student experie
 - Immediately escalate the request with user's original question
 - return a JSON object following the format:
 {{
-    "response": "Connecting you to a human advisor...",
+    "response": "I noticed you are asking a question about <topic>. Let me help you connect with a human advisor.",
     "rocketChatPayload": {{
-        "originalQuestion": "[User's complete original question requiring human advisor answers]",
+        "originalQuestion": "<best guess of student's question requiring human assistance>",
         "llmAnswer": "[Your detailed tentative answer based on available information, clearly marking any uncertainties - FOR HUMAN ADVISOR REVIEW ONLY]"
     }}
 }}
@@ -218,12 +189,22 @@ For questions about coursework (e.g., What is CS112?), workload, student experie
 - Politely inform user the question is outside your scope
 - return a JSON object following the format:
 {{
-    "response": "I'm sorry, but this question is outside my scope as a CS advisor.",
+    "response": "I apologize, but this question falls outside my scope as a MSCS advising bot. I'm only able to provide information related to cs graduate advising topics. Below is a list of frequently asked MSCS advising questions you may find interesting:\\n\\nIf you'd like to speak with a human advisor instead, please say: \\"talk to a human advisor\\".",
     "suggestedQuestions": [
         "What are the core competency areas required for the Computer Science graduate programs?",
         "How many courses are required for a Master's degree in Computer Science at Tufts?",
         "What are the Co-op opportunities for Computer Science graduate students?"
     ]
+}}
+
+### 6. Missing Student Information
+When you need additional student information to provide a more accurate response, you can ask for additional information. However, only ask for relevant information from this specific list:
+- Student program (e.g., MSCS, MSDS)
+- Courses students have already taken
+- GPA
+- Visa status (international students or domestic students)
+{{
+   "response": "I see you have a question about [topic]. To provide you with the most helpful answer, could you share some additional context about your academic situation? Specifically, information about [only mention the specific relevant information needed from the list above] might help me tailor my response better. Please note that sharing this information is completely optional, and you're welcome to continue without it."
 }}
 
 ## IMPORTANT REMINDERS
