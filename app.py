@@ -60,7 +60,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     # initial message sent to human advisor (without thread created)
     payload = {}
     if not tmid and not trigger_msg_id:
-        formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
+        formatted_string = f"\\u1F6A8 *Escalation Alert* \\u1F6A8\n Student {user} has requested help. \n"
         formatted_string += f"\n💬 Student Question: {original_question}"
         formatted_string += f"\n\n Please click on *View Thread* to view the AI-generated response designed to help you address student questions.\n"
         # if llm_answer:
@@ -182,7 +182,7 @@ def format_response_with_buttons(response_text, suggested_questions):
         # Construct response with numbered questions in text and numbered buttons
         numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
         response = {
-            "text": response_text + "\n\n🤔 You might also want to know:\n" + numbered_questions,
+            "text": response_text + "\n\n :kirbyesyesq: You might also want to know:\n" + numbered_questions,
             "attachments": [
                 {
                     "title": "Click a number to ask that question:",

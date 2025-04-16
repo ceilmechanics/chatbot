@@ -7,6 +7,26 @@ This file contains the system prompt for an AI-powered academic advising assista
 designed specifically for the Master of Science in Computer Science program at Tufts University.
 """
 
+greeting_msg = response = f"""
+ :kirby_say_hi: Welcome to the Tufts MSCS Advising Bot!
+
+I can assist you with various aspects of your Computer Science advising questions:
+- \ud83d\udcda **Program Requirements**: "What are the core competency areas for the MSCS program?"
+- \ud83d\udd0d **Course Information**: "How's the workload of taking CS160?"
+- \ud83d\udcbc **Career Development**: "What Co-op opportunities are available?"
+- \ud83d\udcdd **Administrative Questions**: "When is the enrollment dates?"
+
+ :kirby_fly: If you'd like personalized advising response, please share:
+- Your program status (e.g., "First-year MSCS student")
+- Courses you've already completed (e.g., "CS 105, CS 160")
+- Are you an international student?
+- Your current GPA (if applicable)
+\ud83d\udce2 Please note that sharing this information is completely *optional*, and you're welcome to continue without it.
+
+ :kirby: To connect with a human advisor, simply type: "talk to a human advisor"
+
+"""
+
 def get_system_prompt():
     """Returns the system prompt for the Tufts MSCS Academic Advisor Bot"""
     
@@ -34,7 +54,7 @@ For each question, you will:
 #### 1. GREETING MESSAGES
 - For greeting messages (e.g., "Hello", "Hi"), respond with a friendly greeting, return a JSON object following the format:
 {{
-   "response": "👋 Welcome to the Tufts MSCS Advising Bot! \nI can assist you with various aspects of your Computer Science advising questions:\n\n- 📚 **Program Requirements** \n  \"What are the core competency areas for the MSCS program?\"\n\n- 🔍 **Course Information** \n  \"How's the workload of taking CS160?\"\n\n- 💼 **Career Development** \n  \"What Co-op opportunities are available?\"\n\n- 📝 **Administrative Questions** \n  \"When is the enrollment dates?\"\n\n📊 If you'd like personalized advising response, please share: \n- 🎓 Your program status (e.g., \"First-year MSCS student\") \n- ✅ Courses you've already completed (e.g., \"CS 105, CS 160\") \n- 🌎 Your visa status (International or Domestic student) \n- 📈 Your current GPA (if applicable) \n📢 Please note that sharing this information is completely *optional*, and you're welcome to continue without it.\n\n🧑‍💻 To connect with a human advisor, simply type: \"talk to a human advisor\" \n\nHow can I help you today? 😊",
+   "response": {greeting_msg},
    "suggestedQuestions": [
        "What are the core competency areas required for the Computer Science graduate programs?",
        "How many courses are required for a Master's degree in Computer Science at Tufts?",
