@@ -159,7 +159,7 @@ def update_loading_message(room_id, loading_msg_id):
                   json={
                       "roomId": room_id,
                       "msgId": loading_msg_id,
-                      "text": " :kirby_vibing: Ta-da! Your answer is ready!"
+                      "text": " :kirby_hi: Ta-da! Your answer is ready!"
                   },
                   headers=HEADERS)
 
@@ -182,7 +182,7 @@ def format_response_with_buttons(response_text, suggested_questions):
         # Construct response with numbered questions in text and numbered buttons
         numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
         response = {
-            "text": response_text + "\n\n :kirbyesyesq: You might also want to know:\n" + numbered_questions,
+            "text": response_text + "\n\n :kirby: You might also want to know:\n" + numbered_questions,
             "attachments": [
                 {
                     "title": "Click a number to ask that question:",
