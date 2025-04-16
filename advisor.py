@@ -203,9 +203,9 @@ When you need additional student information to provide a more accurate response
 - Courses students have already taken
 - GPA
 - Visa status (international students or domestic students)
-{
+{{
    "response": "I see you have a question about [topic]. To provide you with the most helpful answer, could you share some additional context about your academic situation? Specifically, information about [only mention the specific relevant information needed from the list above] might help me tailor my response better. Please note that sharing this information is completely optional, and you're welcome to continue without it."
-}
+}}
 
 ## IMPORTANT REMINDERS
 1. Try to avoid involving a human, unless the user explicitly requests it or the question falls into category 3.1.
