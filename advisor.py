@@ -228,7 +228,7 @@ Below are a list of pre-stored questions
 
         rag_response = generate(
             model='4o-mini',
-            system=get_system_prompt(),
+            system=system,
             query=query,
             temperature=0.1,
             lastk=lastk,
