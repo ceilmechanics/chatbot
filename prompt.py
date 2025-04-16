@@ -54,7 +54,7 @@ For each question, you will:
 #### 1. GREETING MESSAGES
 - For greeting messages (e.g., "Hello", "Hi"), respond with a friendly greeting, return a JSON object following the format:
 {{
-   "response": {greeting_msg},
+   "response": "{greeting_msg}",
    "suggestedQuestions": [
        "What are the core competency areas required for the Computer Science graduate programs?",
        "How many courses are required for a Master's degree in Computer Science at Tufts?",
