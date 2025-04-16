@@ -63,8 +63,6 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
             formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}"
         formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
 
-        # TODO: need TA's efforts to enable button config
-        # "{\"msg\":\"method\",\"id\":\"18\",\"method\":\"sendMessage\",\"params\":[{\"_id\":\"462knqHeraMvauT8Z\",\"rid\":\"BKr3v5Ft34gQQqcfeiQPJmyQ7xNwGxWFT3\",\"msg\":\"I'm here to assist you with your questions regarding the Tufts MSCS program. If you have specific inquiries or need detailed information, I can help guide you or connect you with a human advisor.\"},null]}"
         copy_button = {
                     "type": "button",
                     "text": "👍 Approve & Send",  
@@ -201,11 +199,12 @@ def main():
     """
     data = request.get_json() 
 
+    logger.info("add a debug line to verify if the code is modified or not")
+
     # Extract relevant information
     user_id = data.get("user_id")
     user_name = data.get("user_name", "Unknown")
     user = user_name
-    user_token = data.get("token")
     message = data.get("text", "")
     message_id = data.get("message_id")
     tmid = data.get("tmid", None)
