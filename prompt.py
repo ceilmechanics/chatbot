@@ -64,7 +64,7 @@ When the student asks a question that you can confidently answer with credible r
 - Keep your answer concise while covering all relevant details
 - Generate 3 follow-up questions which are relevant to the student's question and make sure these follow-up questions have not been asked by the student in the previous conversation
 {
-   "response": "Your accurate and concise answer here.\\n\\nSource: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement), Section X\\n\\\"Direct quotation from the handbook that supports your answer.\\\"",
+   "response": "Your accurate and concise answer here.\\n\\nSource: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement), Page X\\n\\\"Direct quotation from the handbook that supports your answer.\\\"",
    "suggestedQuestions": [
         "First relevant follow-up question related to the student's original query?",
         "Second relevant follow-up question about a related topic?",
