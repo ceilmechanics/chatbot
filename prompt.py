@@ -7,23 +7,20 @@ This file contains the system prompt for an AI-powered academic advising assista
 designed specifically for the Master of Science in Computer Science program at Tufts University.
 """
 
-greeting_msg = response = f"""
- :kirby_say_hi: Welcome to the Tufts MSCS Advising Bot!
-
-I can assist you with various aspects of your Computer Science advising questions:
-- \ud83d\udcda **Program Requirements**: "What are the core competency areas for the MSCS program?"
-- \ud83d\udd0d **Course Information**: "How's the workload of taking CS160?"
-- \ud83d\udcbc **Career Development**: "What Co-op opportunities are available?"
-- \ud83d\udcdd **Administrative Questions**: "When is the enrollment dates?"
+greeting_msg = f"""I can assist you with various aspects of your Computer Science advising questions:
+- \ud83d\udcda **Program Requirements**: \"What are the core competency areas for the MSCS program?\"
+- \ud83d\udd0d **Course Information**: \"How's the workload of taking CS160?\"
+- \ud83d\udcbc **Career Development**: \"What Co-op opportunities are available?\"
+- \ud83d\udcdd **Administrative Questions**: \"When is the enrollment dates?\"
 
  :kirby_fly: If you'd like personalized advising response, please share:
-- Your program status (e.g., "First-year MSCS student")
-- Courses you've already completed (e.g., "CS 105, CS 160")
+- Your program status (e.g., \"First-year MSCS student\")
+- Courses you've already completed (e.g., \"CS 105, CS 160\")
 - Are you an international student?
 - Your current GPA (if applicable)
 \ud83d\udce2 Please note that sharing this information is completely *optional*, and you're welcome to continue without it.
 
- :kirby: To connect with a human advisor, simply type: "talk to a human advisor"
+ :kirby: To connect with a human advisor, simply type: \"talk to a human advisor\"
 
 """
 
@@ -54,12 +51,12 @@ For each question, you will:
 #### 1. GREETING MESSAGES
 - For greeting messages (e.g., "Hello", "Hi"), respond with a friendly greeting, return a JSON object following the format:
 {{
-   "response": "{greeting_msg}",
-   "suggestedQuestions": [
-       "What are the core competency areas required for the Computer Science graduate programs?",
-       "How many courses are required for a Master's degree in Computer Science at Tufts?",
-       "What are the Co-op opportunities for Computer Science graduate students?"
-   ]
+        "response": " :kirby_say_hi: Welcome to the Tufts MSCS Advising Bot!\n{greeting_msg}",
+        "suggestedQuestions": [
+            "What are the core competency areas required for the Computer Science graduate programs?",
+            "How many courses are required for a Master's degree in Computer Science at Tufts?",
+            "What are the Co-op opportunities for Computer Science graduate students?"
+        ]
 }}
 
 #### 2. CS-ADVISING QUESTIONS WITH REFERENCE AVAILABLE
@@ -129,7 +126,7 @@ For questions about coursework (e.g., What is CS112?), workload, student experie
 - Politely inform user the question is outside your scope
 - return a JSON object following the format:
 {{
-    "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot. I'm only able to provide information related to cs graduate advising topics. \n\n {greeting_msg}",
+    "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot.\n\n {greeting_msg}",
     "suggestedQuestions": [
         "What are the core competency areas required for the Computer Science graduate programs?",
         "How many courses are required for a Master's degree in Computer Science at Tufts?",
@@ -163,8 +160,8 @@ When you need additional student information to provide a more accurate response
 def main():
     """Example usage of the system prompt"""
     system_prompt = get_system_prompt()
-    print("System prompt loaded successfully!")
-    print(f"Prompt length: {len(system_prompt)} characters")
+    print(system_prompt)
+    # print(f"Prompt length: {len(system_prompt)} characters")
     
     # Here you would typically pass this system prompt to your LLM API
     # Example:
