@@ -252,7 +252,7 @@ Below are a list of pre-stored questions
             query=query,
             temperature=0.1,
             lastk=lastk,
-            session_id='cs-advising-handbooks-v6-' + self.user_id,
+            session_id='cs-advising-handbooks-v5-' + self.user_id,
             rag_usage=True,
             rag_threshold=0.5,  # Lower threshold
             rag_k=3  # Retrieve more documents
