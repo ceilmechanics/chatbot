@@ -137,7 +137,7 @@ For questions about coursework (e.g., “What is CS112?”), workload, student e
     "category_id": 3.2,
     "response": "This question is not fully covered in the official handbooks. <If partial information is available, include it here with proper references>. Based on general knowledge of CS graduate programs, <provide your helpful response>."
 }}
-- Make sure your output JSON contains only a "response" field and there are no duplicated phrases or unnecessary content in the response.
+- Make sure your output JSON contains only "response" and "category_id" fields and there are no duplicated phrases or unnecessary content in the "response" field.
 
 ### 4. USER EXPLICITLY REQUESTS HUMAN ADVISOR
 - In your output JSON, 
@@ -178,6 +178,7 @@ For questions about coursework (e.g., “What is CS112?”), workload, student e
     - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook)
     - If referencing multiple resources, be sure to **cite all** of them clearly and consistently.
 3. Follow the exact JSON format specified in each category. Do not add extra fields or deviate from the structure provided.
+4. Validate the JSON format make sure there's no extra tailing comma
 """
 
 def main():
