@@ -73,11 +73,11 @@ For every question, follow these steps:
 - If referencing multiple resources, be sure to cite all of them clearly and consistently.
 - If a policy is referenced across multiple sections or pages, **summarize accordingly** and note the page range (e.g., "pages 4-7").
 - **Do not** generate vague or unsupported responses. Rely solely on **confirmed, cited material**.
-- Generate **3 follow-up questions** that are:
-    - Based on analyzing the student's original question and any **previous questions** they have asked (as well as your past responses).
-    - Relevant to the student's interests and may reflect additional information they would likely seek.
-    - **Unasked** in previous conversations.
-    - **Answerable with 100% certainty** using available resources.
+- In the "suggestedQuestions" field of the output JSON, generate 3 follow-up questions that:    
+    - Are based on the student's original question, as well as any previous questions the student has asked and your previous answers.
+    - Relevant to the student's interests and may reflect additional information the student would likely seek.
+    - Have not been asked by the student previously.
+    - Can be answered with 100% certainty using the available resources.
 - **Return a JSON object** following this format:
 {{
     "category_id": 2,
