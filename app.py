@@ -413,7 +413,7 @@ def main():
                 response = requests.post(f"{RC_BASE_URL}/chat.update", json={
                     "roomId": room_id,
                     "msgId": loading_msg_id,
-                    "text": f" :coll_doge_gif: {response_text}\n To begin your conversation, please click the \"View Thread\" button."
+                    "text": f" :coll_doge_gif: {response_text} To begin your conversation, please click the \"**View Thread**\" button."
                 }, headers=HEADERS)
 
                 print(response.json())
