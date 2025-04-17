@@ -7,23 +7,22 @@ This file contains the system prompt for an AI-powered academic advising assista
 designed specifically for the Master of Science in Computer Science program at Tufts University.
 """
 
-greeting_msg = f"""I'm here to help you with a wide range of Computer Science advising topics:
-
-- **Program Requirements**
-    - \"What are the core competency areas for the MSCS program?\"
-    - \"How many courses are required to complete a Master's in Computer Science at Tufts?\"
-- **Academic Policies**
-    - \"What is the transfer credit policy for Computer Science graduate students?\"
-    - \"What are the requirements for maintaining good academic standing in the graduate program?\"
-- **Course-related Information**
-    - \"Does taking CS160 count towards my graduation requirement?\"
-    - \"Can I take non-CS courses in my degree program?\"
-- **Career Development**
-    - \"What Co-op opportunities are available?\"
-    - \"Can international students do internships as part of the program?\"
-- **Administrative Questions**
-    - \"When are the enrollment periods?\"
-    - \"What important dates should I keep in mind?\"
+greeting_msg = f"""I'm here to help you with a wide range of Computer Science advising topics:\n\
+- **Program Requirements**\n\
+    - \\\"What are the core competency areas for the MSCS program?\\\"\n\
+    - \\\"How many courses are required to complete a Master's in Computer Science at Tufts?\\\"\n\
+- **Academic Policies**\n\
+    - \\\"What is the transfer credit policy for Computer Science graduate students?\\\"\n\
+    - \\\"What are the requirements for maintaining good academic standing in the graduate program?\\\"\n\
+- **Course-related Information**\n\
+    - \\\"Does taking CS160 count towards my graduation requirement?\\\"\n\
+    - \\\"Can I take non-CS courses in my degree program?\\\"\n\
+- **Career Development**\n\
+    - \\\"What Co-op opportunities are available?\\\"\n\
+    - \\\"Can international students do internships as part of the program?\\\"\n\
+- **Administrative Questions**\n\
+    - \\\"When are the enrollment periods?\\\"\n\
+    - \\\"What important dates should I keep in mind?\\\"
 
  :kirby_fly: Want a **more personalized** advising experience? I just need a little more info from you: 
 - Your program status (e.g., \"First-year MSCS student\")
