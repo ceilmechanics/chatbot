@@ -115,12 +115,12 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
 
-def send_human_response(user, message, tmid):
+def send_human_response(room_id, message, tmid):
     """
     Sends a response from a human operator back to the original user via RocketChat.
     """
     payload = {
-        "channel": f"@{user}",  # Send directly to the original user
+        "roomId": room_id,  # Send directly to the original user
         "text": f"👤 *{HUMAN_OPERATOR} (Human Advisor):* {message}",
         "tmid": tmid
     }
@@ -129,9 +129,9 @@ def send_human_response(user, message, tmid):
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
 
-def send_loading_response(user):
+def send_loading_response(room_id):
     payload = {
-        "channel": f"@{user}",  # Send directly to the original user
+        "roomId": room_id,  # Send directly to the original user
         "text": f" :everything_fine_parrot: Processing your inquiry. One moment please..."
     }
 
@@ -230,7 +230,7 @@ def main():
         user = parsed_msg.get("user")
 
         if llm_answer and tmid and user:
-            send_human_response(user, llm_answer, tmid)
+            send_human_response(channel_id, llm_answer, tmid)
             # delete the message
             response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
                     "roomId": channel_id,
@@ -272,9 +272,9 @@ def main():
                 logger.info("forwarding a message from student to human advisor (forward_thread_id " + forward_thread_id + ")")
                 send_to_human(user, message, tmid=forward_thread_id)
             else:
-                forward_username = target_thread.get("forward_username")
+                # forward_username = target_thread.get("forward_username")
                 forward_thread_id = target_thread.get("forward_thread_id")
-                send_human_response(forward_username, message, forward_thread_id)
+                send_human_response(channel_id, message, forward_thread_id)
             
             return jsonify({"success": True}), 200
     
@@ -324,7 +324,7 @@ def main():
         # else:
 
         # Prompting loading message
-        room_id, loading_msg_id = send_loading_response(user_name)
+        room_id, loading_msg_id = send_loading_response(channel_id)
 
         # faq_cursor = faq_collection.find(
         #     {"question": {"$exists": True}},  
