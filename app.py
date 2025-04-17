@@ -63,17 +63,6 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
         formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
         formatted_string += f"\n💬 Student Question: {original_question}"
         formatted_string += f"\n\n Please click on *View Thread* to view the AI-generated response designed to help you address student questions.\n"
-        # if llm_answer:
-        #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}"
-        # formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
-
-        # copy_button = {
-        #             "type": "button",
-        #             "text": "✏️ Copy to chat",
-        #             "msg": llm_answer,
-        #             "msg_in_chat_window": True,
-        #             "msg_processing_type": "respondWithMessage"
-        #         }
         
         # Format payload with the modified button
         payload = {
@@ -165,10 +154,6 @@ def update_loading_message(room_id, loading_msg_id):
                   headers=HEADERS)
 
 def format_response_with_buttons(response_text, suggested_questions):
-    # response_text = response_data.get("response")
-    # suggested_questions = response_data.get("suggestedQuestions")
-    # response_data["response"], response_data["suggestedQuestions"]
-
     question_buttons = []
     if suggested_questions:
         for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
@@ -195,7 +180,7 @@ def format_response_with_buttons(response_text, suggested_questions):
     else:
         question_buttons.append({
             "type": "button",
-            "text": f"Yes",  # Just show the number
+            "text": f"🚀 Connect",  # Just show the number
             "msg": "Talk to a human advisor",  # Send the full question when clicked
             "msg_in_chat_window": True,
             "msg_processing_type": "sendMessage",
@@ -205,7 +190,7 @@ def format_response_with_buttons(response_text, suggested_questions):
             "text": response_text,
                 "attachments": [
                     {
-                        "title": "🚀 Connecting to a human advisor?",
+                        "title": "Connecting to a human advisor?",
                         "actions": question_buttons
                     }
                 ]
@@ -215,10 +200,6 @@ def format_response_with_buttons(response_text, suggested_questions):
 def main():
     """
     Main endpoint for handling user queries to the Tufts CS Advisor.
-    
-    This endpoint processes incoming messages, manages conversations through RocketChat,
-    and provides responses using either cached FAQ answers or live LLM responses.
-    It also handles escalation to human operators when necessary.
     """
     data = request.get_json() 
 
@@ -307,8 +288,16 @@ def main():
                 "user_id": user_id,
                 "username": user_name,
                 "last_k": 0,
-                "program": "",
-                "major": ""
+                "transcript": {
+                    "program": "",
+                    "completed_courses": [{
+                        "course_id": "CS112",
+                        "grade": "A"
+                    }],
+                    "credits_earned": "",
+                    "GPA": "",
+                    "domestic": ""
+                }
             }
             user_collection.insert_one(user_profile)
 
@@ -324,111 +313,112 @@ def main():
 
         # ==== FAQ MATCHING - EXACT MATCH ====
         # Check if question exactly matches a cached question in the database
-        faq_collection = get_collection("freq_questions", "questions")
-        faq_doc = faq_collection.find_one({"question": message})
-        if faq_doc:
-            logger.info("Found exact FAQ match - returning cached response")
-            return jsonify(format_response_with_buttons(faq_doc["answer"], faq_doc["suggestedQuestions"]))
+        # faq_collection = get_collection("freq_questions", "questions")
+        # faq_doc = faq_collection.find_one({"question": message})
+        # if faq_doc:
+        #     logger.info("Found exact FAQ match - returning cached response")
+        #     return jsonify(format_response_with_buttons(faq_doc["answer"], faq_doc["suggestedQuestions"]))
         
         # ==== FAQ MATCHING - SEMANTIC MATCH ====
         # If no exact match, try semantic matching with all FAQs
-        else:
-            # Prompting loading message
-            room_id, loading_msg_id = send_loading_response(user_name)
+        # else:
 
-            faq_cursor = faq_collection.find(
-                {"question": {"$exists": True}},  
-                {"_id": 0, "question": 1, "question_id": 1}  # Projection to only return these fields
-            )
+        # Prompting loading message
+        room_id, loading_msg_id = send_loading_response(user_name)
 
-            faq_list = []
-            for doc in faq_cursor:
-                faq_list.append(f"{doc['question_id']}: {doc['question']}")
-            faq_string = "\n".join(faq_list)
-            # response_data = json.loads(advisor.get_cached_response(faq_string, message))
+        # faq_cursor = faq_collection.find(
+        #     {"question": {"$exists": True}},  
+        #     {"_id": 0, "question": 1, "question_id": 1}  # Projection to only return these fields
+        # )
 
-            # Check if LLM found a semantically similar FAQ
-            # if response_data.get("cached_question_id"):
-            #     faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
-            #     logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
+        # faq_list = []
+        # for doc in faq_cursor:
+        #     faq_list.append(f"{doc['question_id']}: {doc['question']}")
+        # faq_string = "\n".join(faq_list)
+        # response_data = json.loads(advisor.get_cached_response(faq_string, message))
 
-            #     response_data = {
-            #         "response": faq_answer["answer"],
-            #         "suggestedQuestions": faq_answer["suggestedQuestions"]
-            #     }
-            #     update_loading_message(room_id, loading_msg_id)
-            #     return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
+        # Check if LLM found a semantically similar FAQ
+        # if response_data.get("cached_question_id"):
+        #     faq_answer = faq_collection.find_one({"question_id": int(response_data["cached_question_id"])})
+        #     logger.info(f"Found semantic FAQ match with confidence score {response_data["confidence"]} - returning cached response")
 
-            # ==== LLM PROCESSING ====
-            # No cached or semantic match found, process with LLM
-            logger.info("No FAQ match found - processing with LLM")
+        #     response_data = {
+        #         "response": faq_answer["answer"],
+        #         "suggestedQuestions": faq_answer["suggestedQuestions"]
+        #     }
+        #     update_loading_message(room_id, loading_msg_id)
+        #     return jsonify(format_response_with_buttons(faq_answer["answer"], faq_answer["suggestedQuestions"]))
 
-            raw_res = advisor.get_faq_response(faq_string, message, lastk)
-            print(raw_res)
-            
-            response_data = json.loads(raw_res)
-            response_text = response_data["response"]
-            rc_payload = response_data.get("rocketChatPayload") 
-            
-            # ==== HUMAN ESCALATION ====
-            # Check if LLM determined human escalation is needed
-            if rc_payload:
-                logger.info("rc_payload exists")
-                
-                # Extract the payload components
-                original_question = rc_payload["originalQuestion"]
-                llm_answer = rc_payload.get("llmAnswer")
-                uncertain_areas = rc_payload.get("uncertainAreas")
+        # ==== LLM PROCESSING ====
+        # No cached or semantic match found, process with LLM
+        logger.info("No FAQ match found - processing with LLM")
+
+        raw_res = advisor.get_faq_response(None, message)
+        print(raw_res)
         
-                # # Format message for human advisor with context
-                # formatted_string = f"\n💬 Student Question: {original_question}"
-                # if llm_answer:
-                #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
+        response_data = json.loads(raw_res)
+        response_text = response_data["response"]
+        rc_payload = response_data.get("rocketChatPayload") 
+        
+        # ==== HUMAN ESCALATION ====
+        # Check if LLM determined human escalation is needed
+        if rc_payload:
+            logger.info("rc_payload exists")
+            
+            # Extract the payload components
+            original_question = rc_payload["originalQuestion"]
+            llm_answer = rc_payload.get("llmAnswer")
+            uncertain_areas = rc_payload.get("uncertainAreas")
+    
+            # # Format message for human advisor with context
+            # formatted_string = f"\n💬 Student Question: {original_question}"
+            # if llm_answer:
+            #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
-                # Forward to human advisor and get the response
-                forward_res = send_to_human(user, original_question)
+            # Forward to human advisor and get the response
+            forward_res = send_to_human(user, original_question)
 
-                # message_id starts a new thread on human advisor side
-                # send a thread message that contains AI-generated response
-                advisor_messsage_id = forward_res["message"]["_id"]
-                send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
+            # message_id starts a new thread on human advisor side
+            # send a thread message that contains AI-generated response
+            advisor_messsage_id = forward_res["message"]["_id"]
+            send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
 
-                # Create bidirectional thread mapping for ongoing conversation
-                thread_item = [{
-                    "thread_id": message_id,
-                    "forward_thread_id": advisor_messsage_id,
-                    "forward_human": True
-                }, 
-                {
-                    "thread_id": advisor_messsage_id,
-                    "forward_thread_id": message_id,
-                    "forward_human": False,
-                    "forward_username": user_name
+            # Create bidirectional thread mapping for ongoing conversation
+            thread_item = [{
+                "thread_id": message_id,
+                "forward_thread_id": advisor_messsage_id,
+                "forward_human": True
+            }, 
+            {
+                "thread_id": advisor_messsage_id,
+                "forward_thread_id": message_id,
+                "forward_human": False,
+                "forward_username": user_name
 
-                }]
-                thread_collection = get_collection("Users", "threads")
-                thread_collection.insert_many(thread_item)
-                
-                # delete loading msg
-                response = requests.post(f"{RC_BASE_URL}/chat.update", json={
-                    "roomId": room_id,
-                    "msgId": loading_msg_id,
-                    "text": f" :coll_doge_gif: {response_text} To begin your conversation, please click the \"**View Thread**\" button."
-                }, headers=HEADERS)
+            }]
+            thread_collection = get_collection("Users", "threads")
+            thread_collection.insert_many(thread_item)
+            
+            # delete loading msg
+            response = requests.post(f"{RC_BASE_URL}/chat.update", json={
+                "roomId": room_id,
+                "msgId": loading_msg_id,
+                "text": f" :coll_doge_gif: {response_text} To begin your conversation, please click the \"**View Thread**\" button."
+            }, headers=HEADERS)
 
-                print(response.json())
+            print(response.json())
 
-                return jsonify({
-                    "text": response_text,
-                    "tmid": message_id
-                })
+            return jsonify({
+                "text": response_text,
+                "tmid": message_id
+            })
 
-            # ==== STANDARD LLM RESPONSE ====
-            # Return LLM-generated response with suggested follow-up questions
-            else:
-                logger.info("Returning standard LLM response with suggested questions")
-                update_loading_message(room_id, loading_msg_id)
-                return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"))
+        # ==== STANDARD LLM RESPONSE ====
+        # Return LLM-generated response with suggested follow-up questions
+        else:
+            logger.info("Returning standard LLM response with suggested questions")
+            update_loading_message(room_id, loading_msg_id)
+            return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"))
 
     except Exception as e:
         traceback.print_exc()

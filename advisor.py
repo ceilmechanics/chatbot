@@ -5,20 +5,22 @@ import time
 
 class TuftsCSAdvisor:
     def __init__(self, user_profile):
+        self.user_profile = user_profile
         self.user_id = user_profile["user_id"]
+        self.last_k = user_profile["last_k"]
         if user_profile["last_k"] == 0:
             handbook_upload(self.user_id)
             time.sleep(2)
 
-    def get_faq_response(self, faq_formatted, query: str, lastk):
-        print(f"user {self.user_id} has lastk {lastk}")
+    def get_faq_response(self, faq_formatted, query: str):
+        print(f"user {self.user_id} has lastk {self.last_k}")
 
         rag_response = generate(
             model='4o-mini',
-            system=get_system_prompt(),
+            system=get_system_prompt(self.user_profile),
             query=query,
             temperature=0.1,
-            lastk=lastk,
+            lastk=self.last_k,
             session_id='cs-advising-handbooks-v5-' + self.user_id,
             rag_usage=True,
             rag_threshold=0.5,  # Lower threshold
