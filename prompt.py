@@ -77,7 +77,7 @@ For every question, follow these steps:
     - Based on analyzing the student's original question and any **previous questions** they have asked (as well as your past responses).
     - Relevant to the student's interests and may reflect additional information they would likely seek.
     - **Unasked** in previous conversations.
-    - **Answerable with 100% certainty** using the CS Graduate Handbook Supplement or SOE Graduate Handbook AY24-25.
+    - **Answerable with 100% certainty** using available resources.
 - **Return a JSON object** following this format:
 {{
     "category_id": 2,
