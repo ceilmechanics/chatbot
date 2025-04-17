@@ -74,7 +74,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     # to display AI-generated answer with copy button
     elif trigger_msg_id:
         formatted_string = "I've generated a response to help you address student questions based on available information. If you find this AI-generated answer helpful, *click ✏️ Copy to chat button* to paste it to your chatbox. \n\n"
-        formatted_string += f"🤖 AI-Generated Answer: {llm_answer}\n"
+        formatted_string += f"🤖 AI-Generated Answer: {llm_answer}\n\n"
         formatted_string += f"🤔 Reason for uncertainty: {uncertain_areas}"
         payload = {
             "channel": HUMAN_OPERATOR,
@@ -403,7 +403,7 @@ def main():
             response = requests.post(f"{RC_BASE_URL}/chat.update", json={
                 "roomId": room_id,
                 "msgId": loading_msg_id,
-                "text": f" :coll_doge_gif: {response_text} To begin your conversation, please click the \"**View Thread**\" button."
+                "text": f" :coll_doge_gif: {response_text} \n📬 To begin your conversation, please click the \"**View Thread**\" button."
             }, headers=HEADERS)
 
             print(response.json())
