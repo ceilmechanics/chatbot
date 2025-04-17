@@ -32,7 +32,7 @@ greeting_msg = f"""I'm here to help you with a wide range of Computer Science ad
 - Your current GPA (if applicable)
 **Totally optional**, and you're welcome to continue without it!
 
- :kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"Connect\" button below
+ :kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"**Connect**\" button below
 """
 
 def get_system_prompt(user_profile):
@@ -136,7 +136,7 @@ For questions about coursework (e.g., “What is CS112?”), workload, student e
 - Return a single JSON object with only a "response" field. Note: Replace all fields within <angle brackets> with actual content based on the conversation. These are placeholders, not literal values.
 {{
     "category_id": 3.2,
-    "response": "This question is not fully covered in the official handbooks. <If partial information is available, include it here with proper references>. Based on general knowledge of CS graduate programs, <provide your helpful response>. \n"
+    "response": "This question is not fully covered in the official handbooks. <If partial information is available, include it here with proper references>. Based on general knowledge of CS graduate programs, <provide your helpful response>."
 }}
 - Make sure your output JSON contains only a "response" field and there are no duplicated phrases or unnecessary content in the response.
 
