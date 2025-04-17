@@ -21,7 +21,7 @@ class TuftsCSAdvisor:
             lastk=lastk,
             session_id='cs-advising-handbooks-v5-' + self.user_id,
             rag_usage=True,
-            rag_threshold=0.75,  # Lower threshold
+            rag_threshold=0.5,  # Lower threshold
             rag_k=5  # Retrieve more documents
         )
 
