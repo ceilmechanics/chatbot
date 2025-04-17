@@ -48,7 +48,7 @@ def is_json_object(json_string):
     except json.JSONDecodeError:
         return None
 
-def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None):
+def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None, uncertain_areas=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
 
@@ -60,7 +60,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     # initial message sent to human advisor (without thread created)
     payload = {}
     if not tmid and not trigger_msg_id:
-        formatted_string = f"\\u1F6A8 *Escalation Alert* \\u1F6A8\n Student {user} has requested help. \n"
+        formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
         formatted_string += f"\n💬 Student Question: {original_question}"
         formatted_string += f"\n\n Please click on *View Thread* to view the AI-generated response designed to help you address student questions.\n"
         # if llm_answer:
@@ -86,6 +86,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     elif trigger_msg_id:
         formatted_string = "I've generated a response to help you address student questions based on available information. If you find this AI-generated answer helpful, *click ✏️ Copy to chat button* to paste it to your chatbox. \n\n"
         formatted_string += f"🤖 AI-Generated Answer: {llm_answer}\n"
+        formatted_string += f"🤔 Reason for uncertainty: {uncertain_areas}"
         payload = {
             "channel": HUMAN_OPERATOR,
             "text": formatted_string,
@@ -377,6 +378,7 @@ def main():
                 # Extract the payload components
                 original_question = rc_payload["originalQuestion"]
                 llm_answer = rc_payload.get("llmAnswer")
+                uncertain_areas = rc_payload.get("uncertainAreas")
         
                 # # Format message for human advisor with context
                 # formatted_string = f"\n💬 Student Question: {original_question}"
@@ -389,7 +391,7 @@ def main():
                 # message_id starts a new thread on human advisor side
                 # send a thread message that contains AI-generated response
                 advisor_messsage_id = forward_res["message"]["_id"]
-                send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id)
+                send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
 
                 # Create bidirectional thread mapping for ongoing conversation
                 thread_item = [{
