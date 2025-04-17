@@ -48,7 +48,7 @@ def is_json_object(json_string):
     except json.JSONDecodeError:
         return None
 
-def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None):
+def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_msg_id=None, uncertain_areas=None):
     """
     Sends a message to a human operator via RocketChat when AI escalation is needed.
 
@@ -56,39 +56,62 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     1. Initial escalation: Creates a new message in the human operator channel with alert emoji
     2. Thread continuation: Forwards subsequent user messages to an existing thread
     """
-    if not tmid:
+
+    # initial message sent to human advisor (without thread created)
+    payload = {}
+    if not tmid and not trigger_msg_id:
         formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
         formatted_string += f"\n💬 Student Question: {original_question}"
-        if llm_answer:
-            formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}"
-        formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
+        formatted_string += f"\n\n Please click on *View Thread* to view the AI-generated response designed to help you address student questions.\n"
+        # if llm_answer:
+        #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}"
+        # formatted_string += "\n\nIf you confirm this AI-generated response appears accurate, *click the button below* to forward it to the student. Otherwise, please respond to the inquiry in the thread (by clicking *\"Reply in thread\"* in the right corner)."
 
-        copy_button = {
-                    "type": "button",
-                    "text": "👍 Approve & Send",  
-                    "msg": json.dumps({
-                        "llm_answer": llm_answer,
-                        "tmid": trigger_msg_id,
-                        "user": user
-                    }),
-                    "msg_in_chat_window": True,
-                    "msg_processing_type": "sendMessage"
-                }
+        # copy_button = {
+        #             "type": "button",
+        #             "text": "✏️ Copy to chat",
+        #             "msg": llm_answer,
+        #             "msg_in_chat_window": True,
+        #             "msg_processing_type": "respondWithMessage"
+        #         }
         
         # Format payload with the modified button
+        payload = {
+            "channel": HUMAN_OPERATOR,
+            "text": formatted_string,
+        }
+
+    # follow-up message that starts a new thread on the initial message
+    # to display AI-generated answer with copy button
+    elif trigger_msg_id:
+        formatted_string = "I've generated a response to help you address student questions based on available information. If you find this AI-generated answer helpful, *click ✏️ Copy to chat button* to paste it to your chatbox. \n\n"
+        formatted_string += f"🤖 AI-Generated Answer: {llm_answer}\n"
+        formatted_string += f"🤔 Reason for uncertainty: {uncertain_areas}"
         payload = {
             "channel": HUMAN_OPERATOR,
             "text": formatted_string,
             "attachments": [
                 {
                     "title": "AI response looks good?",
-                    "actions": [copy_button]
+                    "actions": [
+                        {
+                            "type": "button",
+                            "text": "✏️ Copy to chat",
+                            "msg": llm_answer,
+                            "msg_in_chat_window": True,
+                            "msg_processing_type": "respondWithMessage"
+                        }
+                    ]
                 }
-            ]
+            ],
+            "tmid": trigger_msg_id
         }
-        # for now, only forward initial escalation message to human advisor
+
         # TODO: collect feedback from Johnny to see what is his preference
+        # for now, only forward initial escalation message to human advisor
         # send_notification_email(user, original_question, llm_answer, True)
+    
+    # forwarding message
     else:
         payload = {
             "channel": HUMAN_OPERATOR,
@@ -137,7 +160,7 @@ def update_loading_message(room_id, loading_msg_id):
                   json={
                       "roomId": room_id,
                       "msgId": loading_msg_id,
-                      "text": " :kirby_vibing: Ta-da! Your answer is ready!"
+                      "text": " :kirby_hi: Ta-da! Your answer is ready!"
                   },
                   headers=HEADERS)
 
@@ -160,7 +183,7 @@ def format_response_with_buttons(response_text, suggested_questions):
         # Construct response with numbered questions in text and numbered buttons
         numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
         response = {
-            "text": response_text + "\n\n🤔 You might also want to know:\n" + numbered_questions,
+            "text": response_text + "\n\n :kirby: You might also want to know:\n" + numbered_questions,
             "attachments": [
                 {
                     "title": "Click a number to ask that question:",
@@ -266,7 +289,7 @@ def main():
             if forward_human == True:
                 forward_thread_id = target_thread.get("forward_thread_id")
                 logger.info("forwarding a message from student to human advisor (forward_thread_id " + forward_thread_id + ")")
-                send_to_human(user, message, None, forward_thread_id)
+                send_to_human(user, message, tmid=forward_thread_id)
             else:
                 forward_username = target_thread.get("forward_username")
                 forward_thread_id = target_thread.get("forward_thread_id")
@@ -355,6 +378,7 @@ def main():
                 # Extract the payload components
                 original_question = rc_payload["originalQuestion"]
                 llm_answer = rc_payload.get("llmAnswer")
+                uncertain_areas = rc_payload.get("uncertainAreas")
         
                 # # Format message for human advisor with context
                 # formatted_string = f"\n💬 Student Question: {original_question}"
@@ -362,9 +386,12 @@ def main():
                 #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
                 # Forward to human advisor and get the response
-                forward_res = send_to_human(user, original_question, llm_answer, trigger_msg_id=message_id)
+                forward_res = send_to_human(user, original_question)
+
                 # message_id starts a new thread on human advisor side
+                # send a thread message that contains AI-generated response
                 advisor_messsage_id = forward_res["message"]["_id"]
+                send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
 
                 # Create bidirectional thread mapping for ongoing conversation
                 thread_item = [{
@@ -386,10 +413,8 @@ def main():
                 response = requests.post(f"{RC_BASE_URL}/chat.update", json={
                     "roomId": room_id,
                     "msgId": loading_msg_id,
-                    "text": " :coll_doge_gif: Your question has been forwarded to a human academic advisor. To begin your conversation, please click the \"View Thread\" button."
+                    "text": f" :coll_doge_gif: {response_text} To begin your conversation, please click the \"**View Thread**\" button."
                 }, headers=HEADERS)
-
-                
 
                 print(response.json())
 
