@@ -21,7 +21,7 @@ class TuftsCSAdvisor:
             query=query,
             temperature=0.1,
             lastk=self.last_k,
-            session_id='cs-advising-handbooks-v5-' + self.user_id,
+            session_id='cs-advising-handbooks-v8-' + self.user_id,      # prev v5
             rag_usage=True,
             rag_threshold=0.5,  # Lower threshold
             rag_k=5  # Retrieve more documents
