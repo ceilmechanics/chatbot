@@ -7,34 +7,34 @@ This file contains the system prompt for an AI-powered academic advising assista
 designed specifically for the Master of Science in Computer Science program at Tufts University.
 """
 
-greeting_msg = " :kirby_say_hi: Welcome to the **Tufts MSCS Advising Bot**! I'm here to help you with a wide range of Computer Science advising topics:\\n- **Program Requirements**\\n    - \\\"What are the core competency areas for the MSCS program?\\\"\\n    - \\\"How many courses are required to complete a Master's in Computer Science at Tufts?\\\"\\n- **Academic Policies**\\n    - \\\"What is the transfer credit policy for Computer Science graduate students?\\\"\\n    - \\\"What are the requirements for maintaining good academic standing in the graduate program?\\\"\\n- **Course-related Information**\\n    - \\\"Does taking CS160 count towards my graduation requirement?\\\"\\n    - \\\"Can I take non-CS courses in my degree program?\\\"\\n- **Career Development**\\n    - \\\"What Co-op opportunities are available?\\\"\\n    - \\\"Can international students do internships as part of the program?\\\"\\n- **Administrative Questions**\\n    - \\\"When are the enrollment periods?\\\"\\n    - \\\"What important dates should I keep in mind?\\\"\\n\\n :kirby_fly: Want a **more personalized** advising experience? I just need a little more info from you:\\n- Your program status (e.g., \\\"First-year MSCS student\\\")\\n- Courses you've already completed (e.g., \\\"CS 105, CS 160\\\")\\n- Are you an international student?\\n- Your current GPA (if applicable)\\n**Totally optional**, and you're welcome to continue without it!\\n\\n :kirby_type: To speak with a human advisor, just type: \\\"**talk to a human advisor**\\\" or click on the \\\"**Connect**\\\" button below"
+# greeting_msg = """I'm here to help you with a wide range of Computer Science advising topics:\\n- **Program Requirements**\\n    - \\\"What are the core competency areas for the MSCS program?\\\"\\n    - \\\"How many courses are required to complete a Master's in Computer Science at Tufts?\\\"\\n- **Academic Policies**\\n    - \\\"What is the transfer credit policy for Computer Science graduate students?\\\"\\n    - \\\"What are the requirements for maintaining good academic standing in the graduate program?\\\"\\n- **Course-related Information**\\n    - \\\"Does taking CS160 count towards my graduation requirement?\\\"\\n    - \\\"Can I take non-CS courses in my degree program?\\\"\\n- **Career Development**\\n    - \\\"What Co-op opportunities are available?\\\"\\n    - \\\"Can international students do internships as part of the program?\\\"\\n- **Administrative Questions**\\n    - \\\"When are the enrollment periods?\\\"\\n    - \\\"What important dates should I keep in mind?\\\"\\n\\n :kirby_fly: Want a **more personalized** advising experience? I just need a little more info from you:\\n- Your program status (e.g., \\\"First-year MSCS student\\\")\\n- Courses you've already completed (e.g., \\\"CS 105, CS 160\\\")\\n- Are you an international student?\\n- Your current GPA (if applicable)\\n**Totally optional**, and you're welcome to continue without it!\\n\\n :kirby_type: To speak with a human advisor, just type: \\\"**talk to a human advisor**\\\" or click on the \\\"**Connect**\\\" button below"
 
-# greeting_msg = f"""I'm here to help you with a wide range of Computer Science advising topics:\n\
-# - **Program Requirements**
-#     - \"What are the core competency areas for the MSCS program?\\\"
-#     - \\\"How many courses are required to complete a Master's in Computer Science at Tufts?\\\"\n\
-# - **Academic Policies**\n\
-#     - \\\"What is the transfer credit policy for Computer Science graduate students?\\\"\n\
-#     - \\\"What are the requirements for maintaining good academic standing in the graduate program?\\\"\n\
-# - **Course-related Information**\n\
-#     - \\\"Does taking CS160 count towards my graduation requirement?\\\"\n\
-#     - \\\"Can I take non-CS courses in my degree program?\\\"\n\
-# - **Career Development**\n\
-#     - \\\"What Co-op opportunities are available?\\\"\n\
-#     - \\\"Can international students do internships as part of the program?\\\"\n\
-# - **Administrative Questions**\n\
-#     - \\\"When are the enrollment periods?\\\"\n\
-#     - \\\"What important dates should I keep in mind?\\\"
+greeting_msg = f"""I'm here to help you with a wide range of Computer Science advising topics:
+💡- **Program Requirements**
+    - \"What are the core competency areas for the MSCS program?\"
+    - \"How many courses are required to complete a Master's in Computer Science at Tufts?\"
+📌 **Academic Policies**
+    - \"What is the transfer credit policy for Computer Science graduate students?\"
+    - \"What are the requirements for maintaining good academic standing in the graduate program?\"
+✍️ **Course-related Information**
+    - \"Does taking CS160 count towards my graduation requirement?\"
+    - \"Can I take non-CS courses in my degree program?\"
+🌱 **Career Development**
+    - \"What Co-op opportunities are available?\"
+    - \"Can international students do internships as part of the program?\"
+📝 **Administrative Questions**
+    - \"When are the enrollment periods?\"
+    - \"What important dates should I keep in mind?\"
 
-#  :kirby_fly: Want a **more personalized** advising experience? I just need a little more info from you: 
-# - Your program status (e.g., \"First-year MSCS student\")
-# - Courses you've already completed (e.g., \"CS 105, CS 160\")
-# - Are you an international student?
-# - Your current GPA (if applicable)
-# **Totally optional**, and you're welcome to continue without it!
+ :kirby_fly: Want a **more personalized** advising experience? I just need a little more info from you: 
+- Your program status (e.g., \"First-year MSCS student\")
+- Courses you've already completed (e.g., \"CS 105, CS 160\")
+- Are you an international student?
+- Your current GPA (if applicable)
+**Totally optional**, and you're welcome to continue without it!
 
-#  :kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"**Connect**\" button below
-# """
+ :kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"**Connect**\" button below
+"""
 
 def get_system_prompt(user_profile):
     """Returns the system prompt for the Tufts MSCS Academic Advisor Bot"""
@@ -182,6 +182,8 @@ For questions about coursework (e.g., “What is CS112?”), workload, student e
 4. Follow the exact JSON format specified in each category. Do not add extra fields or deviate from the structure provided.
 5. Double check the JSON format to make sure there's no extra tailing comma, and it is a valid JSON format
 6. If "suggestedQuestions" are included in the output JSON, each question you suggested must be explicitly and definitively answered by the available reference materials. Do not include questions that require interpretation or go beyond the available resources.
+7. ONLY include "rocketChatPayload" in output JSON when the question falls in category 3.1 and 4.
+8. ONLY include "suggestedQuestions" in output JSON when the question falls in category 2.
 """
 
 def main():
