@@ -14,6 +14,7 @@ class TuftsCSAdvisor:
 
     def get_faq_response(self, faq_formatted, query: str):
         print(f"user {self.user_id} has lastk {self.last_k}")
+        print("user_profile: ", self.user_profile)
 
         rag_response = generate(
             model='4o-mini',
