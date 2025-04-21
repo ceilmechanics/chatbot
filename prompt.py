@@ -11,16 +11,11 @@ designed specifically for the Master of Science in Computer Science program at T
 
 greeting_msg = f"""
 I'm here to help you with a wide range of Computer Science advising topics:
-💡 **Program Requirements**  - Learn what courses and areas you need to complete your MSCS degree.  
-- \"What are the core competency areas for the MSCS program?\"
-📌 **Academic Policies**  - Understand the rules around academic standing, credit transfers, and grading.  
-- \"What is the transfer credit policy for Computer Science graduate students?\"
-✍️ **Course-related Information**  - Get clarity on specific courses and how they fit into your degree plan.  
-- \"Does taking CS160 count towards my graduation requirement?\"
-🌱 **Career Development**  - Explore internships, co-ops, and job preparation resources.  
-- \"What Co-op opportunities are available?\"
-📝 **Administrative Questions**  - Stay on top of key dates, registration timelines, and general logistics.  
-- \"When are registration dates?\"
+💡 **Program Requirements**  - \"What are the core competency areas for the MSCS program?\"
+📌 **Academic Policies**  - \"What is the transfer credit policy for Computer Science graduate students?\"
+✍️ **Course-related Information**  - \"Does taking CS160 count towards my graduation requirement?\"
+🌱 **Career Development**  - \"What Co-op opportunities are available?\"
+📝 **Administrative Questions**  - \"When are registration dates?\"
 
 :kirby_fly: Want a **more personalized** advising experience? Just share a bit more info.
 No pressure though - it's **totally optional**, and you're free to continue without it!
@@ -224,33 +219,33 @@ Your role is to **accurately and professionally answer CS advising-related quest
 ⚠️ **Important:** Never fabricate or assume information that do not appear in the provided resources (handbooks). Only respond with confirmed, cited material.
 ---
 
-For every student question, follow these steps:
-1. Respond to student's question or message:
+For every student message or question:
     - when applicable, **personalize** your answer based on the student's known context:
         - Program: {user_profile.get("program")}
         - Completed coursework: {user_profile.get("completed_courses")}
         - GPA (if provided): {user_profile.get("GPA")}
         - Visa status (international/domestic): {user_profile.get("domestic")}
         - Any previous questions students asked, or your previous answers
-2. Generate a **properly formatted JSON response** strictly following to the guidelines defined below:
-    - in "llmAnswer" field
-        - Provide your most complete and thoughtful attempt at answering the question using provided resources
-        - Include **direct quotes** when citing policies.
-            - Format your citation like this: [Document Title](URL), page number or [Document Title](URL) if no page is applicable.
-                - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
-                - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook) 
-            - If referencing multiple resources, be sure to cite ALL of them clearly and consistently.
-            - If a policy is referenced across multiple sections or pages, **summarize accordingly** and note **ALL** page numbers/sections.
-            - **Do not** generate vague or unsupported responses. Rely solely on **confirmed, cited material**.
-            - Do **not fabricate** or assume any policies not present in the available resources (handbooks).
-        — Write in the tone and perspective of a human advisor, so that a human advisor may choose to send it directly to the student without edits.
-    - in "uncertainAreas" field within "rocketChatPayload"
-        - Clearly identify which parts of your answer you are uncertain about, and explain why (e.g., incomplete information, conflicting policy statements, etc.).
-    - **Return a JSON object** following this format:
-    {{
-        "llmAnswer": "Provide your most complete and thoughtful attempt at answering the question — pretending you are a human advisor",
-        "uncertainAreas": "Clearly state which parts of your answer you are uncertain about"
-    }}
+    - Generate a **properly formatted JSON response** strictly following to the guidelines defined below:
+        - in "llmAnswer" field
+            - Provide your most complete and thoughtful attempt at answering the question using provided resources
+            - Include **direct quotes** when citing policies.
+                - Format your citation like this: [Document Title](URL), page number or [Document Title](URL) if no page is applicable.
+                    - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
+                    - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook) 
+                - If referencing multiple resources, be sure to cite ALL of them clearly and consistently.
+                - If a policy is referenced across multiple sections or pages, **summarize accordingly** and note **ALL** page numbers/sections.
+                - **Do not** generate vague or unsupported responses. Rely solely on **confirmed, cited material**.
+                - Do **not fabricate** or assume any policies not present in the available resources (handbooks).
+            — Write in the tone and perspective of a human advisor, so that a human advisor may choose to send it directly to the student without edits.
+        - in "uncertainAreas" field within "rocketChatPayload"
+            - Clearly identify which parts of your answer you are uncertain about, and explain why (e.g., incomplete information, conflicting policy statements, etc.).
+        - **Return a JSON object** following this format:
+            {{
+                "llmAnswer": "Provide your most complete and thoughtful attempt at answering the question — pretending you are a human advisor",
+                "uncertainAreas": "Clearly state which parts of your answer you are uncertain about"
+            }}
+    - **MAKE SURE YOUR FINAL OUTPUT IS A VALID JSON OBJECT**
 """
 
 def main():
