@@ -122,10 +122,10 @@ def send_human_response(room_id, message, tmid):
     logger.info(f"DEBUG: RocketChat API Response: {response.status_code} - {response.text}")
     return response.json()
 
-def send_loading_response(room_id):
+def send_loading_response(room_id, loading_msg=" :everything_fine_parrot: Processing your inquiry. One moment please..."):
     payload = {
         "roomId": room_id,
-        "text": f" :everything_fine_parrot: Processing your inquiry. One moment please..."
+        "text": loading_msg
     }
 
     response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=payload, headers=HEADERS)
@@ -318,10 +318,11 @@ def main():
         
         # === QUESTION SUMMARY HANDLING ===
         if user_profile and user_profile.get("pending_escalation") is True:
-            _, loading_msg_id = send_loading_response(channel_id)
+            _, loading_msg_id = send_loading_response(channel_id, loading_msg=" :everything_fine_parrot: Forwarding your request to a human advisor now...")
 
             advisor = TuftsCSAdvisor(user_profile)
             response_data = advisor.get_escalated_response(message)
+            response_data = json.loads(response_data)
 
             llm_answer = response_data.get("llmAnswer")
             uncertain_areas = response_data.get("uncertainAreas")
