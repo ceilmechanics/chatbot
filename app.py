@@ -32,13 +32,6 @@ HEADERS = {
 
 HUMAN_OPERATOR = "@wendan.jiang" 
 
-# Email configuration
-SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", 587))
-EMAIL_USER = os.environ.get("EMAIL_USER")
-EMAIL_PASSWORD = os.environ.get("EMAIL_PASSWORD")
-ADVISOR_EMAIL = os.environ.get("ADVISOR_EMAIL")
-
 def is_json_object(json_string):
     try:
         parsed = json.loads(json_string)
@@ -131,7 +124,7 @@ def send_human_response(room_id, message, tmid):
 
 def send_loading_response(room_id):
     payload = {
-        "roomId": room_id,  # Send directly to the original user
+        "roomId": room_id,
         "text": f" :everything_fine_parrot: Processing your inquiry. One moment please..."
     }
 
@@ -144,18 +137,18 @@ def send_loading_response(room_id):
     else:
         raise Exception("fail to send loading message")
     
-def update_loading_message(room_id, loading_msg_id):
+def update_loading_message(room_id, loading_msg_id, text=" :kirby_hi: Ta-da! Your answer is ready!"):
     requests.post(f"{RC_BASE_URL}/chat.update",
                   json={
                       "roomId": room_id,
                       "msgId": loading_msg_id,
-                      "text": " :kirby_hi: Ta-da! Your answer is ready!"
+                      "text": text
                   },
                   headers=HEADERS)
 
-def format_response_with_buttons(response_text, suggested_questions):
+def format_response_with_buttons(response_text, suggested_questions, category_id):
     question_buttons = []
-    if suggested_questions:
+    if category_id == "2":
         for i, question in enumerate(suggested_questions, 1):  # Start numbering from 1
             question_buttons.append({
                 "type": "button",
@@ -165,13 +158,21 @@ def format_response_with_buttons(response_text, suggested_questions):
                 "msg_processing_type": "sendMessage",
             })
 
+        question_buttons.append({
+            "type": "button",
+            "text": f"🚀 Human support",
+            "msg": "Talk to a human advisor",
+            "msg_in_chat_window": True,
+            "msg_processing_type": "sendMessage",
+        })   
+
         # Construct response with numbered questions in text and numbered buttons
         numbered_questions = "\n".join([f"{i}. {question}" for i, question in enumerate(suggested_questions, 1)])       
         response = {
             "text": response_text + "\n\n :kirby: You might also want to know:\n" + numbered_questions,
             "attachments": [
                 {
-                    "title": "Click a number to ask that question:",
+                    "title": "Pick a question, or connect with a human",
                     "actions": question_buttons
                 }
             ]
@@ -195,6 +196,67 @@ def format_response_with_buttons(response_text, suggested_questions):
                     }
                 ]
         }
+
+def format_summary_confirmation(original_question):
+    """
+    Format a message with the summary of the student's situation and ask for confirmation
+    before escalating to a human advisor.
+    """
+
+    summary = "Before I forward your request, please confirm if this is the question you'd like to ask a human advisor.\n"
+    summary += "If it looks good, click the **Correct & Send** button, and I'll pass it along. Need to make edits? Just click **Modify my question**.\n\n"    
+    summary += f"🤔 Student Question: {original_question} \n\n"
+    summary += "😊 To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]. No pressure though — it's **totally optional**!"
+
+    return {
+        "text": summary,
+        "attachments": [
+            {
+                "actions": [
+                    {
+                        "type": "button",
+                        "text": "✅ Correct & Send",
+                        # "msg": " :coll_doge_gif: Successfully forwarded your question to a human advisor. \n📬 To begin your conversation with your human advisor, please click the \"**View Thread**\" button.",
+                        "msg": original_question,
+                        "msg_in_chat_window": True
+                    },
+                    {
+                        "type": "button",
+                        "text": "✏️ Modify my question", 
+                        "msg": original_question,
+                        "msg_processing_type": "respondWithMessage",
+                        "msg_in_chat_window": True
+                    }
+                ]
+            }
+        ]
+    }
+
+def build_bidirectional_threads(user, original_question, llm_answer, message_id, uncertain_areas):
+    # Forward to human advisor and get the response
+    forward_res = send_to_human(user, original_question)
+
+    # message_id starts a new thread on human advisor side
+    # send a thread message that contains AI-generated response
+    advisor_messsage_id = forward_res["message"]["_id"]
+    send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
+
+    # Create bidirectional thread mapping for ongoing conversation
+    thread_item = [{
+        "thread_id": message_id,
+        "forward_thread_id": advisor_messsage_id,
+        "forward_human": True
+    }, 
+    {
+        "thread_id": advisor_messsage_id,
+        "forward_thread_id": message_id,
+        "forward_human": False,
+        "forward_username": user
+
+    }]
+    thread_collection = get_collection("Users", "threads")
+    thread_collection.insert_many(thread_item)
+
 
 @app.route('/query', methods=['POST'])
 def main():
@@ -223,33 +285,66 @@ def main():
         return jsonify({"status": "ignored"})
     
     # Handle button message
-    parsed_msg = is_json_object(message)
-    if parsed_msg:
-        llm_answer = parsed_msg.get("llm_answer")
-        tmid = parsed_msg.get("tmid")
-        user = parsed_msg.get("user")
+    # parsed_msg = is_json_object(message)
+    # if parsed_msg:
+    #     llm_answer = parsed_msg.get("llm_answer")
+    #     tmid = parsed_msg.get("tmid")
+    #     user = parsed_msg.get("user")
 
-        if llm_answer and tmid and user:
-            send_human_response(channel_id, llm_answer, tmid)
-            # delete the message
-            response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
-                    "roomId": channel_id,
-                    "msgId": message_id
-                }, 
-                headers={
-                    "Content-Type": "application/json",
-                    "X-Auth-Token": os.environ.get("RC_advisor_token"),
-                    "X-User-Id": user_id
-                })
-            print("delete response", response)
-            # logger.info("deleting button msg response: %s", json.dumps(response, indent=2))
-            return jsonify({"success": True}), 200
+    #     if llm_answer and tmid and user:
+    #         send_human_response(channel_id, llm_answer, tmid)
+    #         # delete the message
+    #         response = requests.post(f"{RC_BASE_URL}/chat.delete", json={
+    #                 "roomId": channel_id,
+    #                 "msgId": message_id
+    #             }, 
+    #             headers={
+    #                 "Content-Type": "application/json",
+    #                 "X-Auth-Token": os.environ.get("RC_advisor_token"),
+    #                 "X-User-Id": user_id
+    #             })
+    #         print("delete response", response)
+    #         # logger.info("deleting button msg response: %s", json.dumps(response, indent=2))
+    #         return jsonify({"success": True}), 200
     
     try:
         # Get MongoDB client from the connection pool
         mongo_client = get_mongodb_connection()
         if not mongo_client:
             return jsonify({"text": "Error connecting to database"}), 500
+        
+        user_collection = get_collection("Users", "user")
+        user_profile = user_collection.find_one({"user_id": user_id})
+        
+        # === QUESTION SUMMARY HANDLING ===
+        if user_profile and user_profile.get("pending_escalation") is True:
+            _, loading_msg_id = send_loading_response(channel_id)
+
+            advisor = TuftsCSAdvisor(user_profile)
+            response_data = advisor.get_escalated_response(message)
+
+            llm_answer = response_data.get("llmAnswer")
+            uncertain_areas = response_data.get("uncertainAreas")
+
+            # error handling
+            if not llm_answer or not uncertain_areas:
+                user_collection.update_one(
+                    {"user_id": user_id},
+                    {"$set": {"pending_escalation": False}}  # Set pending_escalation to True
+                )
+                update_loading_message(channel_id, loading_msg_id, "error processing your escalation request to human advisors, please try again")
+                return jsonify({"success": True}), 200
+
+            # Forward to human advisor and get the response
+            build_bidirectional_threads(user_name, message, llm_answer, message_id, uncertain_areas)
+
+            # flip pending_escalation back to false
+            user_collection.update_one(
+                {"user_id": user_id},
+                {"$set": {"pending_escalation": False}}  # Set pending_escalation to True
+            )
+            update_loading_message(channel_id, loading_msg_id, " :coll_doge_gif: Successfully forwarded your question to a human advisor. \n📬 To begin your conversation, please click the \"**View Thread**\" button.")
+            return jsonify({"success": True}), 200
         
         # ==== THREAD MESSAGE HANDLING ====
         # If message is part of an existing thread, handle direct forwarding without LLM processing
@@ -261,9 +356,6 @@ def main():
             if not target_thread:
                 logger.error("thread with id %s does not exist", tmid)
                 return jsonify({"text": f"Error: unable to find a matched thread"}), 500
-
-            print("target_thread")
-            print(target_thread)
             
             # Determine message direction (student to human advisor or vice versa)
             forward_human = target_thread.get("forward_human")
@@ -280,9 +372,6 @@ def main():
     
         # ==== USER PROFILE MANAGEMENT ====
         # Get or create user profile for tracking interactions
-        user_collection = get_collection("Users", "user")
-        user_profile = user_collection.find_one({"user_id": user_id})
-
         if not user_profile:
             user_profile = {
                 "user_id": user_id,
@@ -358,53 +447,70 @@ def main():
         
         response_data = json.loads(raw_res)
         response_text = response_data["response"]
+        category_id = response_data.get("category_id")
         rc_payload = response_data.get("rocketChatPayload") 
         
         # ==== HUMAN ESCALATION ====
+        # category_id=4, user explicitly wants to talk to a human advisor
+        if category_id == "4":
+            original_question = rc_payload["originalQuestion"]
+            user_collection = get_collection("Users", "user")
+
+            user_collection.update_one(
+                {"user_id": user_id},
+                {"$set": {"pending_escalation": True}}  # Set pending_escalation to True
+            )
+
+            response = requests.post(f"{RC_BASE_URL}/chat.update", json={
+                "roomId": room_id,
+                "msgId": loading_msg_id,
+                "text": response_text
+            }, headers=HEADERS)
+
+            return format_summary_confirmation(original_question)
+
         # Check if LLM determined human escalation is needed
-        if rc_payload:
+        elif rc_payload:
             logger.info("rc_payload exists")
             
             # Extract the payload components
             original_question = rc_payload["originalQuestion"]
             llm_answer = rc_payload.get("llmAnswer")
             uncertain_areas = rc_payload.get("uncertainAreas")
-    
-            # # Format message for human advisor with context
-            # formatted_string = f"\n💬 Student Question: {original_question}"
-            # if llm_answer:
-            #     formatted_string += f"\n🤖 AI-Generated Answer: {llm_answer}\n\nCan you please review this answer for accuracy and completeness?"
 
-            # Forward to human advisor and get the response
-            forward_res = send_to_human(user, original_question)
+            build_bidirectional_threads(user, original_question, llm_answer, message_id, uncertain_areas)
 
-            # message_id starts a new thread on human advisor side
-            # send a thread message that contains AI-generated response
-            advisor_messsage_id = forward_res["message"]["_id"]
-            send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
+            # # Forward to human advisor and get the response
+            # forward_res = send_to_human(user, original_question)
 
-            # Create bidirectional thread mapping for ongoing conversation
-            thread_item = [{
-                "thread_id": message_id,
-                "forward_thread_id": advisor_messsage_id,
-                "forward_human": True
-            }, 
-            {
-                "thread_id": advisor_messsage_id,
-                "forward_thread_id": message_id,
-                "forward_human": False,
-                "forward_username": user_name
+            # # message_id starts a new thread on human advisor side
+            # # send a thread message that contains AI-generated response
+            # advisor_messsage_id = forward_res["message"]["_id"]
+            # send_to_human(user, original_question, llm_answer, trigger_msg_id=advisor_messsage_id, uncertain_areas=uncertain_areas)
 
-            }]
-            thread_collection = get_collection("Users", "threads")
-            thread_collection.insert_many(thread_item)
+            # # Create bidirectional thread mapping for ongoing conversation
+            # thread_item = [{
+            #     "thread_id": message_id,
+            #     "forward_thread_id": advisor_messsage_id,
+            #     "forward_human": True
+            # }, 
+            # {
+            #     "thread_id": advisor_messsage_id,
+            #     "forward_thread_id": message_id,
+            #     "forward_human": False,
+            #     "forward_username": user_name
+
+            # }]
+            # thread_collection = get_collection("Users", "threads")
+            # thread_collection.insert_many(thread_item)
             
             # delete loading msg
-            response = requests.post(f"{RC_BASE_URL}/chat.update", json={
-                "roomId": room_id,
-                "msgId": loading_msg_id,
-                "text": f" :coll_doge_gif: {response_text} \n📬 To begin your conversation, please click the \"**View Thread**\" button."
-            }, headers=HEADERS)
+            # response = requests.post(f"{RC_BASE_URL}/chat.update", json={
+            #     "roomId": room_id,
+            #     "msgId": loading_msg_id,
+            #     "text": f" :coll_doge_gif: {response_text} \n📬 To begin your conversation, please click the \"**View Thread**\" button."
+            # }, headers=HEADERS)
+            update_loading_message(room_id, loading_msg_id, f" :coll_doge_gif: {response_text} \n📬 To begin your conversation, please click the \"**View Thread**\" button.")
 
             print(response.json())
 
@@ -418,7 +524,7 @@ def main():
         else:
             logger.info("Returning standard LLM response with suggested questions")
             update_loading_message(room_id, loading_msg_id)
-            return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"))
+            return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"), category_id)
 
     except Exception as e:
         traceback.print_exc()
