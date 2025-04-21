@@ -1,6 +1,6 @@
 from llmproxy import generate
 from utils.uploads import handbook_upload
-from prompt import get_system_prompt
+from prompt import get_system_prompt, get_escalated_response
 import time
 
 class TuftsCSAdvisor:
@@ -15,7 +15,7 @@ class TuftsCSAdvisor:
     def get_escalated_response(self, query):
         rag_response = generate(
             model='4o-mini',
-            system=get_system_prompt(self.user_profile),
+            system=get_escalated_response(self.user_profile),
             query=query,
             temperature=0.1,
             lastk=0,
