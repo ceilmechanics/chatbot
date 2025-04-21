@@ -322,6 +322,8 @@ def main():
 
             advisor = TuftsCSAdvisor(user_profile)
             response_data = advisor.get_escalated_response(message)
+            print("LINE 325")
+            print(response_data)
             response_data = json.loads(response_data)
 
             llm_answer = response_data.get("llmAnswer")
@@ -344,8 +346,11 @@ def main():
                 {"user_id": user_id},
                 {"$set": {"pending_escalation": False}}  # Set pending_escalation to True
             )
-            update_loading_message(channel_id, loading_msg_id, " :coll_doge_gif: Successfully forwarded your question to a human advisor. \n📬 To begin your conversation, please click the \"**View Thread**\" button.")
-            return jsonify({"success": True}), 200
+            update_loading_message(channel_id, loading_msg_id, " :coll_doge_gif: Successfully forwarded your question to a human advisor. \n📬 To begin your conversation with a human advisor, please click the \"**View Thread**\" button.")
+            return jsonify({
+                "text": "Connecting you with a human advisor now — their response will appear just below once it's ready!",
+                "tmid": message_id
+            })
         
         # ==== THREAD MESSAGE HANDLING ====
         # If message is part of an existing thread, handle direct forwarding without LLM processing
