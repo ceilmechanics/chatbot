@@ -170,6 +170,18 @@ Step 1. Identify the correct **response category** based on student message:
                 "category_id": "3.2",
                 "response": "your response generated"
             }}
+        - Ensure that your output is a valid JSON object. Double-check that there are no illegal trailing commas, especially before the closing brace.
+            Invalid example (has a trailing comma):
+            {{
+                "category_id": "3.2",
+                "response": "your response",
+            }}
+            Correct version:
+            {{
+                "category_id": "3.2",
+                "response": "your response"
+            }}
+            Trailing commas must be avoided! They will cause your JSON to be invalid.
     - CATEGORY 4
         - In your output JSON, strictly populate each field according to the following guidelines
         - in the "category_id" field, use: "4"
@@ -232,20 +244,6 @@ Step 1. Identify the correct **response category** based on student message:
                 "response": "your reply"
             }}
 
----
-⚠️ **FINAL CHECK** Ensure that your output is a valid JSON object. Double-check that there are no illegal trailing commas, especially before the closing brace.
-Invalid example (has a trailing comma):
-{{
-    "category_id": "3.2",
-    "response": "your response",
-}}
-Correct version:
-{{
-    "category_id": "3.2",
-    "response": "your response"
-}}
-Trailing commas must be avoided! They will cause your JSON to be invalid.
----
 """
 
 def get_escalated_response(user_profile):
