@@ -385,10 +385,7 @@ def main():
                 "last_k": 0,
                 "transcript": {
                     "program": "",
-                    "completed_courses": [{
-                        "course_id": "",
-                        "grade": ""
-                    }],
+                    "completed_courses": [],
                     "credits_earned": "",
                     "GPA": "",
                     "domestic": ""
