@@ -8,8 +8,16 @@ designed specifically for the Master of Science in Computer Science program at T
 """
 
 # greeting_msg = """I'm here to help you with a wide range of Computer Science advising topics:\\n- **Program Requirements**\\n    - \\\"What are the core competency areas for the MSCS program?\\\"\\n    - \\\"How many courses are required to complete a Master's in Computer Science at Tufts?\\\"\\n- **Academic Policies**\\n    - \\\"What is the transfer credit policy for Computer Science graduate students?\\\"\\n    - \\\"What are the requirements for maintaining good academic standing in the graduate program?\\\"\\n- **Course-related Information**\\n    - \\\"Does taking CS160 count towards my graduation requirement?\\\"\\n    - \\\"Can I take non-CS courses in my degree program?\\\"\\n- **Career Development**\\n    - \\\"What Co-op opportunities are available?\\\"\\n    - \\\"Can international students do internships as part of the program?\\\"\\n- **Administrative Questions**\\n    - \\\"When are the enrollment periods?\\\"\\n    - \\\"What important dates should I keep in mind?\\\"\\n\\n :kirby_fly: Want a **more personalized** advising experience? I just need a little more info from you:\\n- Your program status (e.g., \\\"First-year MSCS student\\\")\\n- Courses you've already completed (e.g., \\\"CS 105, CS 160\\\")\\n- Are you an international student?\\n- Your current GPA (if applicable)\\n**Totally optional**, and you're welcome to continue without it!\\n\\n :kirby_type: To speak with a human advisor, just type: \\\"**talk to a human advisor**\\\" or click on the \\\"**Connect**\\\" button below"
+import os
+from dotenv import load_dotenv
 
-greeting_msg = f"""
+# Load environment variables from .env file
+load_dotenv()
+BASE_URL = os.environ.get("koyeb_url", "https://shy-moyna-wendanj-b5959963.koyeb.app")
+
+def get_system_prompt(user_profile):
+    greeting_msg = f"""
+
 I'm here to help you with a wide range of Computer Science advising topics:
 💡 **Program Requirements**  - \"What are the core competency areas for the MSCS program?\"
 📌 **Academic Policies**  - \"What is the transfer credit policy for Computer Science graduate students?\"
@@ -17,14 +25,30 @@ I'm here to help you with a wide range of Computer Science advising topics:
 🌱 **Career Development**  - \"What Co-op opportunities are available?\"
 📝 **Administrative Questions**  - \"When are registration dates?\"
 
-:kirby_fly: Want a **more personalized** advising experience? Just share a bit more info.
+ :kirby_fly: Want a **more personalized** advising experience? Just share a bit more info using [this link]({BASE_URL}/student-info?id={user_profile.user_id})
 No pressure though - it's **totally optional**, and you're free to continue without it!
 
-:kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"**Connect**\" button.
+ :kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"**Connect**\" button.
 """
-
-def get_system_prompt(user_profile):
-    """Returns the system prompt for the Tufts MSCS Academic Advisor Bot"""
+    transcript = user_profile.get("transcript")
+    
+    def format_student_courses():
+        if transcript:
+            courses = transcript.get("completed_courses")
+            str = ""
+            for course in courses:
+                str += f"{course.get("course_id", "")} {course.get("course_name", "")}, Grade: {course.get("grade", "not provided")} "
+            return str
+        return "not provided"
+    
+    def is_international_student():
+        if transcript:
+            domestic = transcript.get("domestic", "")
+            if domestic == "false" or domestic == False:
+                return "international student"
+            elif domestic == "true" or domestic == True:
+                return "domestic student"
+            return "not provided"
     
     return f"""
 # TUFTS MSCS ACADEMIC ADVISOR BOT
@@ -60,10 +84,11 @@ Step 1. Identify the correct **response category** based on student message:
         - Examples: acknowledgments, thanks, closing messages
 2. Respond to student's question or message:
     - when applicable, **personalize** your answer based on the student's known context:
-        - Program: {user_profile.get("program")}
-        - Completed coursework: {user_profile.get("completed_courses")}
-        - GPA (if provided): {user_profile.get("GPA")}
-        - Visa status (international/domestic): {user_profile.get("domestic")}
+       - Program: {transcript.get("program", "not provided")}
+        - Completed coursework: {format_student_courses()}
+        - GPA (if provided): {transcript.get("GPA", "not provided")}
+        - Visa status (international/domestic): {is_international_student()}
+        - total credits earned: {transcript.get("credits_earned", "not provided")}
         - Any previous questions students asked, or your previous answers
     - Evaluate whether more student info is needed to provide an accurate and helpful answer.
         - This is especially important when the student is asking a personalized question, such as when their question includes words like "I" or "my", which indicate the question is about their specific situation.
@@ -209,7 +234,26 @@ Step 1. Identify the correct **response category** based on student message:
 """
 
 def get_escalated_response(user_profile):
-    # TODO:
+    transcript = user_profile.get("transcript", {})
+
+    def format_student_courses():
+        if transcript:
+            courses = transcript.get("completed_courses")
+            str = ""
+            for course in courses:
+                str += f"{course.get("course_id", "")} {course.get("course_name", "")}, Grade: {course.get("grade", "not provided")} "
+            return str
+        return "not provided"
+    
+    def is_international_student():
+        if transcript:
+            domestic = transcript.get("domestic", "")
+            if domestic == "false" or domestic == False:
+                return "international student"
+            elif domestic == "true" or domestic == True:
+                return "domestic student"
+            return "not provided"
+        
     return f"""# TUFTS MSCS ACADEMIC ADVISOR BOT
 
 You are an academic advisor specializing in the MSCS (Master of Science in Computer Science) program at Tufts University. 
@@ -221,10 +265,11 @@ Your role is to **accurately and professionally answer CS advising-related quest
 
 For every student message or question:
     - when applicable, **personalize** your answer based on the student's known context:
-        - Program: {user_profile.get("program")}
-        - Completed coursework: {user_profile.get("completed_courses")}
-        - GPA (if provided): {user_profile.get("GPA")}
-        - Visa status (international/domestic): {user_profile.get("domestic")}
+        - Program: {transcript.get("program", "not provided")}
+        - Completed coursework: {format_student_courses()}
+        - GPA (if provided): {transcript.get("GPA", "not provided")}
+        - Visa status (international/domestic): {is_international_student()}
+        - total credits earned: {transcript.get("credits_earned", "not provided")}
         - Any previous questions students asked, or your previous answers
     - Generate a **properly formatted JSON response** strictly following to the guidelines defined below:
         - in "llmAnswer" field

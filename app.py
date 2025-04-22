@@ -386,8 +386,8 @@ def main():
                 "transcript": {
                     "program": "",
                     "completed_courses": [{
-                        "course_id": "CS112",
-                        "grade": "A"
+                        "course_id": "",
+                        "grade": ""
                     }],
                     "credits_earned": "",
                     "GPA": "",
@@ -535,7 +535,7 @@ def main():
     except Exception as e:
         traceback.print_exc()
         print(f"Error processing request: {str(e)}")
-        return jsonify({"text": f"Error: {str(e)}"}), 500
+        return jsonify({"text": "There was an error processing your request. Could you please try again?"})
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -673,6 +673,143 @@ def display_faqs():
         logger.error(f"Error in database view: {str(e)}")
         return render_template('error.html', error_message=str(e))
 
+@app.route('/student-info', methods=['GET', 'POST'])
+def student_info():
+    """
+    Combined endpoint to handle both displaying and updating student information.
+    GET: Retrieves and displays student information (/student-info?id=xxx)
+    POST: Updates student information
+    """
+    # For POST requests, handle the update
+    if request.method == 'POST':
+        try:
+            # Get MongoDB client from the connection pool
+            mongo_client = get_mongodb_connection()
+            if not mongo_client:
+                return jsonify({"success": False, "message": "Error connecting to database"}), 500
+            
+            # First try to get student_id from URL query parameter
+            student_id = request.args.get('id')
+            
+            # If not in URL, try to get from JSON data
+            if not student_id:
+                # Get JSON data from request
+                data = request.get_json()
+                student_id = data.get('student_id')
+            else:
+                # If we got ID from URL, still need the rest of the data from JSON
+                data = request.get_json()
+            
+            # Validate student ID
+            if not student_id:
+                return jsonify({"success": False, "message": "Student ID is required"}), 400
+                
+            # Transcript data
+            program = data.get('program', '')
+            gpa = data.get('gpa', '')
+            domestic_value = data.get('domestic', '')
+            total_credits = data.get('credits_earned', 0)
+            
+            # Convert domestic to appropriate type
+            if domestic_value == 'true':
+                domestic = True
+            elif domestic_value == 'false':
+                domestic = False
+            else:
+                domestic = ''
+            
+            # Process courses
+            course_ids = data.get('course_id', [])
+            course_names = data.get('course_name', [])
+            grades = data.get('grade', [])
+            credits = data.get('credits', [])
+            
+            # Ensure all course arrays are lists
+            if not isinstance(course_ids, list):
+                course_ids = [course_ids]
+            if not isinstance(course_names, list):
+                course_names = [course_names]
+            if not isinstance(grades, list):
+                grades = [grades]
+            if not isinstance(credits, list):
+                credits = [credits]
+            
+            # Create courses array
+            courses = []
+            for i in range(len(course_ids)):
+                if i < len(grades) and i < len(credits) and i < len(course_names):
+                    courses.append({
+                        "course_id": course_ids[i],
+                        "course_name": course_names[i],
+                        "grade": grades[i],
+                        "credits_earned": credits[i]
+                    })
+            
+            # Create update document - only updating transcript fields
+            update_doc = {
+                "$set": {
+                    "transcript.program": program,
+                    "transcript.GPA": gpa,
+                    "transcript.domestic": domestic,
+                    "transcript.completed_courses": courses,
+                    "transcript.credits_earned": total_credits
+                }
+            }
+            
+            # Update the document in MongoDB
+            user_collection = get_collection("Users", "user")
+            from bson.objectid import ObjectId
+            
+            # Try to convert to ObjectId if it's a valid ObjectId format
+            try:
+                result = user_collection.update_one({"_id": ObjectId(student_id)}, update_doc)
+            except:
+                # If not a valid ObjectId, try to update by user_id
+                result = user_collection.update_one({"user_id": student_id}, update_doc)
+            
+            if result.modified_count > 0:
+                return jsonify({"success": True, "message": "Student information updated successfully"})
+            else:
+                # Document might not have been modified if data is the same
+                return jsonify({"success": True, "message": "No changes detected"})
+                
+        except Exception as e:
+            logger.error(f"Error updating student info: {str(e)}")
+            return jsonify({"success": False, "message": str(e)}), 500
+    
+    # For GET requests, retrieve and display student info
+    else:
+        student_id = request.args.get('id')
+        
+        # If no ID is provided, show the default search page
+        if not student_id:
+            return render_template('studentinfo.html')
+        
+        # Otherwise, retrieve and display student information
+        try:
+            # Get MongoDB client from the connection pool
+            mongo_client = get_mongodb_connection()
+            if not mongo_client:
+                return jsonify({"error": "Error connecting to database"}), 500
+            
+            # Get student data from the database
+            user_collection = get_collection("Users", "user")
+            
+            # Find student by user_id
+            student = user_collection.find_one({"user_id": student_id})
+                
+            if not student:
+                return render_template('studentinfo.html', error="Student not found")
+            
+            # Convert ObjectId to string for displaying
+            student['_id'] = str(student['_id'])
+            
+            # Render the template with student data
+            return render_template('studentinfo.html', student=student)
+            
+        except Exception as e:
+            logger.error(f"Error retrieving student info: {str(e)}")
+            return render_template('studentinfo.html', error=str(e))
 
 if __name__ == "__main__":
     # Register shutdown handler to close MongoDB connection when app stops
