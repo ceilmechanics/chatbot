@@ -25,7 +25,7 @@ I'm here to help you with a wide range of Computer Science advising topics:
 🌱 **Career Development**  - \"What Co-op opportunities are available?\"
 📝 **Administrative Questions**  - \"When are registration dates?\"
 
- :kirby_fly: Want a **more personalized** advising experience? Just share a bit more info using [this link]({BASE_URL}/student-info?id={user_profile.user_id})
+ :kirby_fly: Want a **more personalized** advising experience? Just share a bit more info using [this link]({BASE_URL}/student-info?id={user_profile.get("user_id")})
 No pressure though - it's **totally optional**, and you're free to continue without it!
 
  :kirby_type: To speak with a human advisor, just type: \"**talk to a human advisor**\" or click on the \"**Connect**\" button.
