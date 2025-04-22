@@ -515,8 +515,6 @@ def main():
             # }, headers=HEADERS)
             update_loading_message(room_id, loading_msg_id, f" :coll_doge_gif: {response_text} \n📬 To begin your conversation, please click the \"**View Thread**\" button.")
 
-            print(response.json())
-
             return jsonify({
                 "text": response_text,
                 "tmid": message_id
