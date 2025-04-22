@@ -456,6 +456,132 @@
             <form id="transcript-form">
                 <input type="hidden" id="student-id" value="{{ student.user_id }}">
                 
+
+                <div class="card">
+                    <h2><i class="fas fa-university"></i> Academic Information</h2>
+                    <div class="info-row">
+                        <div class="info-label">
+                            <i class="fas fa-book"></i> Program:
+                        </div>
+                        <div class="info-value">
+                            <input type="text" id="program" value="{{ student.transcript.program }}" placeholder="Enter Program">
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">
+                            <i class="fas fa-chart-line"></i> GPA:
+                        </div>
+                        <div class="info-value">
+                            <input type="number" id="gpa" min="0" max="4.0" step="0.01" value="{{ student.transcript.GPA }}" placeholder="Enter GPA">
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">
+                            <i class="fas fa-globe"></i> International Student:
+                        </div>
+                        <div class="info-value radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="domestic" value="false" 
+                                    {% if student.transcript.domestic == false %}checked{% endif %}>
+                                Yes
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="domestic" value="true" 
+                                    {% if student.transcript.domestic == true %}checked{% endif %}>
+                                No
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="domestic" value="" 
+                                    {% if student.transcript.domestic != true and student.transcript.domestic != false %}checked{% endif %}>
+                                Not specified
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2><i class="fas fa-list-check"></i> Completed Courses</h2>
+                    <div id="courses-container" class="courses-container">
+                        {% for course in student.transcript.completed_courses %}
+                        <div class="course-item">
+                            <div class="course-id">
+                                <input type="text" name="course_id[]" value="{{ course.course_id }}" placeholder="Course ID">
+                            </div>
+                            <div class="course-name">
+                                <input type="text" name="course_name[]" value="{{ course.course_name }}" placeholder="Course Name">
+                            </div>
+                            <div class="course-grade">
+                                <select name="grade[]">
+                                    <option value="" {% if course.grade == "" %}selected{% endif %}>Select Grade</option>
+                                    <option value="A" {% if course.grade == "A" %}selected{% endif %}>A</option>
+                                    <option value="A-" {% if course.grade == "A-" %}selected{% endif %}>A-</option>
+                                    <option value="B+" {% if course.grade == "B+" %}selected{% endif %}>B+</option>
+                                    <option value="B" {% if course.grade == "B" %}selected{% endif %}>B</option>
+                                    <option value="B-" {% if course.grade == "B-" %}selected{% endif %}>B-</option>
+                                    <option value="C+" {% if course.grade == "C+" %}selected{% endif %}>C+</option>
+                                    <option value="C" {% if course.grade == "C" %}selected{% endif %}>C</option>
+                                    <option value="C-" {% if course.grade == "C-" %}selected{% endif %}>C-</option>
+                                    <option value="D" {% if course.grade == "D" %}selected{% endif %}>D</option>
+                                    <option value="F" {% if course.grade == "F" %}selected{% endif %}>F</option>
+                                    <option value="P" {% if course.grade == "P" %}selected{% endif %}>P (Pass)</option>
+                                </select>
+                            </div>
+                            <div class="course-credits">
+                                <input type="number" name="credits[]" value="{{ course.credits_earned }}" min="0" step="1" placeholder="Credits">
+                            </div>
+                            <button type="button" class="remove-course">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        {% endfor %}
+                        
+                        {% if not student.transcript.completed_courses or student.transcript.completed_courses|length == 0 %}
+                        <div class="course-item">
+                            <div class="course-id">
+                                <input type="text" name="course_id[]" placeholder="Course ID">
+                            </div>
+                            <div class="course-grade">
+                                <select name="grade[]">
+                                    <option value="" selected>Select Grade</option>
+                                    <option value="A">A</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B">B</option>
+                                    <option value="B-">B-</option>
+                                    <option value="C+">C+</option>
+                                    <option value="C">C</option>
+                                    <option value="C-">C-</option>
+                                    <option value="D">D</option>
+                                    <option value="F">F</option>
+                                    <option value="P">P (Pass)</option>
+                                </select>
+                            </div>
+                            <div class="course-credits">
+                                <input type="number" name="credits[]" min="0" step="1" placeholder="Credits">
+                            </div>
+                            <button type="button" class="remove-course">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <button type="button" id="add-course-btn" class="add-course-btn">
+                        <i class="fas fa-plus"></i> Add Course
+                    </button>
+                    
+                    <div class="credits-summary">
+                        <div class="info-row">
+                            <div class="info-label">
+                                <i class="fas fa-calculator"></i> Total Credits Earned:
+                            </div>
+                            <div class="info-value">
+                                <input type="number" id="credits-earned" name="credits_earned" min="0" step="1" value="{{ student.transcript.credits_earned|default('0') }}" class="credits-input">
+                                <div class="credits-note">Automatically calculated from courses, but can be manually adjusted if needed.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card">
                     <h2><i class="fas fa-book-open"></i> Available Courses</h2>
                     <div class="available-courses">
@@ -563,135 +689,17 @@
                             </div>
                         </div>
                     </div>
+                
                 </div>
                 
-                <div class="card">
-                    <h2><i class="fas fa-university"></i> Academic Information</h2>
-                    <div class="info-row">
-                        <div class="info-label">
-                            <i class="fas fa-book"></i> Program:
-                        </div>
-                        <div class="info-value">
-                            <input type="text" id="program" value="{{ student.transcript.program }}" placeholder="Enter Program">
-                        </div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">
-                            <i class="fas fa-chart-line"></i> GPA:
-                        </div>
-                        <div class="info-value">
-                            <input type="number" id="gpa" min="0" max="4.0" step="0.01" value="{{ student.transcript.GPA }}" placeholder="Enter GPA">
-                        </div>
-                    </div>
-                    <div class="info-row">
-                        <div class="info-label">
-                            <i class="fas fa-globe"></i> International Student:
-                        </div>
-                        <div class="info-value radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="domestic" value="false" 
-                                    {% if student.transcript.domestic == false %}checked{% endif %}>
-                                Yes
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="domestic" value="true" 
-                                    {% if student.transcript.domestic == true %}checked{% endif %}>
-                                No
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="domestic" value="" 
-                                    {% if student.transcript.domestic != true and student.transcript.domestic != false %}checked{% endif %}>
-                                Not specified
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <h2><i class="fas fa-list-check"></i> Completed Courses</h2>
-                    <div id="courses-container" class="courses-container">
-                        {% for course in student.transcript.completed_courses %}
-                        <div class="course-item">
-                            <div class="course-id">
-                                <input type="text" name="course_id[]" value="{{ course.course_id }}" placeholder="Course ID">
-                            </div>
-                            <div class="course-grade">
-                                <select name="grade[]">
-                                    <option value="" {% if course.grade == "" %}selected{% endif %}>Select Grade</option>
-                                    <option value="A" {% if course.grade == "A" %}selected{% endif %}>A</option>
-                                    <option value="A-" {% if course.grade == "A-" %}selected{% endif %}>A-</option>
-                                    <option value="B+" {% if course.grade == "B+" %}selected{% endif %}>B+</option>
-                                    <option value="B" {% if course.grade == "B" %}selected{% endif %}>B</option>
-                                    <option value="B-" {% if course.grade == "B-" %}selected{% endif %}>B-</option>
-                                    <option value="C+" {% if course.grade == "C+" %}selected{% endif %}>C+</option>
-                                    <option value="C" {% if course.grade == "C" %}selected{% endif %}>C</option>
-                                    <option value="C-" {% if course.grade == "C-" %}selected{% endif %}>C-</option>
-                                    <option value="D" {% if course.grade == "D" %}selected{% endif %}>D</option>
-                                    <option value="F" {% if course.grade == "F" %}selected{% endif %}>F</option>
-                                    <option value="P" {% if course.grade == "P" %}selected{% endif %}>P (Pass)</option>
-                                </select>
-                            </div>
-                            <div class="course-credits">
-                                <input type="number" name="credits[]" value="{{ course.credits_earned }}" min="0" step="1" placeholder="Credits">
-                            </div>
-                            <button type="button" class="remove-course">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        {% endfor %}
-                        
-                        {% if not student.transcript.completed_courses or student.transcript.completed_courses|length == 0 %}
-                        <div class="course-item">
-                            <div class="course-id">
-                                <input type="text" name="course_id[]" placeholder="Course ID">
-                            </div>
-                            <div class="course-grade">
-                                <select name="grade[]">
-                                    <option value="" selected>Select Grade</option>
-                                    <option value="A">A</option>
-                                    <option value="A-">A-</option>
-                                    <option value="B+">B+</option>
-                                    <option value="B">B</option>
-                                    <option value="B-">B-</option>
-                                    <option value="C+">C+</option>
-                                    <option value="C">C</option>
-                                    <option value="C-">C-</option>
-                                    <option value="D">D</option>
-                                    <option value="F">F</option>
-                                    <option value="P">P (Pass)</option>
-                                </select>
-                            </div>
-                            <div class="course-credits">
-                                <input type="number" name="credits[]" min="0" step="1" placeholder="Credits">
-                            </div>
-                            <button type="button" class="remove-course">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <button type="button" id="add-course-btn" class="add-course-btn">
-                        <i class="fas fa-plus"></i> Add Course
-                    </button>
-                    
-                    <div class="credits-summary">
-                        <div class="info-row">
-                            <div class="info-label">
-                                <i class="fas fa-calculator"></i> Total Credits Earned:
-                            </div>
-                            <div class="info-value">
-                                <input type="number" id="credits-earned" name="credits_earned" min="0" step="1" value="{{ student.transcript.credits_earned|default('0') }}" class="credits-input">
-                                <div class="credits-note">Automatically calculated from courses, but can be manually adjusted if needed.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 
                 <button type="submit" class="btn-save">
                     <i class="fas fa-save"></i> Save Transcript
                 </button>
+                
             </form>
         </div>
+        
         {% else %}
         <div class="card">
             <p><i class="fas fa-info-circle"></i> Student information not found. Please check the student ID.</p>
@@ -805,7 +813,18 @@
             // Add course button functionality
             const addCourseBtn = document.getElementById('add-course-btn');
             const coursesContainer = document.getElementById('courses-container');
-            
+            if (coursesContainer) {
+                const existingCourses = coursesContainer.querySelectorAll('.course-item');
+                
+                // If there's only one course item and it has an empty course ID, remove it
+                if (existingCourses.length === 1) {
+                    const courseIdInput = existingCourses[0].querySelector('input[name="course_id[]"]');
+                    if (courseIdInput && courseIdInput.value === '') {
+                        existingCourses[0].remove();
+                    }
+                }
+            }
+
             if (addCourseBtn && coursesContainer) {
                 // Add listeners to existing remove buttons
                 document.querySelectorAll('.remove-course').forEach(btn => {
@@ -839,6 +858,9 @@
                     courseItem.innerHTML = `
                         <div class="course-id">
                             <input type="text" name="course_id[]" placeholder="Course ID">
+                        </div>
+                        <div class="course-name">
+                            <input type="text" name="course_name[]" placeholder="Course Name">
                         </div>
                         <div class="course-grade">
                             <select name="grade[]">
@@ -913,10 +935,17 @@
                     const credits = [];
                     
                     courseItems.forEach(item => {
-                        const courseId = item.querySelector('input[name="course_id[]"]').value;
-                        const courseName = item.querySelector('input[name="course_name[]"]').value;
-                        const grade = item.querySelector('select[name="grade[]"]').value;
-                        const credit = item.querySelector('input[name="credits[]"]').value;
+                        const courseIdInput = item.querySelector('input[name="course_id[]"]');
+                        const courseNameInput = item.querySelector('input[name="course_name[]"]');
+                        const gradeSelect = item.querySelector('select[name="grade[]"]');
+                        const creditInput = item.querySelector('input[name="credits[]"]');
+
+
+                        const courseId = courseIdInput ? courseIdInput.value : '';
+                        const courseName = courseNameInput ? courseNameInput.value : '';
+                        const grade = gradeSelect ? gradeSelect.value : '';
+                        const credit = creditInput ? creditInput.value : '0';
+    
                         
                         courseIds.push(courseId);
                         courseNames.push(courseName);
