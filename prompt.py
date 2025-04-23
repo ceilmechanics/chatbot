@@ -243,7 +243,6 @@ Step 1. Identify the correct **response category** based on student message:
                 "category_id": "7",
                 "response": "your reply"
             }}
-
 """
 
 def get_escalated_response(user_profile):

@@ -1,0 +1,265 @@
+Page 1, contents:
+Graduate Student Handbook Supplement
+If you need further clarification, please contact the Director of Graduate Studies
+Prof. Diane Souvaine at diane.souvaine@tufts.edu
+or the Graduate Program Manager
+Johnny Redmond at johnny@cs.tufts.edu
+or the Graduate Program Coordinator
+Sandie Schulenburg at Sandra.Schulenburg@tufts.edu
+Updated 12/02/2024
+
+Page 2, contents:
+Tufts course requirements for a Master's and Ph.D. in Computer Science 
+This document lists important information about course requirements for Master's and Ph.D. Students. The term "courses" refers to lecture-based classes, independent studies, and research. The first two are denoted by "standard courses" and the latter by "research courses. Both Master's and Ph.D. course requirements can be satisfied via a varying combination of standard and research courses depending on your interests.
+We recommend that Master's students interested in completing a thesis and Ph.D. students bias their course selection toward research courses.
+M.S. in Computer Science (10 total courses, each of 3 SHUs or more)
+The flow chart above illustrates the course requirements to get a master's degree. A box that indicates a range in required courses (e.g., 8-10 standard courses) indicates that some of the required courses can be obtained from a box in a sibling branch (e.g., 0-2 research courses). 
+Core Competencies: By your last semester at Tufts, you must have completed at least one class in each of the four areas listed in Appendix E of the handbook and reproduced below. Designated faculty will hold core competency certification sessions during the first seven days of each semester and can approve and/or advise you on the completion of this requirement.
+
+Page 3, contents:
+The competencies can be filled by equivalent classes you may have taken at other universities, and that appear on that university's transcript. Alternatively, you can fill them at Tufts by the courses listed in the sub-bullets below. You must have earned at least a B- in a course, whether at Tufts or elsewhere, to satisfy the relevant course-competency requirement. You will not receive graduate course credit for any course numbered less than 100. 
+Core Competency areas include:
+o Computer Architecture and Assembly Language (CA&AL)
+▪ CS 40, Machine Structure. No graduate credit.
+▪ CS 111, Operating Systems
+▪ CS 112, Networks
+▪ CS 114, Network Security
+▪ CS 116, Introduction to Security
+▪ CS 118, Cloud Computing
+▪ CS 146, (also EE 126) Computer Engineering 
+▪ CS 107 (Formerly COMP/CS 181), Compilers; offered infrequently
+▪ CS 140, Advanced Topics in Computer Architecture 
+o Programming Languages (PL)
+▪ CS 105, Programming Languages
+▪ CS 21, Concurrent Programming. No graduate credit.
+▪ CS 86, Object-Oriented Programming for GUIs. No graduate credit.
+▪ CS 121 (Formerly COMP/CS 180), Software Engineering
+▪ CS 107 (Formerly COMP/CS 181), Compilers; offered infrequently
+o Data structures and Analysis of Algorithms (DS&AA)
+▪ CS 160: Intro to Algorithms (we highly recommend taking this class!)
+o Theory of Computation (ToC)
+▪ CS 170, Computation theory
+▪ If you have little math background, try to take Discrete Math (COMP/CS 61) first.
+CS 191: This course is a vehicle for doing research. It has similar requirements to the M.S. project (see below). This course can be taken at most once.
+CS 199 (Internship in Computer Science): This course is a vehicle for international students to complete an internship. It does not count towards the 10 course requirement. Reach out to Professor Ming Chow for more information on this course.
+M.S. Thesis: The thesis requires a commitment of two semesters total, recorded by enrolling in CS 295 and CS 296 in either order; the M.S. thesis is completely optional. Acceptance to the thesis track occurs after matriculation into the program and only with the support of a faculty advisor who is interested in supervising thesis work. After finding a faculty member who is willing to work with you on a MS Thesis, the faculty member can write to the CS Graduate coordinator to request your change to the thesis track. Some reasons for deciding to do a M.S. thesis may include: 1) you are a M.S. student who wants significant research experience; 2) You want to leave the Ph.D. program with a master's and retain some official record of your research activity; 3) You want to complete a substantial and polished preliminary research project on the way to a Ph.D. You need to submit a thesis prospectus at the end of the first semester and the thesis document just after the end of classes during the semester in which you defend. The deadline can be confirmed here. The defense should be scheduled two weeks earlier than the deadline. 
+The student and advisor will jointly select a thesis committee subject to approval by the CS Graduate Committee. This committee must include at least three faculty members, including one member from outside the department. You will defend the research via a 45-minute presentation, which the committee will attend.
+
+Page 4, contents:
+The defense is also open to the public. You will receive a grade for CS 295 and CS 296 only after you finish both semesters.
+M.S. Project: An M.S. Project consists of research conducted with a faculty advisor and is a commitment of one semester recorded by registering for CS 293, usually for 3 SHUs. You may choose to take this option because: 1) you are a M.S. student who wants to complete a research project without the overhead of writing a thesis, or 2) you are a Ph.D. student who doesn't want to write a separate master's thesis. If you do not have an advisor for the project, you need to find one. If your advisor for the project is not your academic advisor, they need to agree to become your advisor. You and your advisor need to agree on the project and any write-up requirements. (Advisors approve the write-up and keep a copy). This course can be taken at most once.
+CS 193-xx (where xx > 01): These are directed study courses with official names and with two or more students. Your advisor might create one as a vehicle for reading a set of research papers from a conference or understanding a new research area. Another faculty member might create one that involves a joint implementation project, or as a dry run of a course that will become a CS 150. You can count any number of these as standard CS courses.
+Maintaining Good Standing: You must maintain a grade average of at least a B, earning no more than one grade below B-, and make continuous progress toward graduation. Courses that do not count toward your degree requirements must still meet the B- grade requirement.
+Applying for Graduation: Graduation information for graduate students can be found at this website. The chart at the bottom of the page outlines what needs to be done by when for each possible graduation date. https://students.tufts.edu/registrar/make-request/apply-graduation/graduation-information-graduate-students.
+
+Page 5, contents:
+Ph.D. Requirements
+The flow chart above shows the course requirements for obtaining a Ph.D. If you don't already have an M.S. degree in computer science or an approved alternative, you must complete these requirements in addition to those for the master's. 
+Teaching Assistantship: You must TA at least one course during your time as a student at Tufts.
+Core Competencies: By the time you take quals (see below), you must certify that you do have background in the areas listed in Appendix E of the handbook. (See comments on core competencies in the M.S. section above.)
+- Students without their M.S. must have core competencies finished by the end of their third or fourth semester, and before taking the qualifying exam.
+- Students with their M.S. must have core competencies finished by the end of their first or second semester, and before taking the qualifying exam.
+Qualifying Exam: This is a sanity check to ensure you are making research progress and have adequate background about your research area. The exam involves giving a presentation about some research you've conducted + an oral exam on 4-7 research papers. The presentation is 30-40 minutes followed by questions. The oral exam is one hour long. You may read more about the process here.
+● Timing: 
+○ Students without M.S.: Take it during your third or fourth semester from entry into the program, after satisfying your core competencies. You must pass it by the end of your fifth semester at Tufts.
+○ Students with M.S.: Take it by the end of your second semester, after satisfying your core competencies. You must pass it by the end of your third semester at Tufts.
+● Process: 
+○ Students, in conjunction with their advisor, select a committee of at least three members. At least two must be insiders of the student's research area, and at least one of these must be a regular faculty member in the computer science department. In addition, there must be at least one member from outside of the student's research area who is a tenured regular member of the computer science faculty. The Grad Committee approves quals committees; they make the final determination of what committees are acceptable.
+
+Page 6, contents:
+○ Insider committee members choose 4-7 papers related to the student's research and informs the student of them. These are the papers the student will be evaluated on during the oral exam. 
+○ Students work with CS Grad Coordinator to schedule both the presentation and the oral exam with the committee. These may be done back-to-back on the same day or on separate days, so long as the research talk occurs first.
+Prospectus: You must write a document describing the research you plan to conduct for your dissertation and submit it to the CS graduate committee. The prospectus you submit should be about 2-3 pages long and it must: (1) have a title, (2) describe your intended research direction or open problems to be addressed in the thesis research, (3) cite and briefly describe appropriate related work, (4) identify the dissertation advisor, and (5) identify two additional dissertation committee members within the CS department. Two more members will be added later, (6) include references on any cited work.
+● Process: 
+○ Write the prospectus with input from your Ph.D. advisor. 
+○ Ask two additional Tufts faculty members apart from your advisor who will serve on your committee. List them in the prospectus.
+○ Submit the prospectus to the graduate committee six months after your quals. The document should be signed by your advisor prior to submission.
+○ Your prospectus is a living document and should be updated at least once per year at the time of the grad reviews.
+Dissertation Committee: One year after the submission of the prospectus, the student will convene a meeting of the 3 Tufts CS members and the 1 Tufts member outside of CS to review the progress and plans. Six months before the defense, the full committee, including the member external to Tufts, shall meet to map out the expectations for the dissertation.
+Dissertation Defense: This is when you are done. During a dissertation defense, you give a public presentation on your research, and then answer private questions from your committee members about both the presentation and the dissertation document that describes your research. The final deadline for submission of the approved dissertation document is just after the end of classes in each of the Spring, Summer, and Fall semesters, and can be confirmed here. The defense occurs two weeks earlier than the university deadline to allow for edits requested by the committee at the defense.
+● Process: 
+○ Together with your advisor, propose a committee to the Grad Coordinator. This goes for review to the CS Grad Committee.
+○ Convene the committee one year after submitting prospectus and again 6-12 months before defense.
+○ Write the dissertation document.
+○ Schedule a defense date with your committee. 
+○ Submit the abstract and title for the dissertation to the CS office at least three weeks before the defense date so that the public portion of the defense can be publicized. 
+○ Submit the full draft of your dissertation to your committee at least three weeks before the defense date so that they have adequate time to review and to provide you with comments. 
+■ At the same time, submit a copy to the Graduate Program Coordinator for your student file. It will be made available to faculty or students upon request.
+○ Give your defense!
+○ Submit final approved document to the university.
+● Committee:
+○ Your committee should have five members.
+
+Page 7, contents:
+■ CS Faculty Advisor (with or without tenure)
+■ CS Faculty Member (with tenure)
+■ CS Faculty Member (with or without tenure)
+■ Tufts Faculty Member Outside of CS (does not need to be tenured, can have a joint appointment in CS so long as primary appointment is elsewhere)
+■ Member Outside of Tufts (doctoral-level researcher whether in university or industry)
+● This member does not need to be tenured
+Applying for Graduation: Graduation information for graduate students can be found at this website. The chart at the bottom of the page outlines what needs to be done by when for each possible graduation date. https://students.tufts.edu/registrar/make-request/apply-graduation/graduation-information-graduate-students.
+
+Page 8, contents:
+FAQs for Ph.D. Registrations
+Registration for students on RAships and TAships:
+● You should register for at least 9 units of load to be considered full-time. You should not register for more than 13 units of load.
+● You should register for CS 405-TA or CS 406-RA to indicate status as a Ph.D. TA or RA. These are special courses that count as 3 units of load, but do not count as credit.
+● You need to register for at least 6 more SHUs of courses (standard or research) to be considered full time. You should not register for more than 10 additional SHUs of courses.
+● An example full-time course load for a Ph.D. student on RA or TAship could be:
+○ CS 405-TA/406-RA (3 units of load)
+○ CS 135 Machine Learning (3 SHUs)
+○ CS 297 Dissertation Research (3 SHUs)
+○ Total: 9 units of load, 6 SHUs towards degree requirements
+What research courses do I register for once I have completed the 60 SHUs required for the Ph.D.?
+● Once you have accrued 60 SHUs, you switch to "CS 502: Matriculation Continued" rather than registering for more research SHUs.
+● An example full-time course load for a Ph.D. student who has met the 60 SHU requirement could be:
+○ CS 405-TA (3 units of load)
+○ CS 502 Matriculation Continued
+○ Total: full-time status met
+What is the minimum number of "actual" classes I need to take to get an M.S. + Ph.D.?
+● You will need to take 8 "actual" classes. Your M.S. would consist of 7 actual courses, 2 research courses (i.e., CS 191 and 293 or CS 295 and 296), and 1 independent study (CS 193-01).
+● Your Ph.D. would consist of 1 actual course, 1 CS 193-01, and the rest would be research credits (191, 297). It is possible this number could be further reduced by taking named CS 193-0x classes (x>1), as these count as "actual" classes.
+What should I register for if I'm here over the summer?
+● Current students who stay for the summer should register for CS 406-RA/405-TA as well as CS 502 – Doctoral Degree Continued.
+● A Ph.D. student who has not yet completed the M.S. degree should register for CS 406-RA/405-TA and CS 401/402 – Master's Degree Continued.
+● For incoming Ph.D. students who will be here on a temporary visa, they must have a full-time enrollment of 6 SHUs over the summer. This could include one "standard" course, one "research/independent study" course, plus CS 406-RA/405-TA.
+
+Page 9, contents:
+Appendix A: Qualifying Exam Contract
+Qualifying Exam Contract, Department of Computer Science, Tufts University
+Please complete the following form and return to the CS front office by the advertised due date. Please make sure all items requiring a signature are complete as requested. 
+Student: ________________________________________________________________
+ (print name) (sign) (date)
+Semester and year core competencies were satisfied (e.g., Fall 2020): _____________________
+Semester and year of exam (e.g., Fall 2020): _______________________________________
+Title of Research Talk: _______________________________________________________
+Research Area(s) of Oral Exam: _______________________________________________
+Insider #1: ________________________________________________________________
+ (print name) (sign) (date)
+Insider #2: ________________________________________________________________
+ (print name) (sign) (date)
+Outsider: ________________________________________________________________
+ (print name) (sign) (date)
+Optional Member: ________________________________________________________
+ (print name) (sign) (date)
+Optional Member: ________________________________________________________
+ (print name) (sign) (date)
+Advisor approval: __________________________________________________________
+ (print name) (sign) (date)
+Reminders:
+● The committee must consist of at least 3 CS faculty members. Two must be insiders, and one must be an outsider of the student's research area. At least one insider, and the outsider, must be regular CS faculty; the outsider must have tenure. An optional member can be added to satisfy the requirements.
+● The insiders will provide the student with a list of five to seven research papers for the oral exam.
+● Quals is not complete until the exam has been passed and the M.S./Ph.D. Core Competencies have been satisfied.
+● Please refer to the grad handbook supplement for the full exam rules.
+
+Page 10, contents:
+Appendix B: Prospectus Guidelines
+This 1-2 page abstract document must include:
+- A brief description of the student's intended research direction or open problems to be addressed in the thesis research. 
+- Include a title.
+- This should be 2-3 pages long, describing what questions you might want to investigate, or what outcomes you might hope to achieve and please don't just say "I intend to perform research in area X"; on the other hand, the intention is for the text to be relatively short, not putting a huge burden on the student and advisor, but simply serving to confirm that the student is working with the advisor and specifying research directions briefly. Citations to and a description of appropriate related work, intended to demonstrate that the student is familiar with foundational and current work in the field,
+- The name of the dissertation advisor, who must be a member of the Computer Science Department (adjunct appointments included) who is a tenured or tenure-track faculty member at Tufts University.
+- The names of two additional members of the computer science faculty who have agreed to serve on the dissertation committee. 
+Please have the advisor sign the prospectus to attest that he or she approves the prospectus. Unlike the qualifying exam contracts, we do not require a signature from other members of the committee; however, you should have secured their agreement before submitting your prospectus.
+Since the prospectus is intended to be a living document, you are expected to update or refine your prospectus as part of the annual Grad Review process, or at any other time as you and your advisor see fit.
+
+Page 11, contents:
+Appendix C: Registration
+The graduate school at Tufts uses registration to track multiple aspects pertaining to courses, service as RA or TA, and part- or full-time status. This has confused some students in the past; here we attempt to clarify all the requirements in one place.
+M.S. Students: Fall and Spring
+M.S. students must earn 30 SHUs by a combination of at least 10 regular courses of 3 or more SHUs each.
+Students who have already completed 10 courses and 30 SHUs but are still working on an M.S. project or thesis should register for one of the Master's Continuation courses (CS 401 or CS 402), whichever is appropriate. This indicates that they are still pursuing their studies but have otherwise completed the credit requirements.
+Ph.D. Students: Fall and Spring
+Ph.D. students must earn 60 credits for their degree. At least six credits must be composed of at least two regular 100-200 level courses. The rest can be earned by multiple registrations one of the Graduate Research courses (CS 297/298) or by taking other courses approved by the student's advisor. In addition, students are required attend CS 291 Seminar in Computer Science for 4 semesters.
+Full-time students should register for regular courses as guided by their advisor, and in addition register for the appropriate Graduate Research course each semester when doing dissertation work, for a total of 9 credits per semester. Registration for Graduate Research should be repeated until the student has accumulated 60 credits. This means that, normally, a student will register for 6-9 credits per semester (including Graduate Research) until they have accumulated 60 credits. Full-time students who have already accumulated 60 credits and are working on their dissertation should register for the appropriate Doctoral Continuation course (CS 502). Students on TAships or RAships should register for CS 405-TA or CS 406-RA, respectively. These courses represent 3-SHUs of load, but do not count as credit.
+Summer Session
+Both M.S. and Ph.D. students who are not registered for a full load of summer classes but who are otherwise engaged in either a full- or part-time capacity in their studies – for example, working on their research – should register for one of the Continuation courses. Ph.D. students on TAships or RAships should register for CS 405-TA or CS 406-RA, respectively.
+The chart on the following page outlines various student study situations and the appropriate course registrations that go with them.
+
+Page 12, contents:
+Appendix D: Chart of Departmental Non-Classroom & Tracking Courses
+Who Situation Course Credits
+Ph.D. Students
+Ph.D. students in the fall semester who are engaged in dissertation-level research. May register every semester
+CS 297: Graduate Research
+1-9
+Ph.D. students in the spring semester who are engaged in dissertation-level research. May register every semester
+CS 297: Graduate Research
+1-9
+Ph.D. student doing part-time doctoral work, not being paid AND not registered for a full load of regular classes (This covers most students during the summer.)
+CS 501-PT: Doctoral Continuation Part Time
+0
+Ph.D. student doing full-time doctoral work, not being paid AND not registered for a full load of regular classes (This covers most students over the summer.) Register for this in addition to CS 405/CS 406 if you are a summer TA or RA.
+CS 502-FT: Doctoral Continuation Full Time
+0
+Ph.D. student who is serving as a TA. Although this is a 0-credit course that counts as 3 units of load towards the full-time requirement.
+CS 405-TA: Graduate Teaching Assistant
+0
+Ph.D. student who is serving as an RA. Although this is a 0-credit course that counts as 3 units of load towards the fulltime requirement.
+CS 406-RA: Graduate Research Assistant
+0
+M.S. Students
+M.S. student doing part-time master's work, not being paid for that work and not registered for a full load of regular classes. (This typically applies to students doing research during the summer or who have already completed 10 courses and 30 credits but are still working on an M.S. project or thesis.)
+CS 401-PT: Master's Continuation Part Time
+0
+M.S. student doing full-time master's work, not being paid for that work and not registered for a full load of regular classes. (M.S. students who have already completed 10 courses and 30 credits but are still working on an M.S. project or thesis.) Register for this in addition to your TA tracking course if you are a summer TA or RA.
+CS 402-FT: Master's Continuation Full Time
+0
+M.S. students in the fall semester who are engaged in thesis research.
+CS 297: Graduate Research
+1-6
+M.S. students in the spring semester who are engaged in thesis research.
+CS 297: Graduate Research
+1-6
+M.S. students in the fall semester who are engaged in writing a thesis. 
+CS 295: Master's Thesis
+1-6
+M.S. students in the spring semester who are engaged in writing a thesis.
+CS 296: Master's Thesis
+1-6
+M.S. students in the fall semester who are doing a master's project
+CS 293: Graduate Special Topics / Master's Project
+1-3
+M.S. students in the spring semester who are doing a master's project
+CS 293: Graduate Special Topics / Master's Project
+1-3
+International M.S. and Ph.D. Students
+This course is only available to international students who are doing an internship. These credits apply to the full-time visa requirement but may not be applied to either the M.S. or Ph.D. degree requirements.
+CS 299: Internship Computer Science
+1
+
+Page 13, contents:
+Appendix E: Verification of Core Competence: M.S. and Ph.D.
+Department of Computer Science, Tufts University
+This form serves to document how students in the MSCS and PhD programs have covered (or are planning to cover) the core competence requirement. If all core competencies will be taken at Tufts, the student may complete the form with the Grad Coordinator. If seeking approval for non-Tufts courses, the student should meet with core competency faculty reviewers for signature. It should then be submitted to the Grad Coordinator by the end of the first week of classes of the semester in which the student will file for graduation. The approved form will be kept in the student's file. If the coverage plan is changed please submit a new copy for the changed portions.
+Student Name: _________________________________________________________________________
+Topic: Computer Architecture and Assembly Language. This is covered by:
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+Faculty Certifier and date: _______________________________________________________________
+Topic: Programming Languages (specifically, functional programming and object-oriented programming with inheritance). This is covered by:
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+Faculty Certifier and date: ________________________________________________________________
+Topic: Data Structures and Algorithms. This is covered by:
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+Faculty Certifier and date: ____________________________________________________________
+Topic: Theory of Computation. This is covered by:
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+_____________________________________________________________________________________
+Faculty Certifier and date: ________________________________________________________________
+Approved by: Date: __________ ___________________________________________________________________
+
+Page 14, contents:
+Appendix F: Procedure for Approving Choice of Courses in M.S. for Interdisciplinary Students
+Department of Computer Science, Tufts University
+A student in the program who has an interdisciplinary focus but who satisfies all the requirements as specified above does not need special approval, and their choice of courses can be vetted directly by their advisor. In some cases, students focusing on an interdisciplinary area of CS are allowed to take fewer than six CS courses. This requires prior planning and approval. The student should prepare a document with the following components:
+1. A detailed plan for the 10 courses of 3 or more SHUs to be counted for the M.S.
+2. The reasoning which explains why this plan make sense for their specific M.S. education.
+3. An explanation as to how they satisfy all the depth and breadth requirements for M.S. in CS as specified in the handbook.
+The completed document should be approved and signed by the advisor. The signed document should be submitted to the CS main office for approval. Students who want pursue this option are advised to follow this procedure in advance and as early as possible to make sure their plans for the M.S. form an approved program.
