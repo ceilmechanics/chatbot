@@ -1,0 +1,549 @@
+# Computer Science and Data Science Course List
+## COMP 125/CS 125: Numerical Analysis
+**Summary:** Analysis of algorithms involving computation with real 
+numbers. Covers interpolation, methods for solving linear and 
+nonlinear systems of equations, numerical integration, and numerical 
+methods for solving ordinary differential equations. 
+**Prerequisites:** MATH 51 and programming ability in a language such 
+as C, C++, Fortran, or Matlab.
+
+## COMP 156-SEN/CS 121: Software Engineering
+**Summary:** Covers major concepts and techniques of software 
+engineering including system requirements, engineering compromises, 
+design methods, coding, testing, team development, and engineering 
+tools. Combines technical focus with project experience across entire 
+software development workflow. 
+**Prerequisites:** COMP 40, graduate standing, or instructor consent.
+
+## COMP 177/CS 178: Visualization
+**Summary:** Explores visualization as a tool for data analysis, 
+recall, inference, and decision-making. Covers principles of effective 
+visualization including data-visual mapping, interaction techniques, 
+color theory, cognitive psychology, and human factors. 
+**Prerequisites:** Comp15 and Comp61, or permission of instructor.
+
+## COMP 180/CS 121: Software Engineering
+**Summary:** Focuses on core principles for developing large-scale 
+software systems, emphasizing programming aspects. Covers abstraction, 
+modularity, design patterns, specification, testing, verification, and 
+debugging. 
+**Prerequisites:** COMP 40 recommended.
+
+## COMP 181/CS 107: Compilers
+**Summary:** Teaches design and implementation of modern compilers, 
+focusing on scanning, parsing, semantic checking, and code generation. 
+Includes a semester-long project to design a small programming 
+language and implement a compiler for it. 
+**Prerequisites:** COMP 40, COMP 105, and COMP 170.
+
+## COMP 205/DS 205: Principles of Data Science in Python
+**Summary:** Covers fundamentals of Python programming for data 
+analysis, including data structures, algorithms, program design, and 
+coding standards. Explores data preparation, statistical analysis, 
+machine learning, and deep learning applications. 
+**Prerequisites:** Not specified.
+
+## COMP 250-SCS: Seminar in Computer Science
+**Summary:** Course used to fulfill doctoral student community/
+residence requirement. May be taken up to four times for credit. 
+**Prerequisites:** Open to PhD and MS-PhD students only.
+
+## COMP 250-VIS: Visualization Seminar
+**Summary:** Examines research papers in perceptual theories, 
+cognitive principles, data storage methods, and interactive machine 
+learning related to visual analytics. Aims to help students understand 
+state-of-the-art in these areas and identify potential research 
+directions. 
+**Prerequisites:** Some knowledge in building interactive visual 
+interfaces.
+
+## COMP 294: Graduate Special Topics / Master's Project
+**Summary:** Guided individual study of an approved topic suitable for 
+a master's design project. 
+**Prerequisites:** Consent of the instructor.
+
+## COMP 298: Graduate Research
+**Summary:** Guided research on a topic suitable for a doctoral 
+dissertation. 
+**Prerequisites:** Not specified.
+
+## CS 105: Programming Languages
+**Summary:** Examines principles and application of computer 
+programming languages. Emphasizes ideas and techniques most relevant 
+to practitioners while covering foundations crucial for intellectual 
+rigor, including abstract syntax, lambda calculus, and type systems. 
+**Prerequisites:** COMP 15 (Data Structures) and one semester of 
+Discrete Mathematics (COMP/MATH 22 or 61).
+
+## CS 106: Virtual Machines & Language Translation
+**Summary:** Covers translation of high-level, functional programming 
+languages to virtual-machine code. Topics include design and 
+implementation of register-based virtual machines, bytecode 
+interpretation, memory management, parsing and unparsing, and code 
+generation. 
+**Prerequisites:** Not specified.
+
+## CS 111: Operating Systems
+**Summary:** Addresses fundamental issues in operating system design. 
+Covers concurrent processes, synchronization, sharing, deadlock, 
+scheduling, and relevant hardware properties of computer systems. 
+**Prerequisites:** COMP 15 and either CS 40 OR EE 14 recommended.
+
+## CS 112/CS 151-PIC: Networks & Protocols
+**Summary:** Covers design and implementation of computer 
+communication networks, protocols, and applications, with emphasis on 
+the Internet protocol suite. Includes network architectures, data link 
+protocols, transport, routing, congestion management, addressing, and 
+naming. 
+**Prerequisites:** Comp 15 and one of EE 14 or Comp 40.
+
+## CS 113: Human Factors in Security and Privacy
+**Summary:** Examines usability and human-computer interaction 
+problems related to privacy and security. Covers HCI methods for 
+measuring usability issues in security and privacy mechanisms, with 
+practical experience in designing and evaluating systems. 
+**Prerequisites:** Familiarity with introductory concepts in 
+programming.
+
+## CS 114: Network Security
+**Summary:** Explores vulnerabilities, attacks, and mitigations across 
+all layers of the network stack. Covers cryptography, authentication 
+protocols, botnets, firewalls, intrusion detection systems, and 
+communication privacy and anonymity. 
+**Prerequisites:** Computer Science 15 or graduate standing.
+
+## CS 115: Database Systems
+**Summary:** Covers fundamental concepts of database management 
+systems, including data models, SQL query language, implementation 
+techniques, storage structures, concurrency control, recovery, query 
+processing, and management of unstructured data. 
+**Prerequisites:** COMP 15.
+
+## CS 116: Introduction to Security
+**Summary:** Takes a systems perspective on host-based and network-
+based computer security. Covers current vulnerabilities, protection 
+measures, firewalls, and intrusion detection systems with hands-on 
+programming projects. 
+**Prerequisites:** Comp 15.
+
+## CS 117: Internet-Scale Distributed Systems
+**Summary:** Explores design decisions that enabled the Web's success 
+and derives principles for designing other modern distributed systems. 
+Compares with traditional distributed system designs and studies core 
+Web specifications. 
+**Prerequisites:** CS 40 or permission of the instructor.
+
+## CS 118: Cloud Computing
+**Summary:** Covers fundamentals of cloud computing, including 
+architecture, scalability, elasticity, performance metrics, 
+programming models, persistent storage, networking, and security. 
+Explores both technical components and distributed system design. 
+**Prerequisites:** COMP 15 and (COMP 40 or EE 14) or CS Grad standing 
+or CS postbac.
+
+## CS 119: Big Data
+**Summary:** Introduces techniques for collecting, processing, 
+analyzing, and acting on data at internet scale. Covers parallel and 
+distributed database systems, map-reduce infrastructures, scalable 
+platforms for complex data types, and cloud-based computing. 
+**Prerequisites:** A beginning course in databases, familiarity with 
+Python, shell programming, Java, Scala, and SQL.
+
+## CS 120: Web Programming and Engineering
+**Summary:** Focuses on web applications as complex systems delivering 
+rich functionality with unique performance, scalability, usability, 
+and security demands. Covers web engineering processes, design, 
+architectures, testing, and modern frameworks. 
+**Prerequisites:** Comp 15 and Comp 20, or Consent of Instructor.
+
+## CS 122: Parallel Computing
+**Summary:** Teaches programming for modern parallel computer 
+architectures, especially GPUs and multi-core CPUs. Covers multi-
+threaded programming challenges and developing high-performance 
+software that leverages hardware caches and parallel computation. 
+**Prerequisites:** EE 126 or COMP 40 recommended.
+
+## CS 126: Numerical Linear Algebra
+**Summary:** Addresses the two basic computational problems of linear 
+algebra: solution of linear systems and computation of eigenvalues and 
+eigenvectors. 
+**Prerequisites:** MATH 70 or 72 and COMP 11 recommended.
+
+## CS 131: Artificial Intelligence
+**Summary:** Covers history, theory, and computational methods of 
+artificial intelligence. Explores knowledge representation and 
+computational reasoning methods, along with one or two application 
+areas such as expert systems, robotics, computer vision, or natural 
+language understanding. 
+**Prerequisites:** Comp 15 and either COMP/MATH 22 or 61 or 
+familiarity with both symbolic logic and basic probability theory.
+
+## CS 132: Computer Vision
+**Summary:** Introduces low and intermediate levels of classic and 
+modern Computer Vision. Teaches algorithm design for automatic visual 
+scene analysis, covering fundamentals of image formation, processing, 
+feature detection, segmentation, and multiple views. 
+**Prerequisites:** CS 160 and Math 165 recommended.
+
+## CS 133: Human-Robot Interaction
+**Summary:** Provides an overview of the interdisciplinary field of 
+human-robot interaction (HRI). Examines the intersection of 
+psychology, human factors engineering, computer science, and robotics 
+through key papers, presentations, and group projects. 
+**Prerequisites:** Senior or graduate standing in Computer Science, or 
+permission of instructor.
+
+## CS 134: Computational Models in Cognitive Science
+**Summary:** Explores scientific logic of using computational models 
+for testing theories in cognitive science. Covers connectionist and 
+Bayesian models, agent-based simulation, and combining models with 
+empirical data to test theories. 
+**Prerequisites:** COMP 10, 11, or some programming experience 
+recommended.
+
+## CS 135: Introduction to Machine Learning
+**Summary:** Provides an overview of methods for computers to learn 
+from data or experience and make decisions accordingly. Covers 
+supervised, unsupervised, and reinforcement learning, and knowledge 
+extraction with applications across multiple domains. 
+**Prerequisites:** Comp 15 and COMP/MATH 22 or 61 or consent of 
+instructor.
+
+## CS 136: Statistical Pattern Recognition
+**Summary:** Explores statistical foundations and algorithms for 
+machine learning with a focus on Bayesian modeling. Covers 
+classification, regression, regularization, model selection, kernel 
+methods, support vector machines, and Gaussian processes. 
+**Prerequisites:** MATH 13 or 42; MATH 46 or 70; EE 104 or MATH 166; 
+CS 40 or CS 105 or a programming course using Matlab.
+
+## CS 137: Deep Neural Networks
+**Summary:** Examines deep neural networks and their applications in 
+computer vision and natural language processing. Covers feed-forward, 
+convolutional, and recurrent networks, along with techniques for 
+training, optimization, and regularization. 
+**Prerequisites:** COMP 135, MATH 42, and MATH 70 recommended.
+
+## CS 138: Reinforcement Learning
+**Summary:** Focuses on agents that must learn, plan, and act in 
+complex, non-deterministic environments. Covers main theory and 
+approaches of Reinforcement Learning, along with software libraries 
+and practical implementations. 
+**Prerequisites:** Proficiency in C++, Java, or Python. Prior 
+coursework in Artificial Intelligence and/or Machine Learning highly 
+recommended.
+
+## CS 139: Ethics for AI, Robotics, and Human Robot Interaction
+**Summary:** Provides an overview of ethical problems and challenges 
+in AI, robotics, and human-robot interaction. Connects philosophical 
+ethical theories with algorithmic approaches in artificial agents and 
+explores societal implications. 
+**Prerequisites:** Senior standing, or permission of instructor. CS/
+MATH 61 and CS 15 recommended.
+
+## CS 140: Advanced Topics Computer Architecture
+**Summary:** Explores modern computer architecture from basic 
+pipelines to advanced processors. Covers techniques for maximizing 
+performance within constraints of memory technology, power 
+consumption, and application parallelism, examining current challenges 
+and research. 
+**Prerequisites:** EE126/COMP146 or COMP40 recommended.
+
+## CS 141: Probabilistic Robotics
+**Summary:** Covers techniques for probabilistic state estimation and 
+their application to robot localization, mapping, perception, and 
+planning in human-robot interaction contexts. Includes machine 
+learning and computer vision techniques for robots interacting with 
+humans. 
+**Prerequisites:** Proficiency in C/C++ or Python recommended.
+
+## CS 142: Network Science
+**Summary:** Explores mathematical foundations of graphs and networks 
+that arise in social, biological, and Internet contexts. Covers random 
+graph models, community structure, inference problems, network 
+dynamics, and cascading. 
+**Prerequisites:** MATH 70 or 72 or CS 135 or 160 recommended.
+
+## CS 144: Iterative Methods in Machine Learning
+**Summary:** Focuses on design and analysis of modern machine learning 
+methods for convex and nonconvex problems across different 
+computational architectures. Covers convergence, complexity, gradient 
+descent variations, and state-of-the-art optimization methods. 
+**Prerequisites:** MATH 70 and CS 11.
+
+## CS 146: Computer Engineering with Lab
+**Summary:** Teaches advanced computer architecture concepts from 
+basic pipelines to advanced processors. Covers techniques for 
+maximizing single-thread performance and includes hands-on hardware 
+implementation of a MIPS processor in VHDL. 
+**Prerequisites:** ES4 and either EE14 or COMP 40 with a 'C' or 
+better.
+
+## CS 149: Information Theory
+**Summary:** Explores information theory as a framework for addressing 
+fundamental laws and limits of data compression and digital 
+communication. Covers source coding, information measures, lossless 
+data compression algorithms, channel coding, and rate distortion. 
+**Prerequisites:** Undergraduate Probability OR EE 104 OR Permission 
+of instructor recommended.
+
+## CS 160: Algorithms
+**Summary:** Introduces algorithm study, covering strategies like 
+divide-and-conquer, greedy methods, and dynamic programming. Includes 
+graph algorithms, sorting, searching, integer arithmetic, hashing, and 
+NP-complete problems. 
+**Prerequisites:** COMP 15 and COMP/MATH 22 or 61.
+
+## CS 163: Computational Geometry
+**Summary:** Covers design and analysis of algorithms for geometric 
+problems. Topics include convex hulls, searching, plane sweep, Voronoi 
+diagrams, intersection problems, decomposition, and closest-pairs 
+problems. 
+**Prerequisites:** COMP 160, COMP 170, any 100+ MATH course, or 
+permission of the instructor.
+
+## CS 166: Computational Systems Biology
+**Summary:** Teaches computational modeling of complex biological 
+systems to analyze emergent properties and predict system behavior. 
+Covers molecular and protein modeling in biochemical networks and 
+applications across biological domains. 
+**Prerequisites:** Not specified.
+
+## CS 167: Computational Biology
+**Summary:** Addresses computational challenges in molecular biology, 
+including sequence alignment, genomic annotation, microarray data 
+analysis, and proteomics. Covers underlying computational techniques 
+like dynamic programming, hidden Markov models, and search procedures. 
+**Prerequisites:** Comp15 and at least one CS course numbered 100 or 
+higher.
+
+## CS 168: Convex Optimization
+**Summary:** Covers convex optimization theory and algorithms 
+including convex sets, functions, and optimization problems. Explores 
+duality theory, optimality conditions, and algorithms for solving 
+convex problems with applications in communications and signal 
+processing. 
+**Prerequisites:** Math 70 or graduate standing.
+
+## CS 169: Statistical Bioinformatics
+**Summary:** Focuses on computational methods and analyses for 
+bioinformatics and biomedical data. Covers statistical methods for 
+heterogeneous high-dimensional biological data, hypothesis assessment, 
+visualization, and simulation. 
+**Prerequisites:** CS 11 and (CS/Math 61 or Math 65), or graduate 
+standing recommended.
+
+## CS 170: Computation Theory
+**Summary:** Explores models of computation including Turing machines, 
+pushdown automata, and finite automata. Covers grammars, formal 
+languages, context-free languages, regular sets, and important 
+theoretical problems in computer science. 
+**Prerequisites:** COMP 15 and COMP/MATH 22 or 61.
+
+## CS 171: Human-Computer Interaction
+**Summary:** Introduces human-computer interaction principles and 
+interface design. Covers methodology for designing and testing user 
+interfaces, interaction styles, interface techniques, design 
+guidelines, and user interface management systems. 
+**Prerequisites:** COMP 15.
+
+## CS 175: Computer Graphics
+**Summary:** Explores fundamentals of computer graphics, including 
+digital image representation, 2D rasterization, 3D rendering 
+techniques, viewing transformations, 3D shape representation, and 
+animation. Assignments require C programming knowledge. 
+**Prerequisites:** MATH 42 or 44, and MATH 70 or 72, or graduate 
+standing recommended.
+
+## CS 182: Cyber in the Civilian Sector
+**Summary:** Explores cyber issues in the civilian sector, focusing on 
+how the Internet complicates national control of information flow. 
+Covers jurisdictional issues, new technology challenges, criminal 
+activities, and civil infrastructure impacts. 
+**Prerequisites:** Not specified.
+
+## CS 183: Privacy in the Digital Age
+**Summary:** Introduces legal and regulatory protections for personal 
+data and the evolving nature of digital surveillance and online 
+privacy. Covers threats from public and private sectors and 
+international privacy protection approaches. 
+**Prerequisites:** Not specified.
+
+## CS 184: Cyberlaw and Cyberpolicy
+**Summary:** Introduces legal issues in cyberspace, examining 
+technology's evolution relative to law. Covers jurisdiction, privacy, 
+surveillance, copyright, and computer fraud from a US perspective with 
+some international context. 
+**Prerequisites:** Not specified.
+
+## CS 185: Computing for Developing Regions
+**Summary:** Takes an interdisciplinary approach to studying computing 
+technologies in developing regions. Covers low-cost infrastructure, 
+socially relevant technologies, and technology use by underserved 
+communities through case studies and group projects. 
+**Prerequisites:** Completion of COMP 15 or graduate standing.
+
+## CS 191: Research
+**Summary:** Research on a Computer Science topic culminating in a 
+final paper describing accomplishments. Aims to advance the state of 
+the art under faculty sponsorship. 
+**Prerequisites:** Consent.
+
+## CS 193: Directed Study
+**Summary:** Guided study of an approved topic.
+**Prerequisites:** Consent.
+
+## CS 193-CC: Computational Complexity
+**Summary:** Topic information not provided in detail.
+**Prerequisites:** Consent.
+
+## CS 193-GFA: Geometric Folding Algorithms
+**Summary:** Topic information not provided in detail.
+**Prerequisites:** Consent of department.
+
+## CS 193-MSC: MS CoreComp
+**Summary:** Topic information not provided in detail.
+**Prerequisites:** Consent of department.
+
+## CS 197: Honors Thesis
+**Summary:** Honors Thesis in Computer Science.
+**Prerequisites:** Not specified.
+
+## CS 201: Cyber for Future Policymakers
+**Summary:** Explores computer technologies relevant to policy 
+development. Covers Internet architecture, networking, web 
+technologies, cryptography, security, privacy, AI, machine learning, 
+and emerging technologies like quantum computing. 
+**Prerequisites:** Graduate standing in a non-CS related discipline; 
+COMP 10 or COMP 11 recommended.
+
+## CS 202: How Systems Work
+**Summary:** Graduate version of COMP13 covering how computing systems 
+work at a foundational level. Topics include information 
+representation, CPU operation, assembly language, programming 
+languages, networking, and algorithms. 
+**Prerequisites:** Graduate standing in a non-CS related discipline; 
+COMP 10 or COMP 11 recommended.
+
+## CS 203: How Systems Fail
+**Summary:** Examines failure of computer systems within the context 
+of complex systems. Covers failures in algorithms, engineering, 
+systems, applications, people, and culture, along with attack recovery 
+and security case studies. 
+**Prerequisites:** Graduate standing in a non-CS related discipline.
+
+## CS 204: Programming for Data Science
+**Summary:** Covers algorithms for data manipulation, cleaning, and 
+preparation. Explores program design, coding standards, software 
+libraries, and performance optimization for data science applications 
+from basic analysis to deep learning. 
+**Prerequisites:** Course in data structures (equivalent to CS 15) and 
+linear algebra (equivalent to Math 70) recommended.
+
+## CS 226: Numerical Analysis
+**Summary:** Analyzes algorithms for computation with real numbers, 
+with strong theoretical emphasis. Covers interpolation, solving 
+equation systems, integration, differential equations, and methods for 
+hyperbolic partial differential equations. 
+**Prerequisites:** Math 51 or 153, Math 70 or 72, and graduate 
+standing; or permission of instructor.
+
+## CS 239: Ethics for AI, Robotics, and Human Robot Interaction
+**Summary:** Explores technical challenges of endowing autonomous 
+agents with normative principles. Connects philosophical ethical 
+theories with algorithmic approaches in artificial agents and analyzes 
+societal implications of AI and robotic technology. 
+**Prerequisites:** CS MS or PhD or DS MS or HRI MS.
+
+## CS 260: Advanced Algorithms
+**Summary:** Explores modern algorithms and beautiful algorithm design 
+techniques. Covers randomized algorithms, approximation algorithms, 
+online algorithms, and current research areas in algorithmic design. 
+**Prerequisites:** Comp 160 or permission of the instructor.
+
+## CS 263: Advanced Computational Geometry
+**Summary:** Covers advanced design and analysis of sequential, 
+parallel, probabilistic, and approximation algorithms for geometry 
+problems. Includes geometric data structures, complexity, searching, 
+computation, and applications. 
+**Prerequisites:** CS 163 or permission of instructor recommended.
+
+## CS 288/DS 288: Master of Science Capstone Project I
+**Summary:** First part of a two-course capstone for MS programs. 
+Focuses on requirements analysis, design, project planning, 
+management, and proof-of-concept prototyping for a comprehensive 
+programming or data science project. 
+**Prerequisites:** CS 180 or 121, and enrollment in the Master of 
+Science program.
+
+## CS 289/DS 289: Master of Science Capstone Project II
+**Summary:** Second part of the two-course capstone for MS programs. 
+Implements the project defined in part one, including testing, 
+documentation, maintenance, and release management, culminating in 
+final project presentation. 
+**Prerequisites:** CS 288/DS 288, and enrollment in the Master of 
+Science program.
+
+## CS 291: Seminar in Computer Science
+**Summary:** Weekly seminar with guest speakers discussing research 
+challenges and recent advances in Computer Science. Pass/fail based on 
+attendance and feedback for at least 50% of seminars. 
+**Prerequisites:** Ph.D. standing in Computer Science.
+
+## CS 293: Graduate Special Topics / Master's Project
+**Summary:** Guided individual study of an approved topic suitable for 
+a master's design project. 
+**Prerequisites:** Permission of the instructor.
+
+## CS 295: Master's Thesis
+**Summary:** Guided research on a topic approved as suitable for a 
+master's thesis. 
+**Prerequisites:** Not specified.
+
+## CS 296: Master's Thesis
+**Summary:** Guided research on a topic approved as suitable for a 
+master's thesis. 
+**Prerequisites:** Not specified.
+
+## CS 297: Graduate Research
+**Summary:** Guided research on a topic suitable for a doctoral 
+dissertation. 
+**Prerequisites:** Not specified.
+
+## CS 299/DS 299: Internship in Computer Science/Data Science
+**Summary:** Study of approved topics in Computer Science or Data 
+Science in conjunction with an internship in computing or related 
+field outside the University. 
+**Prerequisites:** Permission of instructor.
+
+## CS 401: Master's Continuation Part-Time
+**Summary:** Maintains active status for Master's students working 
+part-time. 
+**Prerequisites:** Not specified.
+
+## CS 402: Master's Continuation Full-Time
+**Summary:** Maintains active status for Master's students working 
+full-time. 
+**Prerequisites:** Not specified.
+
+## CS 404: Graduate Engineering Co-op
+**Summary:** Graduate-level cooperative education work experience.
+**Prerequisites:** Not specified.
+
+## CS 405: Graduate Teaching Assistant
+**Summary:** Registration for graduate teaching assistant positions.
+**Prerequisites:** Not specified.
+
+## CS 406: Graduate Research Assistant
+**Summary:** Registration for graduate research assistant positions.
+**Prerequisites:** Not specified.
+
+## CS 501: Doctoral Continuation Part-Time
+**Summary:** Maintains active status for doctoral students working 
+part-time. 
+**Prerequisites:** Not specified.
+
+## CS 502: Doctoral Continuation Full-Time
+**Summary:** Maintains active status for doctoral students working 
+full-time. 
+**Prerequisites:** Not specified.

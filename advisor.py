@@ -20,9 +20,9 @@ class TuftsCSAdvisor:
             temperature=0.1,
             lastk=0,
             session_id='cs-advising-handbooks-v5-' + self.user_id,      # prev v5
-            rag_usage=True,
-            rag_threshold=0.5,  # Lower threshold
-            rag_k=5  # Retrieve more documents
+            rag_usage=False
+            # rag_threshold=0.5,  # Lower threshold
+            # rag_k=5  # Retrieve more documents
         )
 
         if isinstance(rag_response, dict) and 'response' in rag_response:
@@ -42,9 +42,9 @@ class TuftsCSAdvisor:
             temperature=0.1,
             lastk=self.last_k,
             session_id='cs-advising-handbooks-v5-' + self.user_id,      # prev v5
-            rag_usage=True,
-            rag_threshold=0.5,  # Lower threshold
-            rag_k=5  # Retrieve more documents
+            rag_usage=False
+            # rag_threshold=0.5,  # Lower threshold
+            # rag_k=5  # Retrieve more documents
         )
 
         print("\nResponse:", rag_response.get('response') if isinstance(rag_response, dict) else rag_response)
