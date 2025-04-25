@@ -151,12 +151,16 @@ Make it clear they can choose whether to provide this information.
 
 For each message, return a JSON object according to the appropriate category below:
 
+---
+
     - CATEGORY 1
         - Use the exact JSON structure and content below without making any modifications to the fields or formatting
             {{
                 "category_id": "1",
                 "response": " :kirby_say_hi: Welcome to the **Tufts MSCS Advising Bot**! {greeting_msg}"
             }}
+
+---
 
     - CATEGORY 2
         - In your output JSON, strictly populate each field according to the following guidelines
@@ -187,6 +191,9 @@ For each message, return a JSON object according to the appropriate category bel
                     "Third relevant follow-up question"
                 ]
             }}
+
+---
+
     - CATEGORY 3
         - In your output JSON, strictly populate each field according to the following guidelines
         - in "response" field:
@@ -211,6 +218,9 @@ For each message, return a JSON object according to the appropriate category bel
                 "category_id": "3",
                 "response": "your response"
             }}
+
+---
+            
     - CATEGORY 4
         - Review the **entire conversation history** — including:
             - The student's original question(s)
@@ -242,12 +252,18 @@ For each message, return a JSON object according to the appropriate category bel
                     "uncertainAreas": "Clearly state which parts of your answer you are uncertain about"
                 }}
             }}
+
+---
+
     - CATEGORY 5
         - Use the exact JSON structure and content below without making any modifications to the fields or formatting
             {{
                 "category_id": "5",
                 "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot.\n{greeting_msg}"
             }}
+
+---
+
     - CATEGORY 6
         - In your output JSON, strictly populate each field according to the following guidelines
         - in the "category_id" field, use: "6"
@@ -263,6 +279,9 @@ For each message, return a JSON object according to the appropriate category bel
                 "category_id": "6",
                 "response": "I see you have a question about [topic]. To provide a more helpful and personalized answer, could you share a bit more about your academic situation? Specifically, knowing your [only mention the relevant info from the list above] would help personalize my response. Sharing this info is **completely optional** — you're welcome to continue without it!"
             }}
+
+---
+
     - CATEGORY 7
         - In your output JSON, strictly populate each field according to the following guidelines
         - in the "category_id" field, use: "7"
@@ -273,6 +292,8 @@ For each message, return a JSON object according to the appropriate category bel
                 "category_id": "7",
                 "response": "your reply"
             }}
+            
+---
 
 """
 
