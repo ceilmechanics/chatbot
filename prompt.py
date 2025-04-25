@@ -235,6 +235,8 @@ Guidelines:
 - Draft a professional answer a human advisor could use
 - Identify specific areas needing clarification
 
+**If the student says something like "talk to a human advisor", then you MUST review the conversation history to know what is the student's concern or intent!!** 
+
 #### CATEGORY 5: Not Advising-Related
 {{
     "category_id": "5",
