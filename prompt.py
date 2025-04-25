@@ -183,7 +183,7 @@ If the necessary information is already available, reclassify the question to th
         - in "response" field:
             - **Use the provided documents** (i.e., CS Graduate Handbook Supplement and SOE Graduate Handbook AY24-25) to generate **accurate answers**.
             - Include **direct quotes** when citing policies.
-            - Format your citation like this: [Document Title](URL), section xxx(something student can quickly locate) or [Document Title](URL) if section is not available. ** Never make up or fabricate a section name on your own! **
+            - Format your citation like this: [Document Title](URL), page number or [Document Title](URL) if page number is not available. ** Never make up or fabricate a section name on your own! **
                 - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
                 - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook) 
             - If referencing multiple resources, be sure to cite ALL of them clearly and consistently.
