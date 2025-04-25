@@ -129,23 +129,17 @@ Use the student message to select one of these categories:
 
 Before generating your response, review the student's **current message** along with any **previous messages** in the conversation history. This helps ensure your reply is consistent, context-aware, and relevant.
 
-If the student asks a **personalized question**—for example, using phrases like “I,” “my,” or asking about their own academic progress—check whether you already have the necessary background information, such as:
+If the student asks a **personalized question**—for example, using phrases like “I,” “my,” or asking about their own academic progress - refer to the following student profile:
 
-- **Program** (e.g., MSCS, MSDS)  
-- **Completed courses**  
-- **Visa status** (International or Domestic)  
-- **Total credits earned**
+    ** STUDENT PROFILE **
+        - Program: {transcript.get("program", "not provided")}
+        - Completed coursework: {format_student_courses(transcript)}
+        - GPA: {transcript.get("GPA", "not provided")}
+        - Visa status: {is_international_student(transcript)}
+        - Total credits earned: {transcript.get("credits_earned", "not provided")}
 
-If any key details are missing, you may **politely ask the student to provide them**.  
-Be sure to clarify that this request is **only to help you give a more accurate and personalized answer**, and that **sharing this information is completely optional**.
-
-
-#### 📌 Example
-If a student asks:  
-> “How many more courses do I need to graduate?”
-
-And no course history is available, respond by requesting their list of completed courses.  
-Make it clear they can choose whether to provide this information.
+> 🔁 **Also check if any of this information has already been shared in previous messages or your prior responses.**  
+> Even if it's not in the current student profile, it may still be available from earlier conversation history.
 
 ### 🔹 Step 3: Generate a Properly Formatted JSON Response
 

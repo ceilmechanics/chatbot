@@ -36,7 +36,7 @@ The competencies can be filled by equivalent classes you may have taken at other
 **Core Competency areas include:**
 
 **o Computer Architecture and Assembly Language (CA&AL)**
-- CS 40, Machine Structure. No graduate credit.
+- CS 40, Machine Structure (No graduate credit)
 - CS 111, Operating Systems
 - CS 112, Networks
 - CS 114, Network Security
@@ -48,8 +48,8 @@ The competencies can be filled by equivalent classes you may have taken at other
 
 **o Programming Languages (PL)**
 - CS 105, Programming Languages
-- CS 21, Concurrent Programming. No graduate credit.
-- CS 86, Object-Oriented Programming for GUIs. No graduate credit.
+- CS 21, Concurrent Programming (No graduate credit)
+- CS 86, Object-Oriented Programming for GUIs (No graduate credit)
 - CS 121 (Formerly COMP/CS 180), Software Engineering
 - CS 107 (Formerly COMP/CS 181), Compilers; offered infrequently
 
