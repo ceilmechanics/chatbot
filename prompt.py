@@ -235,8 +235,7 @@ In the `suggestedQuestions` field, generate 3 follow-up questions that:
 
 {{
   "category_id": "5",
-  "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot.
-{greeting_msg}"
+  "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot. \n{greeting_msg}"
 }}
 
 ---
@@ -255,10 +254,10 @@ In the `suggestedQuestions` field, generate 3 follow-up questions that:
 
 #### 🟦 CATEGORY 7: Thank You / Goodbye
 
-{
+{{
   "category_id": "7",
   "response": "your reply"
-}
+}}
 
 """
 
