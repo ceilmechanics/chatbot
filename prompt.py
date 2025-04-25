@@ -58,9 +58,7 @@ def get_txt(filename):
 
 
 def get_system_prompt(user_profile):
-    greeting_msg = f"""
-
-I'm here to help you with a wide range of Computer Science advising topics:
+    greeting_msg = f"""I'm here to help you with a wide range of Computer Science advising topics:
 💡 **Program Requirements**  - \"What are the core competency areas for the MSCS program?\"
 📌 **Academic Policies**  - \"What is the transfer credit policy for Computer Science graduate students?\"
 ✍️ **Course-related Information**  - \"Does taking CS160 count towards my graduation requirement?\"
@@ -161,7 +159,7 @@ Use the exact structure below without modifying any field or formatting.
 
 {{
   "category_id": "1",
-  "response": " :kirby_say_hi: Welcome to the **Tufts MSCS Advising Bot**! {greeting_msg}"
+  "response": " :kirby_say_hi: Welcome to the **Tufts MSCS Advising Bot**! \n\n{greeting_msg}"
 }}
 
 ---
@@ -235,7 +233,7 @@ In the `suggestedQuestions` field, generate 3 follow-up questions that:
 
 {{
   "category_id": "5",
-  "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot. \n{greeting_msg}"
+  "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot. \n\n{greeting_msg}"
 }}
 
 ---
