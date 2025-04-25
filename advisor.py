@@ -8,9 +8,9 @@ class TuftsCSAdvisor:
         self.user_profile = user_profile
         self.user_id = user_profile["user_id"]
         self.last_k = user_profile["last_k"]
-        if user_profile["last_k"] == 0:
-            handbook_upload(self.user_id)
-            time.sleep(2)
+        # if user_profile["last_k"] == 0:
+        #     handbook_upload(self.user_id)
+        #     time.sleep(2)
 
     def get_escalated_response(self, query):
         rag_response = generate(
