@@ -1,4 +1,4 @@
-# Computer Science and Data Science Course List
+# CS Graduate Course Descriptions
 ## COMP 125/CS 125: Numerical Analysis
 **Summary:** Analysis of algorithms involving computation with real 
 numbers. Covers interpolation, methods for solving linear and 
