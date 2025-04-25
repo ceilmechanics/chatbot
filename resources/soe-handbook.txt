@@ -1,485 +1,403 @@
-page 39, content:
-Graduate Co-op Program
-Tufts University's School of Engineering (SOE) offers a Cooperative (Co-op) Education
-Program for full time MS students. The objective of this program is to offer Tufts SOE
-MS students opportunities to pursue real-world work experience, form professional
-relationships, and to enhance their resumes. The program's main goal is to introduce
-students to professional experiences that will assist them in their career path. This
-program helps students get a feel for a company's culture and work environment, and
-learn to interact with other colleagues in their field.
+# SOE Graduate Handbook AY24-25
 
-Benefits of a Co-Op Program
-• Provide students with the skills and frameworks to clarify short- and long-term
-personal, educational, and career goals and to consistently make prudent, informed
-decisions throughout one's career.
-• Help students explore and experience professional employment in areas related to
-the student's academic program as well as professional interests and personal aspirations. 
-• Guide students through the development of a modern personal brand including
-brand statements, marketing documents curation, and effective network cultivation
-and strategic management.
-• Understanding, practicing, and employing best practices around key career competencies in the modern world of work including, but not limited to: interviews, negotiations, workplace professionalism and etiquette, communication with leaders,
-managers, and colleagues.
-• Receive direct and dedicated support from the Assistant Director, Graduate Co-op
-Advisor and the Tufts Career Center for the entirety of your co-op preparation and
-employment experience.
+## PAGE 2
+### Academic Calendar–Fall Term 2024
 
-How Co-Op Works
-Tufts Graduate School of Engineering's co-op program offers students a unique opportunity to integrate their academic knowledge with industry and subject matter expertise to help employers address and solve practical, real-world problems. Participating
-students may gain up to eight months of full-time paid work experience that is valuable for building and showcasing distinct, technical, professional, and social competencies employers covet and very often offer co-op alumni with a competitive edge for
-post-graduation employment opportunities. 
+| Date | Day | Event |
+|------|-----|-------|
+| 26-August | Monday | Registration reopens for all AS&E students at 12 a.m. |
+| 29-August | Thursday | Undergraduate New Student Orientation begins; Matriculation |
+| 29-August | Thursday | International Student Orientation |
+| 2-September | Monday | Labor Day (University Holiday) No Classes |
+| 3-September | Tuesday | Classes Begin |
+| 4-September | Wednesday | TA/RA Orientation (SOE) |
+| 6-September | Friday | Graduate Student Orientation (SOE) |
+| 10-September | Tuesday | Last day for AS&E students to ADD classes |
+| 8-October | Tuesday | Last day for AS&E students (except First-Year Undergraduate students, first-semester Transfer students, and first-semester REAL students) to DROP Full Term courses without record of enrollment |
+| 14-October | Monday | Indigenous Peoples' Day (University Holiday) No Classes Held |
+| 15-October | Tuesday | Last day for AS&E students to make up incomplete grades from Spring 2024 |
+| 21-October | Monday | Graduate students in First Session courses only: Last Day for Graduate AS&E Students to WITHDRAW from classes and receive a Grade of W |
+| 5-November | Tuesday | Presidential Election Day (No classes held) |
+| 11-November | Monday | Veterans' Day (University Holiday) No Classes |
+| Nov 12 | Tuesday | Spring 2025 registration starts for graduate and postbac students in SIS |
+| 27-November | Wednesday | No Classes |
+| 28-November | Thursday | Thanksgiving (University Holiday) No Classes |
+| 29-November | Friday | No Classes (University Holiday) |
+| 10-December | Tuesday | Classes end |
+| 10-December | Tuesday | Graduate Students Only: Last Day to WITHDRAW from Full Term and Second Session Courses and Receive a Grade of W |
+| 11-12-Dec. | Wed-Thur | Reading Period |
 
-Eligible MS students may complete one co-op over the course of their degree program. Students must apply to join the co-op program at the end of their first semester as an enrolled master's student. After starting their MS program and completing
-18 credits, exclusive of seminar credits, that count toward their degree, students may
-then look for co-op opportunities.
+## PAGE 3
+### Academic Calendar–Fall Term 2024 (continued)
 
-page 40, content:
-The Graduate Co-op Program follows a cohort model, where admitted students are
-grouped based on the semester they intend to begin their co-op positions. During
-the preceding semester, students will engage in intentional, independent, and cohort-shared experiences across all aspects of the Tufts Career Center Career Planning
-and Management Process, including self-assessment and discovery, strategic opportunity identification and targeting, custom marketing document creation and co-op
-search, relationship building practice and management, and modern interview and
-negotiation practice and preparation. Consistent participation in curated professional
-development offerings, collaborative and supportive cohort working groups, and
-regularly scheduled meetings with the Graduate Co-op Advisor is expected, and often
-mandatory. The Career Center and the SOE Graduate School are sincerely invested in
-our admitted co-op program students' development and execution plan and have built
-a system of impactful tools, resources, coaching expertise, and insights that are fundamental to not only securing a co-op but also managing all aspects of a career. 
+| Date | Day | Event |
+|------|-----|-------|
+| 13-December | Friday | Review Boards begin |
+| 13-December | Friday | Final Examinations begin |
+| 20-December | Friday | Final Examinations end |
+| 20-December | Friday | Review Boards end |
+| 25-December | Wednesday | Christmas Day Observed (University Holiday) |
 
-In preparation for a co-op search, students must participate in the required career
-development sessions offered by Tufts Career Center, which provide valuable skills
-needed to be successful in securing a co-op position that simultaneously aligns with
-individual needs and preference while also adhering to Tufts standards and ethical
-guidelines and employer expectation.
+### Academic Calendar–Spring Term 2025
 
-As part of the co-op program, eligible MS students are only allowed to accept one position during their time in the program. There is no guarantee that students who enter the 
-co-op program will secure employment.
+| Date | Day | Event |
+|------|-----|-------|
+| 1-January | Wednesday | New Year's Day Observed (University Holiday) |
+| 2-January | Thursday | Fall Term Grades Due Online by 9 a.m. |
+| 15-January | Wednesday | Classes Begin |
+| 17-January | Friday | Graduate Student Orientation (SOE) |
+| 20-January | Monday | Martin Luther King Day (University Holiday) |
+| 22-January | Wednesday | SOE Graduate Students students to make up incomplete grades from Fall 2024 |
+| 15-Feb to 21-April | | Graduate students to apply and submit materials for May graduation |
+| 17-February | Monday | Presidents' Day Observed (University Holiday) No Classes |
+| 19-February | Wednesday | Last day for AS&E students to DROP courses without record of enrollment |
+| 26-February | Wednesday | Last day for AS&E students to make up incomplete grades from Fall 2024 |
+| 4-March | Tuesday | Graduate students in First Session courses only: Last Day for Graduate AS&E Students to WITHDRAW from classes and receive a Grade of W |
+| 15-March | Saturday | Spring Recess begins; Classes Suspended |
+| 24-March | Monday | Spring Recess ends; Classes Resume |
+| 9-April | Wednesday | Fall 2025 registration starts for graduate and postbac students in SIS |
+| 21-April | Monday | Patriots' Day observed (University Holiday) No Classes |
+| 28-April | Monday | Classes end |
+| 28-April | Monday | Last Day for Graduate AS&E Students to WITHDRAW from Courses and Receive a Grade of W |
+| 29-April | Tuesday | Reading Period; Make-up Day (no classes held) |
 
-Cost Of Co-Op Program 
+## PAGE 4
+### Academic Calendar–Spring Term 2025 (continued)
+
+| Date | Day | Event |
+|------|-----|-------|
+| 30-April | Wednesday | Reading Period |
+| 1-May | Thursday | Reading Period |
+| 2-May | Friday | Review Boards begin/ Final Examinations begin |
+| 9-May | Friday | Final Examinations end |
+| 9-May | Friday | Review Boards end |
+| 12-May | Monday | Senior Week begins |
+| 16-May | Friday | Remaining Grades Due Online by 9 a.m. |
+| 18-May | Sunday | Commencement |
+
+### Academic Calendar–Summer/Fall Term 2025
+
+| Date | Day | Event |
+|------|-----|-------|
+| 21-May | Monday | First and 12 Week Summer Sessions begin |
+| 26-May | Monday | Memorial Day (University Holiday) |
+| 19-June | Wednesday | Juneteenth observed (University Holiday) No Classes |
+| 4-July | Thursday | Independence Day observed (University Holiday) |
+
+### Academic Calendar–Links
+- Academic Calendar: https://students.tufts.edu/registrar/courses-and-calendars/academic-calendar
+- Graduation Deadlines and Important Dates: https://students.tufts.edu/registrar/make-request/apply-graduation/graduation-information-graduate-students
+
+## PAGE 12
+### Leaves of Absence
+#### Overview of Leaves
+
+There are three types of leave available to graduate students: personal leave, parental accommodation, and medical leave. Information about each leave type is detailed below, with additional information on the Student Life website. It is recommended that students who are considering a leave of absence discuss their plan with their academic advisor and the department's graduate studies committee representative. Students who are on leave, except for those on approved Ph.D. Parental Accommodation, are not charged tuition and fees and are not eligible for stipends; funding upon return cannot be guaranteed; if you have questions about the leave please speak with your department's graduate studies committee representative. In cases where a student has a teaching or research assistant appointment, it is expected the student alert their advisor as well as the department's graduate studies committee representative of the leave. No courses/credits taken during a leave may be transferred towards a student's degree requirements. Notification should be given within a reasonable time period prior to the leave so alternate arrangements can be made for the duration of time the student will be on leave.
+
+Student loan borrowers will receive exit interview and repayment information and may be required to begin loan repayment while on leave. Students who are not in good academic standing when taking a leave must have an academic plan intact so upon their return they can continue making academic progress. This plan must be approved by their academic advisor and the graduate dean before their return. Please see the policy on academic standing on page 8.
+
+Because leaves of absence can impact visa status and eligibility to remain in the United States, international students who are considering taking a leave must contact the International Center before any leave is authorized. Personal leaves of absence directly jeopardize an international student's ability to remain in the United States.
+
+## PAGE 18
+### Reinstatement Policy
+
+If a graduate student has not registered at Tufts for one or more semesters, and later decides to resume work in the degree program, the student must be reinstated by the graduate school. In order to be reinstated, a student must complete the Petition for Reinstatement form and submit it along with all required supporting documentation to the dean's office for consideration. A $350 reinstatement fee will be charged to all graduate students who re-enroll in the graduate program.
+
+International students must contact the International Center prior to requesting a reinstatement in order to properly plan any visa needs if approved.
+
+Reinstatement will be a decision by the department and its graduate committee and will have to be approved by the graduate dean.
+
+### Transfer of Credit
+
+Students may apply for transfer credit for graduate-level courses taken at Tufts or at other institutions. (Graduate certificate students may not transfer in courses taken outside of Tufts.* Courses taken through the Tufts Gordon Institute that are beyond the degree requirements cannot be transferred to another Tufts engineering program). It is recommended that students apply for transfer credit at the beginning of their graduate program. Transfer of credit is requested and processed in SIS.
+
+A maximum of two courses may be transferred and used to fulfill requirements for a graduate degree, subject to the following conditions. Credits transferred must:
+- Carry the grade of B- or better (courses taken as pass/fail cannot be transferred)
+- Not have been counted toward another degree**
+- Have been earned in graduate-level courses at a properly accredited institution
+- Have been taken within the past five years
+
+These are minimum requirements for credits transferred. Departments have the right to impose additional criteria.
+
+*Students previously enrolled in a Tufts certificate program may petition to transfer all credits required for the certificate into a Tufts graduate degree program. Degree candidates cannot earn more than one certificate in conjunction with a graduate degree. Some departments may allow certificates to be earned concurrently with the degree program. See your departmental graduate handbook for your program's requirements and policies. Students in eligible programs must formally apply for a certificate program, and be admitted at least two semesters before completing their primary graduate degree program, in order to be eligible to receive a concurrent certificate.
+
+**Courses taken in the duration of a degree program are eligible for transfer credit only if a transcript notation or documentation from the institution confirms the course was in excess
+
+## PAGE 19
+of degree requirements, and withheld from calculation in overall earned credit hours, GPA, and honors.
+
+In all cases, the transfer of courses must be approved by the department. Approved courses that meet all eligibility requirements will be posted on the graduate transcript.
+
+Doctoral candidates may not transfer courses counted toward a master's degree to their doctoral program. However, individual departments and programs may, at their discretion, accept these courses in order to reduce the number of courses required for the doctoral degree. No student will be allowed to graduate without formal department and program approval of the credits earned elsewhere. It is the student's responsibility to obtain approval of the credits from the department or program prior to submitting the application for graduation.
+
+### Transfer of Credit from Tufts University College
+
+Engineering graduate courses taken through the Tufts University College may only be transferred into a degree or certificate program with the permission of the graduate dean.
+
+### Fifth-Year Master's Program Double-Counting Policy—School of Engineering
+
+School of Engineering seniors are eligible to apply to the Fifth-Year Master's Degree Program. Juniors are not eligible to apply, and must wait until their senior year to submit an application. Fifth-Year MS program students in the School of Engineering who matriculate into the MS program after February 1, 2023, may transfer from their undergraduate studies two eligible reserved graduate-level courses towards their MS degree and double-count two courses towards both the BS and MS degrees, for a total of four courses. Only 100-level courses that contribute toward the graduate program requirements are eligible, and the courses must be reserved before matriculating into the graduate program. Eligible courses cross-listed between departments in the School of Engineering may be double-counted. Courses cross-listed across departments in the School of Engineering and the Graduate School of Arts and Sciences will not be double-counted towards the School of Engineering master's degree requirements. To apply courses toward both degrees and/or reserve courses for graduate credit, a completed SOE Fifth-Year Master's Course Distribution Form must be submitted with the undergraduate graduation packet. Students must complete and earn their undergraduate degree before matriculating into the MS program. The degrees cannot be completed concurrently. Courses cannot be retroactively reserved or shared after the undergraduate degree is conferred. Students may enroll full-time or part-time while participating in the master's degree portion of the combined degree program,
+
+## PAGE 20
+but must enroll immediately after completion of their BS degree. No deferrals are available for this program. Courses may not be counted more than two times across certificates or degree programs. Fifth-Year students pursuing two MS degrees will need to complete a minimum of 16 additional courses beyond their BS program.
+
+### English Language Proficiency Evaluation
+
+In order to help School of Engineering international graduate students develop superb communication skills, all incoming graduate students who were required to submit TOEFL and/or IELTS scores for admission will have their English language proficiency skills evaluated. Those deemed needing more ESL support will be required to take a non-credit, graded course in English for Technical Professionals during their first semester of graduate study. Students will be automatically enrolled in a mandatory second semester course in English for Technical Professionals at the discretion of the administrator. Failure to complete the required course(s) will prevent the student from graduating.
+
+### Advisors
+
+Graduate students are assigned academic advisors and thesis or dissertation mentors by their departments. There are occasions when it is desirable for students to switch to a new advisor or mentor.
+
+These changes are considered to be a standard practice so long as they conform to the policies and procedures of the department. Students may consult with the graduate dean if questions arise about advisor or mentor assignments.
+
+The faculty director of the graduate certificate program in most cases serves as the advisor of enrolled students.
+
+### Non-Discrimination Statement
+
+Tufts is enriched by the many experiences and perspectives each individual member brings to our community. Tufts does not discriminate in admissions, employment, or in any of its educational programs or activities on the basis of race (including traits historically associated with race, including, but not limited to, hair texture, hair type, hair length and protective hairstyles), color, national or ethnic origin, ancestry, age, religion, disability, sex or gender (including pregnancy, sexual harassment and other sexual misconduct including acts of sexual violence such as rape, sexual assault, stalking, sexual exploitation, sexual exploitation and coercion, relationship/intimate partner violence and domestic violence), gender identity and/or expression (including a transgender identity), sexual orientation, military or veteran status, genetic information, the intersection of these identities or any other characteristic protected under
+
+## PAGE 23
+### Registration
+#### Continuous Enrollment Policy
+
+Graduate students must be enrolled (registered), or on an approved leave of absence, for every academic-year semester between matriculation and graduation. Graduate students may only register for courses that count toward their degree program. Students should register during the early registration periods in November and April. The university reserves the right to withhold registration for any student having unmet Academic Integrity Training (AIT), financial, or health services obligations. Students who fail to register by the end of the first week of classes, or the add deadline for the term, whichever is first, will be administratively withdrawn and subject to a $350 reinstatement fee. International students must maintain proper enrollment status per their visa requirements.
+
+### Degree-only Status
+
+If a student has registered for all required courses, including thesis research (295, 296) or dissertation research (297, 298), the student must register for a course designation that indicates that only thesis, project, master's exhibition, or dissertation-related work, whether part-time or full-time, is being pursued.
+
+Master's candidates must register for course 401-PT (part-time) or 402-FT (full-time) in their department and doctoral candidates must register for course 501-PT (part-time) or 502-FT (full-time) in their department. Graduate students may declare full-time status of thirty-five hours per week (402 or 502) with their advisor's concurrence.
+
+### Enrollment Status
+
+Graduate students are responsible for maintaining enrollment status at Tufts.* Federal regulations require students to be enrolled (registered) full-time or half-time in order to receive and/or defer student loans. Tufts provides information regarding student enrollment status to lenders via the National Student Loan Clearinghouse and is required by law to return funds for students who do not maintain a minimum of half-time enrollment status. Enrollment status is either full-time, half-time, or part-time as defined below:
+
+**Full-time:** Nine (9) or more course credits, six (6) course credits and a teaching or research assistantship (must also register for 405-TA or 406-RA), or registration as a full-time continuing student (402/502) working on a thesis, dissertation, project, or internship. Students admitted full-time who register for credits totaling less than full-time will not achieve a full-time status.
+
+## PAGE 24
+
+**Half-time:** Five (5) course credits; Two (2) course credits plus a teaching or research assistantship.
+
+**Part-time:** One (1) to Four (4) course credits, or registration as a part-time continuing student (401/501).
+
+*In most situations, international students must maintain full-time status. In certain circumstances, international students may be authorized for a reduced course load, allowing them to drop below full-time: Contact the International Center with questions or concerns about Enrollment Status.
+
+### Cross-Registration and Graduate School Consortium
+
+During the academic year, full-time graduate students may take one course per semester through cross-registration agreements with Boston College, Boston University, and Brandeis University. A full-time graduate student at Tufts University may also enroll for two graduate courses during any semester at the Fletcher School of Law and Diplomacy, the Friedman School of Nutrition Science and Policy, and the Graduate School of Biomedical Sciences. Cross-registration is possible on a space available basis. Students who wish to cross-register should consult with the instructor of the course, and should expect to satisfy any prerequisites typically required for enrollment. Cross-registration is not permitted in any summer school. Courses satisfactorily completed (B– or better) at one of the three consortium schools (Boston College, Boston University, and Brandeis University) automatically appear on the student's Tufts transcript and may be counted toward degree requirements.
+
+Tufts students who wish to cross register at a consortium school should first consult with their academic advisor and/or the department's graduate studies committee representative before completing the online Cross-Registration Petition Form through SIS. The host institution reserves the right to terminate the student's participation at that institution at any time.
+
+Cross-registration is also offered through the Consortium for Graduate Studies in Gender, Culture, Women, and Sexuality at MIT. This consortium relationship is limited to the specific area of Women, Gender, and Sexuality Studies. For information about course offerings and application materials, visit the GCWS website.
+
+### Audits
+
+Graduate students may arrange with an instructor to sit in on a course, but this course will not appear on the academic record.
+
+## PAGE 27
+### Expenses and Payment Options
+#### Tuition
+
+While most tuition rate changes are effective in the fall term each academic year, The Trustees of Tufts College reserve the right to change the tuition or to establish additional fees or charges for special features or services whenever such action is deemed advisable. We will provide the earliest possible notification of changes in tuition and other fees.
+
+For online students who receive a 10% discount, the discount only applies to the online program. Although the online students can take in-person courses, they will not receive the discount for those courses.
+
+Students who are billed per credit should be aware of how the tuition refund calendars will impact their bill; students should review the refund policy on the bursar's website for details: https://students.tufts.edu/financial-services/billing/tuition-refund-policy/.
+
+### Degree Programs
+
+The tuition for engineering master's programs is charged per-credit. Students who enroll in additional semesters to complete a thesis, project, or capstone will be charged continuation tuition each semester.
+
+Doctoral tuition for both full-time and part-time Ph.D. candidates is charged for nine semesters unless the student enters the program with an appropriate master's degree, in which case tuition is charged for six semesters. Students will be charged continuation tuition each semester after the regular tuition requirements for the program have been satisfied. For more information, please refer to https://asegrad.tufts.edu/tuition-aid/tuition-and-fees.
+
+### Certificate and Post-Bac Certificate Programs
+
+Certificate and post-bac certificate students are charged per-credit. Students in the post-bac certificate program pay a reduced rate for their undergraduate level courses.
+
+### Health Insurance and Health and Wellness Fee
+
+**Student Health Insurance:**
+Admitted full-time graduate students, international, and admitted part-time graduate students enrolled in seven (7) credits or more of coursework in a fall or spring semester in Massachusetts are required by law to have health insurance: https://malegisla-
+
+## PAGE 39
+### Graduate Co-op Program
+
+Tufts University's School of Engineering (SOE) offers a Cooperative (Co-op) Education Program for full time MS students. The objective of this program is to offer Tufts SOE MS students opportunities to pursue real-world work experience, form professional relationships, and to enhance their resumes. The program's main goal is to introduce students to professional experiences that will assist them in their career path. This program helps students get a feel for a company's culture and work environment, and learn to interact with other colleagues in their field.
+
+#### Benefits of a Co-Op Program
+
+- Provide students with the skills and frameworks to clarify short- and long-term personal, educational, and career goals and to consistently make prudent, informed decisions throughout one's career.
+- Help students explore and experience professional employment in areas related to the student's academic program as well as professional interests and personal aspirations.
+- Guide students through the development of a modern personal brand including brand statements, marketing documents curation, and effective network cultivation and strategic management.
+- Understanding, practicing, and employing best practices around key career competencies in the modern world of work including, but not limited to: interviews, negotiations, workplace professionalism and etiquette, communication with leaders, managers, and colleagues.
+- Receive direct and dedicated support from the Assistant Director, Graduate Co-op Advisor and the Tufts Career Center for the entirety of your co-op preparation and employment experience.
+
+#### How Co-Op Works
+
+Tufts Graduate School of Engineering's co-op program offers students a unique opportunity to integrate their academic knowledge with industry and subject matter expertise to help employers address and solve practical, real-world problems. Participating students may gain up to eight months of full-time paid work experience that is valuable for building and showcasing distinct, technical, professional, and social competencies employers covet and very often offer co-op alumni with a competitive edge for post-graduation employment opportunities.
+
+Eligible MS students may complete one co-op over the course of their degree program. Students must apply to join the co-op program at the end of their first semester as an enrolled master's student. After starting their MS program and completing 18 credits, exclusive of seminar credits, that count toward their degree, students may then look for co-op opportunities.
+
+## PAGE 40
+
+The Graduate Co-op Program follows a cohort model, where admitted students are grouped based on the semester they intend to begin their co-op positions. During the preceding semester, students will engage in intentional, independent, and cohort-shared experiences across all aspects of the Tufts Career Center Career Planning and Management Process, including self-assessment and discovery, strategic opportunity identification and targeting, custom marketing document creation and co-op search, relationship building practice and management, and modern interview and negotiation practice and preparation. Consistent participation in curated professional development offerings, collaborative and supportive cohort working groups, and regularly scheduled meetings with the Graduate Co-op Advisor is expected, and often mandatory. The Career Center and the SOE Graduate School are sincerely invested in our admitted co-op program students' development and execution plan and have built a system of impactful tools, resources, coaching expertise, and insights that are fundamental to not only securing a co-op but also managing all aspects of a career.
+
+In preparation for a co-op search, students must participate in the required career development sessions offered by Tufts Career Center, which provide valuable skills needed to be successful in securing a co-op position that simultaneously aligns with individual needs and preference while also adhering to Tufts standards and ethical guidelines and employer expectation.
+
+As part of the co-op program, eligible MS students are only allowed to accept one position during their time in the program. There is no guarantee that students who enter the co-op program will secure employment.
+
+#### Cost Of Co-Op Program
+
 There is no additional charge for a student to be enrolled in the co-op program.
 
-Graduate Co-op Program Eligibility 
+#### Graduate Co-op Program Eligibility
+
 Prerequisites that the student must meet to be considered for the program:
-1. Must be enrolled in a program that offers the Graduate Co-op Program (see the
-list of departments below). This program is not available to part time programs,
-online programs, certificate programs, Ph.D. programs, or Post Baccalaureate
-programs. Students enrolled in a combined Post-Bacc/MS program or Fifth-Year
-MS programs are eligible to participate as long as they meet program requirements.
-2. Must complete at least 2 full-time semesters as a fully-matriculated and enrolled
-Master's student. Students must complete a minimum of 9 credits in their first
-semester to be considered for the program and must complete at least 18 credits
-towards their MS programs before beginning their co-op. Newly matriculated stu-
+1. Must be enrolled in a program that offers the Graduate Co-op Program (see the list of departments below). This program is not available to part time programs, online programs, certificate programs, Ph.D. programs, or Post Baccalaureate programs. Students enrolled in a combined Post-Bacc/MS program or Fifth-Year MS programs are eligible to participate as long as they meet program requirements.
+2. Must complete at least 2 full-time semesters as a fully-matriculated and enrolled Master's student. Students must complete a minimum of 9 credits in their first semester to be considered for the program and must complete at least 18 credits towards their MS programs before beginning their co-op. Newly matriculated stu-
 
-page 41, content:
-dents can only apply for the program and attend the required info session before
-the end of their first semester as a full-time student. 
-a. Post-Bacc/MS students: No bachelor-level classes for at least 2 full-time semesters before beginning their co-op.
-a. Fifth-Year MS students: Must be fully matriculated with a completed BS degree.
-3. Must be in good academic standing (See requirements below), enrolled full-time,
-have had no previous extensions of time or reduced course load accommodations, and have not enrolled in any undergraduate course as an MS student. 
-4. Must have at least one semester remaining in their MS programs after co-op
-opportunity . 
+## PAGE 41
+dents can only apply for the program and attend the required info session before the end of their first semester as a full-time student.
+   a. Post-Bacc/MS students: No bachelor-level classes for at least 2 full-time semesters before beginning their co-op.
+   a. Fifth-Year MS students: Must be fully matriculated with a completed BS degree.
+3. Must be in good academic standing (See requirements below), enrolled full-time, have had no previous extensions of time or reduced course load accommodations, and have not enrolled in any undergraduate course as an MS student.
+4. Must have at least one semester remaining in their MS programs after co-op opportunity.
 
-Academics and the Co-op Program
+#### Academics and the Co-op Program
+
 Students must meet all requirements of the SOE Graduate Handbook and any departmental specific requirements to be eligible and to participate in the program. All students must meet the following criteria:
-1. Good Academic Standing requirement: Students need to be in good academic
-standing, enrolled full-time, have had no previous extensions of time or reduced course load accommodations, and have not enrolled in any undergraduate courses as an MS student. Students must be in good academic standing at all
-times. Failure to remain in good academic standing at all times will result in a
-student being removed from the co-op program and the MS time to degree will be
-reduced to the non-co-op time to degree limits for MS programs.
-2. Course completion requirement: Fully matriculated students must complete two
-full-time semesters before working at a co-op, with at least 9 credits total completed in their first semester and at least 18 total credits in the second semester. 
-Courses must be taken at Tufts while matriculated and enrolled as an SOE graduate student. The SOE will be checking to see if an applicant is on track for meeting these requirements in the application process. 
-3. The student's academic record must demonstrate a high level of success,
-including:
-a. No missing grades.
-b. No incomplete grades (grade of I).
-c. No grade of W in the most recent spring/fall semester completed or in progress.
-d. No more than one repeated/substituted course.
-e. No academic probation or disciplinary issues.
-f. No semesters on a reduced course load or degree extensions of time.
+1. Good Academic Standing requirement: Students need to be in good academic standing, enrolled full-time, have had no previous extensions of time or reduced course load accommodations, and have not enrolled in any undergraduate courses as an MS student. Students must be in good academic standing at all times. Failure to remain in good academic standing at all times will result in a student being removed from the co-op program and the MS time to degree will be reduced to the non-co-op time to degree limits for MS programs.
+2. Course completion requirement: Fully matriculated students must complete two full-time semesters before working at a co-op, with at least 9 credits total completed in their first semester and at least 18 total credits in the second semester. Courses must be taken at Tufts while matriculated and enrolled as an SOE graduate student. The SOE will be checking to see if an applicant is on track for meeting these requirements in the application process.
+3. The student's academic record must demonstrate a high level of success, including:
+   a. No missing grades.
+   b. No incomplete grades (grade of I).
+   c. No grade of W in the most recent spring/fall semester completed or in progress.
+   d. No more than one repeated/substituted course.
+   e. No academic probation or disciplinary issues.
+   f. No semesters on a reduced course load or degree extensions of time.
 
-page 42, content:
-g. Satisfied language assessment and completion of the English for Technical
-Professionals online course (for international students who were required to
-submit TOEFL/language scores in their application).
-4. Students searching for a co-op position during a fall or spring semester must
-meet the semester-hour requirements.
-5. All students must have their academic advisors sign off on the Co-op Agreement
-form to ensure a return plan that outlines a feasible pathway for completing the
-remaining requirements within the degree time limits. The sequence of courses
-in the program should be considered in addition to possible alternatives to required courses, should a required course not be offered during the semester
-when the student returns from co-op. A student's degree program cannot be
-extended because a required course is not offered during the semester that they
-return. 
-6. After the co-op, students must return to complete one full semester at Tufts before graduating. There must be degree requirements remaining in their program
-after the co-op is completed. Students cannot go on a co-op if all degree requirements are already satisfied.
+## PAGE 42
+   g. Satisfied language assessment and completion of the English for Technical Professionals online course (for international students who were required to submit TOEFL/language scores in their application).
+4. Students searching for a co-op position during a fall or spring semester must meet the semester-hour requirements.
+5. All students must have their academic advisors sign off on the Co-op Agreement form to ensure a return plan that outlines a feasible pathway for completing the remaining requirements within the degree time limits. The sequence of courses in the program should be considered in addition to possible alternatives to required courses, should a required course not be offered during the semester when the student returns from co-op. A student's degree program cannot be extended because a required course is not offered during the semester that they return.
+6. After the co-op, students must return to complete one full semester at Tufts before graduating. There must be degree requirements remaining in their program after the co-op is completed. Students cannot go on a co-op if all degree requirements are already satisfied.
 
-Departments Participating in Co-Op Program
-Students enrolled in MS degree programs offered by the following departments are
-eligible to participate in the co-op program for graduate students. Part-time, online
-certificate, post-bacc, and Ph.D. students students do not qualify for the co-op.
-• Biomedical Engineering
-• Chemical and Biological Engineering
-• Civil and Environmental Engineering
-• Computer Science
-• Electrical and Computer Engineering
-• Mechanical Engineering
-• Tufts Gordon Institute
+#### Departments Participating in Co-Op Program
 
-Questions and Contact Information
+Students enrolled in MS degree programs offered by the following departments are eligible to participate in the co-op program for graduate students. Part-time, online certificate, post-bacc, and Ph.D. students students do not qualify for the co-op.
+- Biomedical Engineering
+- Chemical and Biological Engineering
+- Civil and Environmental Engineering
+- Computer Science
+- Electrical and Computer Engineering
+- Mechanical Engineering
+- Tufts Gordon Institute
+
+#### Questions and Contact Information
+
 Graduate Admissions for new applicants.
 Career Center for enrolled MS students.
 
-Co-op Application Process
-To be considered for enrollment in the Graduate Co-op Program, students must:
-1. Attend a REQUIRED Graduate Co-op Information Session. Info sessions are
-typically held at the end of the semester and are hosted by the Career Center and
-partnership with SOE. Eligible students will receive an announcement to their
+#### Co-op Application Process
 
-page 43, content:
-Tufts email on dates and details on the info session and can register for the event
-on Handshake. Attendance is tracked and monitored so the student can receive
-important information.
-2. Complete the Graduate Co-op Program Application. The applications submission platform opens the day of the information session and only those with verified attendance will receive access to the application link. Interested students
-must apply before the application deadline which is consistently announced
-throughout the semester in multiple co-op promotional email messages to the
-Graduate SOE community as well as in this information session. Please note: Applications will not be accepted after any established submission deadline.
+To be considered for enrollment in the Graduate Co-op Program, students must:
+1. Attend a REQUIRED Graduate Co-op Information Session. Info sessions are typically held at the end of the semester and are hosted by the Career Center and partnership with SOE. Eligible students will receive an announcement to their
+
+## PAGE 43
+Tufts email on dates and details on the info session and can register for the event on Handshake. Attendance is tracked and monitored so the student can receive important information.
+2. Complete the Graduate Co-op Program Application. The applications submission platform opens the day of the information session and only those with verified attendance will receive access to the application link. Interested students must apply before the application deadline which is consistently announced throughout the semester in multiple co-op promotional email messages to the Graduate SOE community as well as in this information session. Please note: Applications will not be accepted after any established submission deadline.
 3. Important deadlines, dates, and announcements can be found on the Career Center's Graduate Co-op Program Page.
-4. After the student has completed the steps above, the Career Center will review
-applications in partnership with SOE to determine eligibility for the program. 
-Students will receive an email to their Tufts email regarding their acceptance or
-declination from the program. 
+4. After the student has completed the steps above, the Career Center will review applications in partnership with SOE to determine eligibility for the program. Students will receive an email to their Tufts email regarding their acceptance or declination from the program.
 Questions on academic planning should be directed to SOE.
 
-Participating in the Graduate Co-op Program
-Once a student has received their acceptance into the program, the student then has
-received authorization to begin searching for co-op jobs, participating in interviews,
-and considering offers. 
+#### Participating in the Graduate Co-op Program
 
-The Graduate Co-op Program is a cohort-style program which means that students
-will be accepted into a cohort based on the semester they plan to work at their co-ops. 
-They will then use the semester prior to job search and attend the required career
-development sessions. For example, if a student is accepted into the Spring 2025 co-op
-cohort, they will be job searching and participating in the program in Fall 2024 to plan
-on working at a job in Spring 2025 through the summer. 
+Once a student has received their acceptance into the program, the student then has received authorization to begin searching for co-op jobs, participating in interviews, and considering offers.
 
-Students will receive details on the required workshops, events, and sessions from the
-Career Center. Accepted students must:
-1. Complete an initial meeting with the Graduate Co-op Advisor in the Career Center. Students will review program requirements, sign the Co-op Agreement Form
-with an academic advisor's signature, and strategize on their co-op search. 
-2. The Co-op Agreement Form outlines basic expectations and rules students must
-follow for a successful experience in the Graduate Co-op Program. If a student
-fails to meet the program's participation expectations, it may result in removal
-from the program. 
+The Graduate Co-op Program is a cohort-style program which means that students will be accepted into a cohort based on the semester they plan to work at their co-ops. They will then use the semester prior to job search and attend the required career development sessions. For example, if a student is accepted into the Spring 2025 co-op cohort, they will be job searching and participating in the program in Fall 2024 to plan on working at a job in Spring 2025 through the summer.
+
+Students will receive details on the required workshops, events, and sessions from the Career Center. Accepted students must:
+1. Complete an initial meeting with the Graduate Co-op Advisor in the Career Center. Students will review program requirements, sign the Co-op Agreement Form with an academic advisor's signature, and strategize on their co-op search.
+2. The Co-op Agreement Form outlines basic expectations and rules students must follow for a successful experience in the Graduate Co-op Program. If a student fails to meet the program's participation expectations, it may result in removal from the program.
 3. Attend the required workshops, events, and sessions.
 
-page 44, content:
-4. It may take several months to secure a co-op. Students should utilize the Career
-Center's resources, meet with their Graduate Co-op Advisor regularly, and be consistently proactive in their job search. 
-5. Students are required to attend regular and routine meetings with the Graduate
-Co-op Advisor. This person will be your career coach, advisor, advocate, and mentor for all aspects of the co-op planning and preparation process from the first
-personal introduction through the completion of the student's co-op experience.
+## PAGE 44
+4. It may take several months to secure a co-op. Students should utilize the Career Center's resources, meet with their Graduate Co-op Advisor regularly, and be consistently proactive in their job search.
+5. Students are required to attend regular and routine meetings with the Graduate Co-op Advisor. This person will be your career coach, advisor, advocate, and mentor for all aspects of the co-op planning and preparation process from the first personal introduction through the completion of the student's co-op experience.
 
-Eligible Co-op Roles
-Students are responsible for searching for and finding their own co-ops. Tufts does
-not place students into co-ops. Students can find co-ops in various avenues including
-but not limited to: Handshake, various job board websites (LinkedIn, Indeed, Glassdoor, etc.), or through networking. An eligible co-op must meet the following criteria:
+#### Eligible Co-op Roles
+
+Students are responsible for searching for and finding their own co-ops. Tufts does not place students into co-ops. Students can find co-ops in various avenues including but not limited to: Handshake, various job board websites (LinkedIn, Indeed, Glassdoor, etc.), or through networking. An eligible co-op must meet the following criteria:
 1. Must be full-time hours (35+ hours per week).
-2. Related to the MS student's area of studies and advanced to challenge a graduate
-student.
-3. Work dates, at minimum, span the entirety of one academic semester and may
-also include a portion of the summer, given that most co-op opportunities are
-typically six months long. Co-op appointments must include summer/fall semesters or spring/summer semesters. No fall/spring (full academic year) co-ops are
-allowed at this time.
-4. Must be paid. Co-ops are paid positions and compensation should be adjusted
-based on industry standard, employer salary ranges, and location. Positions are
-typically paid via an hourly wage, biweekly sum, or monthly sum. Some co-op
-compensation packages may also include relocation funds or funds to support
-housing.
-5. Cannot be related to conducting academic research, writing a thesis, grading, or
-teaching. No positions at Tufts University will be considered for the co-op program.
+2. Related to the MS student's area of studies and advanced to challenge a graduate student.
+3. Work dates, at minimum, span the entirety of one academic semester and may also include a portion of the summer, given that most co-op opportunities are typically six months long. Co-op appointments must include summer/fall semesters or spring/summer semesters. No fall/spring (full academic year) co-ops are allowed at this time.
+4. Must be paid. Co-ops are paid positions and compensation should be adjusted based on industry standard, employer salary ranges, and location. Positions are typically paid via an hourly wage, biweekly sum, or monthly sum. Some co-op compensation packages may also include relocation funds or funds to support housing.
+5. Cannot be related to conducting academic research, writing a thesis, grading, or teaching. No positions at Tufts University will be considered for the co-op program.
 6. Students may only participate in one co-op opportunity during their master's program and the experience must be with a single company.
 
-If one or more of the criteria above is not met, the co-op role will not be approved. For
-questions on eligible co-ops, please contact the Graduate Co-op Advisor.
+If one or more of the criteria above is not met, the co-op role will not be approved. For questions on eligible co-ops, please contact the Graduate Co-op Advisor.
 
-Accepting and Working at a Co-op
-To accept and start working at a co-op, a student must be accepted and enrolled in the
-Graduate Co-op Program and be enrolled in the appropriate cohort for the specific
-term they are planning to work. Once a student has accepted a co-op offer they must:
+#### Accepting and Working at a Co-op
 
-page 45, content:
-1. Report their co-op on Handshake through Experiences. The Graduate Co-op
-Advisor will review the co-op to make sure it meets co-op eligibility and an additional review is completed by the student's co-op supervisor. Students will need
-an official offer letter from a company with:
-• The start date and end date
-• Full-time employment status (35+ hours per week)
-• Salary information
-• Job description
-• Supervisor information
-• Location of the co-op
+To accept and start working at a co-op, a student must be accepted and enrolled in the Graduate Co-op Program and be enrolled in the appropriate cohort for the specific term they are planning to work. Once a student has accepted a co-op offer they must:
+
+## PAGE 45
+1. Report their co-op on Handshake through Experiences. The Graduate Co-op Advisor will review the co-op to make sure it meets co-op eligibility and an additional review is completed by the student's co-op supervisor. Students will need an official offer letter from a company with:
+   - The start date and end date
+   - Full-time employment status (35+ hours per week)
+   - Salary information
+   - Job description
+   - Supervisor information
+   - Location of the co-op
 
 Co-op appointments must include summer/fall semesters or spring/summer semesters. No fall/spring (full academic year) co-ops are allowed at this time.
 
-2. Once a student has an approved co-op on Handshake, they will then receive permission to register for the Graduate Co-op Course from the Graduate Co-op Advisor. Students must register for the Graduate Co-op Course for the semester they
-will be working in the co-op. This is a zero credit, no cost course that is required
-for the co-op program. This provides an accommodation for the student to maintain full-time status and does not affect loan repayment, financial aid, or health
-care. Only students enrolled in the program and that have approved co-ops will
-be granted permission to register.
-3. The student must be in good academic standing before embarking on a co-op job,
-failure to do so may result in being removed from the co-op program. 
-4. The student must return to campus for at least one semester after the co-op work
-experience. 
-5. Co-op is considered full time employment, therefore students should not hold
-any other jobs or enroll in classes during their co-op.
+2. Once a student has an approved co-op on Handshake, they will then receive permission to register for the Graduate Co-op Course from the Graduate Co-op Advisor. Students must register for the Graduate Co-op Course for the semester they will be working in the co-op. This is a zero credit, no cost course that is required for the co-op program. This provides an accommodation for the student to maintain full-time status and does not affect loan repayment, financial aid, or health care. Only students enrolled in the program and that have approved co-ops will be granted permission to register.
+3. The student must be in good academic standing before embarking on a co-op job, failure to do so may result in being removed from the co-op program.
+4. The student must return to campus for at least one semester after the co-op work experience.
+5. Co-op is considered full time employment, therefore students should not hold any other jobs or enroll in classes during their co-op.
 6. Students utilizing Tufts Housing must continue to fulfill all lease obligations.
 7. Students must continue to pay all Tufts fees, health fees, and health insurance.
 
-Courses During Co-op
-Aside from the SOE Graduate Co-op Course (a 0-credit course), students may not take
-any course during their co-op experience without special approval from the Graduate
-Co-op Advisor and their employer. Approval will only be granted for special circumstances, such as required virtual department seminars. 
+#### Courses During Co-op
 
-Changing Co-op Semesters
-Students who do not secure a co-op placement during their first co-op search or need
-to change when they would like to go out on co-op may request to extend their search
-(not their degree program) by one semester by completing a "Request to Extend Co-op
-Search" form which the Graduate Co-op Advisor can provide upon request.
+Aside from the SOE Graduate Co-op Course (a 0-credit course), students may not take any course during their co-op experience without special approval from the Graduate Co-op Advisor and their employer. Approval will only be granted for special circumstances, such as required virtual department seminars.
 
-page 46, content:
+#### Changing Co-op Semesters
+
+Students who do not secure a co-op placement during their first co-op search or need to change when they would like to go out on co-op may request to extend their search (not their degree program) by one semester by completing a "Request to Extend Co-op Search" form which the Graduate Co-op Advisor can provide upon request.
+
 • All eligibility requirements still apply, and only one search extension can be requested.
-• Students are responsible for communicating with the Graduate Co-op Advisor to
-learn more about this process and meet all deadlines, including the deadline for
-when to submit the form.
-• The student will need to complete the form, have their academic advisor review to
-sign the form, then submit it to the Graduate Co-op Advisor for final approval. 
-• All requests are evaluated in detail to ensure that the student meets eligibility requirements. 
-• If the request is approved, the Graduate Co-op Advisor will respond to the student to
-their Tufts email on which semester they have been approved to go on co-op.
+• Students are responsible for communicating with the Graduate Co-op Advisor to learn more about this process and meet all deadlines, including the deadline for when to submit the form.
+• The student will need to complete the form, have their academic advisor review to sign the form, then submit it to the Graduate Co-op Advisor for final approval.
+• All requests are evaluated in detail to ensure that the student meets eligibility requirements.
+• If the request is approved, the Graduate Co-op Advisor will respond to the student to their Tufts email on which semester they have been approved to go on co-op.
 
-Evaluation of Co-op
+#### Evaluation of Co-op
+
 To receive a passing grade ("S") for the Graduate Co-op Course, students must:
 1. Fulfill all work obligations as outlined on their offer letter and Experiences submission.
-2. Work during the full duration of the co-op with no major breaks (for example,
-taking a month off).
+2. Work during the full duration of the co-op with no major breaks (for example, taking a month off).
 3. Complete the required Self Evaluation on Handshake.
 4. Supervisor must complete employer evaluation on Handshake.
 
-Students who are dismissed from or resign from a co-op job for circumstances under
-their control will receive a U (unsatisfactory) grade for co-op work experience and
-will be ineligible for future co-op experiences. Failure of a student to succeed in their
-co-op will not affect their academic standing, but it may shorten their program completion time limit. 
+Students who are dismissed from or resign from a co-op job for circumstances under their control will receive a U (unsatisfactory) grade for co-op work experience and will be ineligible for future co-op experiences. Failure of a student to succeed in their co-op will not affect their academic standing, but it may shorten their program completion time limit.
 
-Graduate Co-op Program and International Students
-International students are welcome to apply and participate in the Graduate Co-op
-Program. International students must follow all the guidelines outlined and will need
-to also complete the following steps:
-1. Meet with the I-Center once accepted into the co-op program to review visa status
-and answer questions about work authorization. 
-2. Once an international student has accepted a paid co-op offer, they must apply
-for Curricular Practical Training (CPT).
-• What International Students need to apply for CPT under the Graduate Co-op
-Program:
-a) The official offer letter from the company
-b) A fully approved Experiences submission on Handshake
+#### Graduate Co-op Program and International Students
 
-page 18, content:
-Reinstatement Policy
-If a graduate student has not registered at Tufts for one or more semesters, and later
-decides to resume work in the degree program, the student must be reinstated by the
-graduate school. In order to be reinstated, a student must complete the Petition for
-Reinstatement form and submit it along with all required supporting documentation
-to the dean's office for consideration. A $350 reinstatement fee will be charged to all
-graduate students who re-enroll in the graduate program.
+International students are welcome to apply and participate in the Graduate Co-op Program. International students must follow all the guidelines outlined and will need to also complete the following steps:
+1. Meet with the I-Center once accepted into the co-op program to review visa status and answer questions about work authorization.
+2. Once an international student has accepted a paid co-op offer, they must apply for Curricular Practical Training (CPT).
+• What International Students need to apply for CPT under the Graduate Co-op Program:
+   a) The official offer letter from the company
+   b) A fully approved Experiences submission on Handshake
+   c) Registration for the Graduate Co-op Course (can only be done once a fully approved Experiences submission on Handshake is completed)
+   - Please allow two weeks for the I-Center to process applications
+3. International students will need to apply for a Social Security Number (SSN) if they are working in the US.
 
-International students must contact the International Center prior to requesting a
-reinstatement in order to properly plan any visa needs if approved.
+#### Additional Program Guidelines
 
-Reinstatement will be a decision by the department and its graduate committee and
-will have to be approved by the graduate dean.
-
-Transfer of Credit
-Students may apply for transfer credit for graduate-level courses taken at Tufts or at
-other institutions. (Graduate certificate students may not transfer in courses taken
-outside of Tufts.* Courses taken through the Tufts Gordon Institute that are beyond the
-degree requirements cannot be transferred to another Tufts engineering program). It
-is recommended that students apply for transfer credit at the beginning of their graduate program. Transfer of credit is requested and processed in SIS.
-
-A maximum of two courses may be transferred and used to fulfill requirements for a
-graduate degree, subject to the following conditions. Credits transferred must:
-• Carry the grade of B- or better (courses taken as pass/fail cannot be transferred)
-• Not have been counted toward another degree**
-• Have been earned in graduate-level courses at a properly accredited institution
-• Have been taken within the past five years
-
-These are minimum requirements for credits transferred. Departments have the right
-to impose additional criteria.
-
-*Students previously enrolled in a Tufts certificate program may petition to transfer all credits required for the certificate into a Tufts graduate degree program. Degree candidates cannot earn more than one certificate in conjunction with a graduate degree. Some departments 
-may allow certificates to be earned concurrently with the degree program. See your departmental graduate handbook for your program's requirements and policies. Students in eligible programs must formally apply for a certificate program, and be admitted at least two 
-semesters before completing their primary graduate degree program, in order to be eligible to 
-receive a concurrent certificate.
-**Courses taken in the duration of a degree program are eligible for transfer credit only if a 
-transcript notation or documentation from the institution confirms the course was in excess
-
-page 19, content:
-of degree requirements, and withheld from calculation in overall earned credit hours, GPA, 
-and honors.
-
-In all cases, the transfer of courses must be approved by the department. Approved courses 
-that meet all eligibility requirements will be posted on the graduate transcript.
-
-Doctoral candidates may not transfer courses counted toward a master's degree to
-their doctoral program. However, individual departments and programs may, at their
-discretion, accept these courses in order to reduce the number of courses required
-for the doctoral degree. No student will be allowed to graduate without formal department and program approval of the credits earned elsewhere. It is the student's
-responsibility to obtain approval of the credits from the department or program prior
-to submitting the application for graduation.
-
-Transfer of Credit from Tufts University College
-Engineering graduate courses taken through the Tufts University College may only be
-transferred into a degree or certificate program with the permission of the graduate
-dean.
-
-Fifth-Year Master's Program Double-Counting Policy—
-School of Engineering
-School of Engineering seniors are eligible to apply to the Fifth-Year Master's Degree
-Program. Juniors are not eligible to apply, and must wait until their senior year to
-submit an application. Fifth-Year MS program students in the School of Engineering
-who matriculate into the MS program after February 1, 2023, may transfer from their
-undergraduate studies two eligible reserved graduate-level courses towards their MS
-degree and double-count two courses towards both the BS and MS degrees, for a total 
-of four courses. Only 100-level courses that contribute toward the graduate program
-requirements are eligible, and the courses must be reserved before matriculating
-into the graduate program. Eligible courses cross-listed between departments in the
-School of Engineering may be double-counted. Courses cross-listed across departments in the School of Engineering and the Graduate School of Arts and Sciences will
-not be double-counted towards the School of Engineering master's degree requirements. To apply courses toward both degrees and/or reserve courses for graduate
-credit, a completed SOE Fifth-Year Master's Course Distribution Form must be submitted with the undergraduate graduation packet. Students must complete and earn their
-undergraduate degree before matriculating into the MS program. The degrees cannot
-be completed concurrently. Courses cannot be retroactively reserved or shared after
-the undergraduate degree is conferred. Students may enroll full-time or part-time
-while participating in the master's degree portion of the combined degree program,
-
-page 23, content:
-Registration
-Continuous Enrollment Policy
-Graduate students must be enrolled (registered), or on an approved leave of absence,
-for every academic-year semester between matriculation and graduation. Graduate
-students may only register for courses that count toward their degree program. Students should register during the early registration periods in November and April. 
-The university reserves the right to withhold registration for any student having
-unmet Academic Integrity Training (AIT), financial, or health services obligations. 
-Students who fail to register by the end of the first week of classes, or the add deadline for the term, whichever is first, will be administratively withdrawn and subject
-to a $350 reinstatement fee. International students must maintain proper enrollment
-status per their visa requirements.
-
-Degree-only Status
-If a student has registered for all required courses, including thesis research (295, 296)
-or dissertation research (297, 298), the student must register for a course designation
-that indicates that only thesis, project, master's exhibition, or dissertation-related
-work, whether part-time or full-time, is being pursued.
-
-Master's candidates must register for course 401-PT (part-time) or 402-FT (full-time) in
-their department and doctoral candidates must register for course 501-PT (part-time)
-or 502-FT (full-time) in their department. Graduate students may declare full-time status of thirty-five hours per week (402 or 502) with their advisor's concurrence.
-
-Enrollment Status
-Graduate students are responsible for maintaining enrollment status at Tufts.* Federal
-regulations require students to be enrolled (registered) full-time or half-time in order
-to receive and/or defer student loans. Tufts provides information regarding student
-enrollment status to lenders via the National Student Loan Clearinghouse and is required by law to return funds for students who do not maintain a minimum of halftime enrollment status. Enrollment status is either full-time, half-time, or part-time as
-defined below:
-
-Full-time: Nine (9) or more course credits, six (6) course credits and a teaching or
-research assistantship (must also register for 405-TA or 406-RA), or registration as a
-full-time continuing student (402/502) working on a thesis, dissertation, project, or
-internship. Students admitted full-time who register for credits totaling less than fulltime will not achieve a full-time status.
-
-page 2, content:
-Academic Calendar–Fall Term 2024
-26-August	Monday	Registration reopens for all AS&E students at 12 a.m. 
-29-August	Thursday	Undergraduate New Student Orientation begins;
-Matriculation
-29-August	Thursday	International Student Orientation
-2-September	Monday	Labor Day (University Holiday) No Classes
-3-September	Tuesday	Classes Begin
-4 September	Wednesday	TA/RA Orientation (SOE)
-6 September	Friday	Graduate Student Orientation (SOE)
-10-September	Tuesday	Last day for AS&E students to ADD classes
-8-October	Tuesday	Last day for AS&E students (except First-Year Undergraduate students, first-semester Transfer students, and
-first-semester REAL students) to DROP Full Term courses
-without record of enrollment
-14-October	Monday	Indigenous Peoples' Day (University Holiday)
-No Classes Held
-15-October	Tuesday	Last day for AS&E students to make up incomplete grades
-from Spring 2024
-21-October	Monday	Graduate students in First Session courses only: Last Day
-for Graduate AS&E Students to WITHDRAW from classes
-and receive a Grade of W
-5-November	Tuesday	Presidential Election Day (No classes held)
-11-November	Monday	Veterans' Day (University Holiday) No Classes
-Nov 12	Tuesday	Spring 2025 registration starts for graduate and postbac
-students in SIS
-27-November	Wednesday	No Classes
-28-November	Thursday	Thanksgiving (University Holiday) No Classes
-29-November	Friday	No Classes (University Holiday)
-10-December	Tuesday	Classes end
-10-December	Tuesday	Graduate Students Only: Last Day to WITHDRAW from
-Full Term and Second Session Courses and Receive a
-Grade of W
-11-12-Dec.	Wed-Thur	Reading Period
-
-page 3, content:
-13-December	Friday	Review Boards begin
-13-December	Friday	Final Examinations begin
-20-December	Friday	Final Examinations end
-20-December	Friday	Review Boards end
-25-December	Wednesday	Christmas Day Observed (University Holiday)
-
-Academic Calendar–Spring Term 2025
-1-January	Wednesday	New Year's Day Observed (University Holiday)
-2-January	Thursday	Fall Term Grades Due Online by 9 a.m.
-15-January	Wednesday	Classes Begin
-17-January	Friday	Graduate Student Orientation (SOE)
-20-January	Monday	Martin Luther King Day (University Holiday)
-22-January	Wednesday	SOE Graduate Students students to make up incomplete
-grades from Fall 2024
-15-Feb to 21-April		Graduate students to apply and submit materials for May
-graduation
-17-February	Monday	Presidents' Day Observed (University Holiday) No Classes
-19-February	Wednesday	Last day for AS&E students to DROP courses without record
-of enrollment
-26-February	Wednesday	Last day for AS&E students to make up incomplete grades
-from Fall 2024
-4-March	Tuesday	Graduate students in First Session courses only: Last Day
-for Graduate AS&E Students to WITHDRAW from classes
-and receive a Grade of W
-15-March	Saturday	Spring Recess begins; Classes Suspended
-24-March	Monday	Spring Recess ends; Classes Resume
-9-April	Wednesday	Fall 2025 registration starts for graduate and postbac students in SIS
-21-April	Monday	Patriots' Day observed (University Holiday) No Classes
-28-April	Monday	Classes end
-28-April	Monday	Last Day for Graduate AS&E Students to WITHDRAW from
-Courses and Receive a Grade of W
-29-April	Tuesday	Reading Period; Make-up Day (no classes held)
-
-page 4, content:
-Academic Calendar–Spring Term 2025 (continued)
-30-April	Wednesday	Reading Period
-1-May	Thursday	Reading Period
-2-May	Friday	Review Boards begin/ Final Examinations begin
-9-May	Friday	Final Examinations end
-9-May	Friday	Review Boards end
-12-May	Monday	Senior Week begins
-16-May	Friday	Remaining Grades Due Online by 9 a.m.
-18-May	Sunday	Commencement
-
-Academic Calendar–Summer/Fall Term 2025
-21-May	Monday	First and 12 Week Summer Sessions begin
-26-May	Monday	Memorial Day (University Holiday)
-19-June	Wednesday	Juneteenth observed (University Holiday) No Classes
-4-July	Thursday	Independence Day observed (University Holiday)
-
-Academic Calendar–Links
-Academic Calendar https://students.tufts.edu/registrar/courses-and-calendars/academic-calendar
-Graduation Deadlines and Important Dates: https://students.tufts.edu/registrar/
-make-request/apply-graduation/graduation-information-graduate-students
+- Students may participate in only one co-op experience during their Master's program.
+- Students who participate in any other academic semester internship are not allowed to participate in the co-op program. However, a student who is enrolled in the Graduate Co-op Program can upgrade a summer internship to a co-op as long as it is during their first academic year. The program cannot be changed or extended beyond this. Students need to confirm upgrade through their employer and Tufts within the first 90 days of their internship. If a student wishes to upgrade a summer internship into a co-op, they will need permission from Graduate Co-op Advisor and SOE.
+- A student who participates in a co-op at the Master's level cannot search for a second co-op.
