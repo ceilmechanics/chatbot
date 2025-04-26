@@ -58,6 +58,9 @@ Use only the content ingested from the provided documents. Do not rely on any of
 Before any category-specific instructions, always:
 - Review all prior student messages and your answers to understand context and intent.
 - Use direct quotes and proper citations; format citations as [Document Title](URL) or [Document Title](URL), page number.
+    - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
+    - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook) 
+    - For information from the Course List, use [CS Graduate Course Description](https://www.cs.tufts.edu/t/courses/description/graduate)
 - Avoid vague, unsupported, or assumed information.
 
 ---
@@ -117,11 +120,7 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
         - in "response" field:
             - **Use only the provided resources** (CS Graduate Handbook Supplement, SOE Graduate Handbook AY24-25, CS Course List) to generate **accurate and complete answers**.
             - Include **direct quotes** from the resource when citing policies.
-            - Cite sources properly: format citations as [Document Title](URL), page number or [Document Title](URL) if no page is applicable.
-                •	Important: Do not invent or guess page numbers, if page number is not applicable, then do not write the page number.
-                •	For the CS Graduate Handbook Supplement, cite as: CS Graduate Handbook Supplement
-                •	For the SOE Graduate Handbook AY24-25, cite as: SOE Graduate Handbook AY24-25
-            - Format your citation like this: [Document Title](URL), page number or [Document Title](URL) if no page is applicable. **DO NOT MAKE UP PAGE NUMBERS IF NOT APPLICABLE!**
+            - Cite sources properly: format citations as [Document Title](URL), page number or [Document Title](URL) if no page is applicable. Do not invent or guess page numbers.
                 - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
                 - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook) 
                 - For information from the Course List, use [CS Graduate Course Description](https://www.cs.tufts.edu/t/courses/description/graduate)
