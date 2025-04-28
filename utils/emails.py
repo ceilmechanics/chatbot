@@ -24,7 +24,11 @@ ADVISOR_EMAIL = os.environ.get("ADVISOR_EMAIL")
 logger = logging.getLogger(__name__)
 
 
-def send_notification_email(student_username, student_question, llm_answer, is_initial_escalation):
+def send_notification_email(student_username, student_question, llm_answer, uncertain_areas, is_initial_escalation):
+    if not os.environ.get("email_enabled") or os.environ.get("email_enabled").lower() != "true":
+        logger.info("Email feature disabled")
+        return
+
     if not all([EMAIL_USER, EMAIL_PASSWORD, ADVISOR_EMAIL]):
         logger.warning("Email credentials not configured. Skipping email notification.")
         return
@@ -45,6 +49,8 @@ def send_notification_email(student_username, student_question, llm_answer, is_i
                 <p>{student_question}</p>
                 <h3>AI-Generated Response:</h3>
                 <p>{llm_answer}</p>
+                <h3>Uncertain Areas:</h3>
+                <p>{uncertain_areas}</p>
                 <p>Please log in to RocketChat to respond to this message.</p>
                 <hr>
                 <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>

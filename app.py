@@ -91,7 +91,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
 
         # TODO: collect feedback from Johnny to see what is his preference
         # for now, only forward initial escalation message to human advisor
-        # send_notification_email(user, original_question, llm_answer, True)
+        send_notification_email(user, original_question, llm_answer, uncertain_areas, True)
     
     # forwarding message
     else:
@@ -215,7 +215,7 @@ def format_summary_confirmation(original_question):
                 "actions": [
                     {
                         "type": "button",
-                        "text": "✅ Correct & Send",
+                        "text": "✅ Send as it is",
                         # "msg": " :coll_doge_gif: Successfully forwarded your question to a human advisor. \n📬 To begin your conversation with your human advisor, please click the \"**View Thread**\" button.",
                         "msg": original_question,
                         "msg_in_chat_window": True
