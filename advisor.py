@@ -1,5 +1,5 @@
 from llmproxy import generate
-from utils.uploads import handbook_upload
+from utils.uploads import handbook_upload, handbook_txt_upload
 from prompt import get_system_prompt, get_escalated_response
 import time
 
@@ -9,7 +9,8 @@ class TuftsCSAdvisor:
         self.user_id = user_profile["user_id"]
         self.last_k = user_profile["last_k"]
         if user_profile["last_k"] == 0:
-            handbook_upload(self.user_id)
+            # handbook_upload(self.user_id)
+            handbook_txt_upload(self.user_id)
             time.sleep(2)
 
     def get_escalated_response(self, query):
