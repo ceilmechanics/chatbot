@@ -8,6 +8,7 @@ import traceback
 import requests
 from bson.objectid import ObjectId
 from flask import Flask, request, jsonify, redirect, render_template
+from dotenv import load_dotenv
 
 # Local application imports
 from advisor import TuftsCSAdvisor
@@ -21,8 +22,13 @@ app = Flask(__name__)
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# Load environment variables from .env file
+load_dotenv()
+BASE_URL = os.environ.get("koyeb_url", "https://shy-moyna-wendanj-b5959963.koyeb.app")
+
 # global variables
 RC_BASE_URL = "https://chat.genaiconnect.net/api/v1"
+
 
 HEADERS = {
     "Content-Type": "application/json",
@@ -53,7 +59,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
     # initial message sent to human advisor (without thread created)
     payload = {}
     if not tmid and not trigger_msg_id:
-        formatted_string = f"🚨 *Escalation Alert* 🚨\n Student {user} has requested help. \n"
+        formatted_string = f" :alert:  *Escalation Alert*: Student {user} has requested help. \n"
         formatted_string += f"\n💬 Student Question: {original_question}"
         formatted_string += f"\n\n Please click on *View Thread* to view the AI-generated response designed to help you address student questions.\n"
         
@@ -91,7 +97,7 @@ def send_to_human(user, original_question, llm_answer=None, tmid=None, trigger_m
 
         # TODO: collect feedback from Johnny to see what is his preference
         # for now, only forward initial escalation message to human advisor
-        # send_notification_email(user, original_question, llm_answer, True)
+        send_notification_email(user, original_question, llm_answer, uncertain_areas, True)
     
     # forwarding message
     else:
@@ -197,16 +203,16 @@ def format_response_with_buttons(response_text, suggested_questions, category_id
                 ]
         }
 
-def format_summary_confirmation(original_question):
+def format_summary_confirmation(original_question, user_id):
     """
     Format a message with the summary of the student's situation and ask for confirmation
     before escalating to a human advisor.
     """
 
     summary = "Before I forward your request, please confirm if this is the question you'd like to ask a human advisor.\n"
-    summary += "If it looks good, click the **Correct & Send** button, and I'll pass it along. Need to make edits? Just click **Modify my question**.\n\n"    
+    summary += "If it looks good, click the **Send as it is** button, and I'll pass it along. Need to make edits? Just click **Modify my question**.\n\n"    
     summary += f"🤔 Student Question: {original_question} \n\n"
-    summary += "😊 To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]. No pressure though — it's **totally optional**!"
+    summary += f"To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]({BASE_URL}/student-info?id={user_id}). No pressure though — it's **totally optional**!"
 
     return {
         "text": summary,
@@ -215,7 +221,7 @@ def format_summary_confirmation(original_question):
                 "actions": [
                     {
                         "type": "button",
-                        "text": "✅ Correct & Send",
+                        "text": "✅ Send as it is",
                         # "msg": " :coll_doge_gif: Successfully forwarded your question to a human advisor. \n📬 To begin your conversation with your human advisor, please click the \"**View Thread**\" button.",
                         "msg": original_question,
                         "msg_in_chat_window": True
@@ -470,7 +476,7 @@ def main():
                 "text": response_text
             }, headers=HEADERS)
 
-            return format_summary_confirmation(original_question)
+            return format_summary_confirmation(original_question, user_id)
 
         # Check if LLM determined human escalation is needed
         elif rc_payload:
