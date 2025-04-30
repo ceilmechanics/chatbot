@@ -6,7 +6,7 @@ def handbook_upload(user_id):
         for reference in all_references:
             response = pdf_upload(
                 path = f'resources/{reference}',
-                session_id = 'cs-advising-handbooks-v10-' + user_id,
+                session_id = 'cs-advising-handbooks-v5-' + user_id,
                 strategy = 'smart'
             )
             print("✅ " + reference + " is successfully loaded")
@@ -42,7 +42,7 @@ def handbook_txt_upload(user_id):
         for txt in all_txts:
             response = text_upload(
                     text = get_txt(f"resources/{txt}"),
-                    session_id = 'cs-advising-handbooks-v10-' + user_id,
+                    session_id = 'cs-advising-handbooks-v5-' + user_id,
                     strategy = 'fixed')
             print("✅ " + txt + " is successfully loaded")
     except Exception as e:
