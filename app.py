@@ -212,7 +212,7 @@ def format_summary_confirmation(original_question, user_id):
     summary = "Before I forward your request, please confirm if this is the question you'd like to ask a human advisor.\n"
     summary += "If it looks good, click the **Send as it is** button, and I'll pass it along. Need to make edits? Just click **Modify my question**.\n\n"    
     summary += f"🤔 Student Question: {original_question} \n\n"
-    summary += f"😊 To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]({BASE_URL}/student-info?id={user_id}). No pressure though — it's **totally optional**!"
+    summary += f"To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]({BASE_URL}/student-info?id={user_id}). No pressure though — it's **totally optional**!"
 
     return {
         "text": summary,
