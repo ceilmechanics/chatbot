@@ -176,7 +176,8 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 - If the student asked a question, received your answer, and then the student requested human assistance, it's likely that their request is related to that previous question or topic.
                 - For example, if the student asked, "What's the workload of ...?", received your response, and then followed up with "talk to a human," it likely means they are still unclear about the workload.
                 - In some cases, you may need to refer to multiple earlier student questions and your answers to fully understand the student's intent and provide meaningful context.
-            — write a detailed summary of the student's concern or intent for requesting human help, referencing prior student questions and your answers if needed.
+            — write a detailed summary of the student's concern or intent for requesting human help, referencing prior student questions and your answers if needed. 
+            - Write in the tone and perspective of a student.
             - Include the student's academic information (e.g., completed courses) if you believe it will help the human advisor better understand the context or provide a more informed response.
         - in "llmAnswer" field within "rocketChatPayload"
             - Provide your most complete and thoughtful attempt at answering the question 
@@ -188,7 +189,7 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 "category_id": "4",
                 "response": "I noticed you are asking a question about [topic]. Let me help you connect with a human advisor.",
                 "rocketChatPayload": {{
-                    "originalQuestion": "detailed summary of the student's question or their intent for requesting human help — you may need to refer to previous messages. Include the student's academic information (e.g., completed courses) if you believe it will help the human advisor better understand the context or provide a more informed response.",
+                    "originalQuestion": "Write in the tone and perspective of a student: detailed summary of the student's question or their intent for requesting human help — you may need to refer to previous messages. Include the student's academic information (e.g., completed courses) if you believe it will help the human advisor better understand the context or provide a more informed response.",
                     "llmAnswer": "Provide your most complete and thoughtful attempt at answering the question — pretending you are a human advisor",
                     "uncertainAreas": "Clearly state which parts of your answer you are uncertain about"
                 }}
