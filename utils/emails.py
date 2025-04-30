@@ -41,22 +41,64 @@ def send_notification_email(student_username, student_question, llm_answer, unce
         if is_initial_escalation:
             msg['Subject'] = f"🚨 ALERT: New CS Advising Escalation from {student_username}"
             body = f"""
-            <html>
-            <body>
-                <h2>New Escalation Alert</h2>
-                <p>Student <b>{student_username}</b> has requested help that requires your attention.</p>
-                <h3>Student question:</h3>
-                <p>{student_question}</p>
-                <h3>AI-Generated Response:</h3>
-                <p>{llm_answer}</p>
-                <h3>Uncertain Areas:</h3>
-                <p>{uncertain_areas}</p>
-                <p>Please log in to RocketChat to respond to this message.</p>
-                <hr>
-                <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
-            </body>
-            </html>
-            """
+<html>
+<head>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }}
+        .container {{
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: auto;
+        }}
+        h2 {{
+            color: #333366;
+        }}
+        h3 {{
+            color: #444444;
+        }}
+        p {{
+            line-height: 1.5;
+            color: #333333;
+        }}
+        .footer {{
+            font-size: 0.9em;
+            color: #888888;
+            margin-top: 30px;
+            border-top: 1px solid #eeeeee;
+            padding-top: 10px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🚨 New Escalation Alert</h2>
+        <p>Student <b>{student_username}</b> has requested help that requires your attention.</p>
+        
+        <h3>📝 Student Question:</h3>
+        <p>{student_question}</p>
+
+        <h3>🤖 AI-Generated Response:</h3>
+        <p>{llm_answer}</p>
+
+        <h3>❓ Uncertain Areas:</h3>
+        <p>{uncertain_areas}</p>
+
+        <p><strong>➡️ Please log in to RocketChat to respond to this message.</strong></p>
+
+        <div class="footer">
+            <p><i>This is an automated message from the Tufts CS Advising Bot.</i></p>
+        </div>
+    </div>
+</body>
+</html>
+"""
         # else:
         #     msg['Subject'] = f"💬 New Thread Message from {student_username}"
         #     body = f"""

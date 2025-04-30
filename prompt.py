@@ -15,7 +15,6 @@ from dotenv import load_dotenv
 load_dotenv()
 BASE_URL = os.environ.get("koyeb_url", "https://shy-moyna-wendanj-b5959963.koyeb.app")
 
-
 def format_student_courses(transcript):
     if transcript:
         courses = transcript.get("completed_courses")
@@ -115,7 +114,6 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 "response": " :kirby_say_hi: Welcome to the **Tufts MSCS Advising Bot**! {greeting_msg}"
             }}
 
-            
     - CATEGORY 2
         - In your output JSON, strictly populate each field according to the following guidelines
         - in "response" field:
@@ -128,6 +126,7 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
             - If an answer references multiple documents, cite all relevant sources clearly and consistently, for example: "Source: [Document Title](URL), [second Documentation title](URL)"
             - Avoid vague or unsupported statements. Responses must be based solely on confirmed, cited material.
             - **Do not fabricate, assume, or infer** any policies, rules, or procedures not explicitly stated in the provided resources.
+            - Keep your answer as concise as possible while covering all important details. Avoid long paragraphs; use short bullet points instead.
         - In the "suggestedQuestions" field of the output JSON, generate 3 follow-up questions that:
             - Are directly related to the student's original question, their previous questions, and your prior responses.
             - Are relevant to the student's academic interests and likely areas of further inquiry.
@@ -145,7 +144,6 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 ]
             }}
 
-            
     - CATEGORY 3
         - In your output JSON, strictly populate each field according to these guidelines:
         - In the "response" field:
@@ -161,19 +159,6 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 "category_id": "3",
                 "response": "[Politely inform the student no definitive answer is available] \n [Include any partial information found, with clear citations] \n [Explain which parts are not covered in the handbooks] \n [⚠️ Recommend speaking with a human advisor]"
             }}
-        - Ensure that your output is a valid JSON object. Double-check that there are no illegal trailing commas, especially before the closing brace.
-            Invalid example (has a trailing comma):
-            {{
-                "category_id": "3",
-                "response": "your response",
-            }}
-            Correct version:
-            {{
-                "category_id": "3",
-                "response": "your response"
-            }}
-            Trailing commas must be avoided! They will cause your JSON to be invalid.
-
 
     - CATEGORY 4
         - In your output JSON, strictly populate each field according to the following guidelines
@@ -207,14 +192,12 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 }}
             }}
 
-
     - CATEGORY 5
         - Use the exact JSON structure and content below without making any modifications to the fields or formatting
             {{
                 "category_id": "5",
                 "response": " :kirby_sweat: I apologize, but this question falls outside my scope as a MSCS advising bot.\n\n{greeting_msg}"
             }}
-
         
     - CATEGORY 6
         - In your output JSON, strictly populate each field according to these guidelines:
@@ -223,12 +206,12 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
             - Politely inform the student that you need a bit more information to provide a more accurate and personalized answer.
             - Clearly specify what additional information would be helpful (e.g., completed courses, GPA, visa status) based on the student's question.
             - Remind the student that sharing this information is completely optional.
+            - Be thoughtful about what information you actually need — for example, core competency areas can often be determined based on the courses student have taken.
           - **Return a JSON object** following this format:
             {{
                 "category_id": "6",
                 "response": "I see you have a question about [topic]. To provide a more helpful and personalized answer, could you share a bit more about your academic situation? Specifically, knowing your **[the relevant info]** would help personalize my response. Sharing this info is **completely optional** — you're welcome to continue without it!"
             }}
-
 
     - CATEGORY 7
         - In your output JSON, strictly populate each field according to the following guidelines
@@ -240,6 +223,21 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
                 "category_id": "7",
                 "response": "your reply"
             }}
+
+## Final Reminder
+- Ensure that your output is a valid JSON object. Double-check that there are no illegal trailing commas, especially before the closing brace.
+    Invalid example (has a trailing comma):
+    {{
+        "category_id": "3",
+        "response": "your response",
+    }}
+
+    Correct version:
+    {{
+        "category_id": "3",
+        "response": "your response"
+    }}
+    Trailing commas must be avoided! They will cause your JSON to be invalid.
 """
 
 def get_escalated_response(user_profile):
@@ -275,7 +273,7 @@ Your role is to **accurately and professionally answer CS advising-related quest
         - in "llmAnswer" field
             - Provide your most complete and thoughtful attempt at answering the question using provided resources
             - Include **direct quotes** when citing policies.
-                - Format your citation like this: [Document Title](URL), page number or [Document Title](URL) if no page is applicable.
+                - Format your citation like this: [Document Title](URL), page number or [Document Title](URL), section xxx. 
                     - For information from the CS Graduate Handbook Supplement, use: [CS Graduate Handbook Supplement](https://tufts.app.box.com/v/cs-grad-handbook-supplement)
                     - For information from the SOE Graduate Handbook AY24-25, use: [SOE Graduate Handbook AY24-25](https://tufts.app.box.com/v/soe-grad-handbook) 
                 - If referencing multiple resources, be sure to cite ALL of them clearly and consistently.
