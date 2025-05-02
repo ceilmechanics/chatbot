@@ -478,13 +478,6 @@ def main():
             }, headers=HEADERS)
 
             return format_summary_confirmation(original_question, user_id)
-        
-        elif category_id == "6":
-            user_collection = get_collection("Users", "user")
-            user_collection.update_one(
-                {"user_id": user_id},
-                {"$set": {"channel_id": channel_id}}
-            )
 
         # Check if LLM determined human escalation is needed
         elif rc_payload:
@@ -537,6 +530,13 @@ def main():
         # ==== STANDARD LLM RESPONSE ====
         # Return LLM-generated response with suggested follow-up questions
         else:
+            if category_id == "6":
+                user_collection = get_collection("Users", "user")
+                user_collection.update_one(
+                    {"user_id": user_id},
+                    {"$set": {"channel_id": channel_id}}
+                )
+                
             logger.info("Returning standard LLM response with suggested questions")
             update_loading_message(room_id, loading_msg_id)
             return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"), category_id)
