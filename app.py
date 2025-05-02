@@ -536,7 +536,7 @@ def main():
                     {"user_id": user_id},
                     {"$set": {"channel_id": channel_id}}
                 )
-                
+
             logger.info("Returning standard LLM response with suggested questions")
             update_loading_message(room_id, loading_msg_id)
             return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"), category_id)
@@ -783,6 +783,8 @@ def student_info():
                 "user_name": updated_user.get("username"),
                 "channel_id": updated_user.get("channel_id")
             })
+
+            print(response)
             
             if response.status_code == 200:
                 return jsonify({"success": True, "message": "Student information updated successfully"})
