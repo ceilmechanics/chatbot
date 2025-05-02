@@ -783,6 +783,7 @@ def student_info():
             })
 
             response_data = response.json()
+            response_data['roomId'] = updated_user.get("channel_id")
             print(response_data)
 
             response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=response_data, headers=HEADERS)
