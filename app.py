@@ -842,10 +842,8 @@ def format_student_profile(user_data):
         return "Student profile not found."
     
     # Basic user info
-    user_id = user_data.get('user_id', 'Unknown')
-    first_name = user_data.get('first_name', 'Unknown')
-    last_name = user_data.get('last_name', 'Unknown')
-    email = user_data.get('email', 'Unknown')
+    # user_id = user_data.get('user_id', 'Unknown')
+    # user_name = user_data.get('username', 'Unknown')
     
     # Transcript info
     transcript = user_data.get('transcript', {})
@@ -864,18 +862,13 @@ def format_student_profile(user_data):
     
     # Build the profile string
     profile = f"""
-STUDENT PROFILE
---------------------------
-Student ID: {user_id}
-Name: {first_name} {last_name}
-Email: {email}
+Below is the student information you find it useful: 
+
 Program: {program}
 GPA: {gpa}
 Status: {domestic_status}
 Credits Earned: {total_credits}
-
-COMPLETED COURSES
---------------------------
+Completed courses:
 """
     
     # Add course information
