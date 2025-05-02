@@ -786,7 +786,7 @@ def student_info():
             print(response_data)
 
             response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=response_data, headers=HEADERS)
-            print(response)
+            print(response.json())
             
             if response.status_code == 200:
                 return jsonify({"success": True, "message": "Student information updated successfully"})
