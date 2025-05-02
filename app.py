@@ -847,10 +847,10 @@ def format_student_profile(user_data):
     
     # Transcript info
     transcript = user_data.get('transcript', {})
-    program = transcript.get('program', 'Unknown')
-    gpa = transcript.get('GPA', 'Unknown')
-    domestic = transcript.get('domestic', 'Unknown')
-    total_credits = transcript.get('credits_earned', 'Unknown')
+    program = transcript.get('program', None)
+    gpa = transcript.get('GPA', None)
+    domestic = transcript.get('domestic', None)
+    total_credits = transcript.get('credits_earned', None)
     
     # Format domestic status
     if domestic is True:
@@ -858,22 +858,23 @@ def format_student_profile(user_data):
     elif domestic is False:
         domestic_status = "International Student"
     else:
-        domestic_status = "Unknown"
+        domestic_status = None
     
     # Build the profile string
-    profile = f"""
-Below is the student information you find it useful: 
-
-Program: {program}
-GPA: {gpa}
-Status: {domestic_status}
-Credits Earned: {total_credits}
-Completed courses:
-"""
+    profile = ""
+    if program:
+        profile += f"Program: {program}; \n"
+    if gpa:
+        profile += f"GPA: {gpa}; \n"
+    if domestic:
+        profile += f"visa status: {domestic_status}; \n"
+    if total_credits:
+        profile += f"total credits earned: {total_credits}; \n"
     
     # Add course information
     courses = transcript.get('completed_courses', [])
     if courses:
+        profile += "courses taken: "
         for i, course in enumerate(courses, 1):
             course_id = course.get('course_id', 'Unknown')
             course_name = course.get('course_name', 'Unknown')
