@@ -272,8 +272,6 @@ def main():
     """
     data = request.get_json() 
 
-    logger.info("add a debug line to verify if the code is modified or not")
-
     # Extract relevant information
     user_id = data.get("user_id")
     user_name = data.get("user_name", "Unknown")
@@ -778,7 +776,7 @@ def student_info():
 
             # telling the user your info has been successfully forwarded
             response = requests.post(f"{BASE_URL}/query", json={
-                "message": formatted_profile,
+                "text": formatted_profile,
                 "user_id": updated_user.get("user_id"),
                 "user_name": updated_user.get("username"),
                 "channel_id": updated_user.get("channel_id")
