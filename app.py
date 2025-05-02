@@ -782,6 +782,10 @@ def student_info():
                 "channel_id": updated_user.get("channel_id")
             })
 
+            response_data = response.json()
+            print(response_data)
+
+            response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=response_data, headers=HEADERS)
             print(response)
             
             if response.status_code == 200:
