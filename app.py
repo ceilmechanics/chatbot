@@ -6,6 +6,7 @@ import traceback
 
 # Third-party imports
 import requests
+import pymongo
 from bson.objectid import ObjectId
 from flask import Flask, request, jsonify, redirect, render_template
 from dotenv import load_dotenv
@@ -212,7 +213,7 @@ def format_summary_confirmation(original_question, user_id):
     summary = "Before I forward your request, please confirm if this is the question you'd like to ask a human advisor.\n"
     summary += "If it looks good, click the **Send as it is** button, and I'll pass it along. Need to make edits? Just click **Modify my question**.\n\n"    
     summary += f"🤔 Student Question: {original_question} \n\n"
-    summary += f"To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]({BASE_URL}/student-info?id={user_id}). No pressure though — it's **totally optional**!"
+    # summary += f"To help the advisor better assist you, if you haven't shared your academic information with us yet, you're welcome to complete it using [this link]({BASE_URL}/student-info?id={user_id}). No pressure though — it's **totally optional**!"
 
     return {
         "text": summary,
@@ -270,8 +271,6 @@ def main():
     Main endpoint for handling user queries to the Tufts CS Advisor.
     """
     data = request.get_json() 
-
-    logger.info("add a debug line to verify if the code is modified or not")
 
     # Extract relevant information
     user_id = data.get("user_id")
@@ -529,6 +528,13 @@ def main():
         # ==== STANDARD LLM RESPONSE ====
         # Return LLM-generated response with suggested follow-up questions
         else:
+            if category_id == "6":
+                user_collection = get_collection("Users", "user")
+                user_collection.update_one(
+                    {"user_id": user_id},
+                    {"$set": {"channel_id": channel_id}}
+                )
+
             logger.info("Returning standard LLM response with suggested questions")
             update_loading_message(room_id, loading_msg_id)
             return format_response_with_buttons(response_data["response"], response_data.get("suggestedQuestions"), category_id)
@@ -759,20 +765,35 @@ def student_info():
             
             # Update the document in MongoDB
             user_collection = get_collection("Users", "user")
-            from bson.objectid import ObjectId
+            updated_user = user_collection.find_one_and_update(
+                {"user_id": student_id}, 
+                update_doc,
+                return_document=pymongo.ReturnDocument.AFTER  # This ensures you get the document AFTER the update
+            )
+
+            # Format the entire student profile as a string
+            formatted_profile = format_student_profile(updated_user)
+
+            # telling the user your info has been successfully forwarded
+            response = requests.post(f"{BASE_URL}/query", json={
+                "text": formatted_profile,
+                "user_id": updated_user.get("user_id"),
+                "user_name": updated_user.get("username"),
+                "channel_id": updated_user.get("channel_id")
+            })
+
+            response_data = response.json()
+            response_data['roomId'] = updated_user.get("channel_id")
+            print(response_data)
+
+            response = requests.post(f"{RC_BASE_URL}/chat.postMessage", json=response_data, headers=HEADERS)
+            print(response.json())
             
-            # Try to convert to ObjectId if it's a valid ObjectId format
-            try:
-                result = user_collection.update_one({"_id": ObjectId(student_id)}, update_doc)
-            except:
-                # If not a valid ObjectId, try to update by user_id
-                result = user_collection.update_one({"user_id": student_id}, update_doc)
-            
-            if result.modified_count > 0:
+            if response.status_code == 200:
                 return jsonify({"success": True, "message": "Student information updated successfully"})
             else:
                 # Document might not have been modified if data is the same
-                return jsonify({"success": True, "message": "No changes detected"})
+                return jsonify({"success": False, "message": "Something went wrong, please try again"})
                 
         except Exception as e:
             logger.error(f"Error updating student info: {str(e)}")
@@ -811,6 +832,61 @@ def student_info():
         except Exception as e:
             logger.error(f"Error retrieving student info: {str(e)}")
             return render_template('studentinfo.html', error=str(e))
+
+def format_student_profile(user_data):
+    """
+    Format the entire student profile as a string.
+    If any field is not provided, display "Unknown".
+    """
+    if not user_data:
+        return "Student profile not found."
+    
+    # Basic user info
+    # user_id = user_data.get('user_id', 'Unknown')
+    # user_name = user_data.get('username', 'Unknown')
+    
+    # Transcript info
+    transcript = user_data.get('transcript', {})
+    program = transcript.get('program', None)
+    gpa = transcript.get('GPA', None)
+    domestic = transcript.get('domestic', None)
+    total_credits = transcript.get('credits_earned', None)
+    
+    # Format domestic status
+    if domestic is True:
+        domestic_status = "Domestic Student"
+    elif domestic is False:
+        domestic_status = "International Student"
+    else:
+        domestic_status = None
+    
+    # Build the profile string
+    profile = ""
+    if program:
+        profile += f"Program: {program}; \n"
+    if gpa:
+        profile += f"GPA: {gpa}; \n"
+    if domestic:
+        profile += f"visa status: {domestic_status}; \n"
+    if total_credits:
+        profile += f"total credits earned: {total_credits}; \n"
+    
+    # Add course information
+    courses = transcript.get('completed_courses', [])
+    if courses:
+        profile += "courses taken: "
+        for i, course in enumerate(courses, 1):
+            course_id = course.get('course_id', 'Unknown')
+            course_name = course.get('course_name', 'Unknown')
+            grade = course.get('grade', 'Unknown')
+            credits = course.get('credits_earned', 'Unknown')
+            
+            profile += f"{i}. {course_id}: {course_name}\n   Grade: {grade}, Credits: {credits}\n"
+    else:
+        profile += "No courses completed yet.\n"
+    
+    return profile
+
 
 if __name__ == "__main__":
     # Register shutdown handler to close MongoDB connection when app stops

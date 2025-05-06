@@ -213,7 +213,7 @@ Step 3. Generate a **properly formatted JSON response** strictly following to th
           - **Return a JSON object** following this format:
             {{
                 "category_id": "6",
-                "response": "I see you have a question about [topic]. To provide a more helpful and personalized answer, could you share a bit more about **[the relevant info]**? It would help personalize my response. Sharing this info is **completely optional** — you're welcome to continue without it!"
+                "response": "I see you have a question about [topic]. To provide a more helpful and personalized answer, could you share a bit more about **[the relevant info]**? \n\nYou can either reply directly in the chatbox or click the form below to share your academic infor: \n👉[Fill out this quick form]({BASE_URL}/student-info?id={user_profile.get("user_id")})). \n\nSharing this info is **completely optional** — you're welcome to continue without it!"
             }}
 
     - CATEGORY 7
